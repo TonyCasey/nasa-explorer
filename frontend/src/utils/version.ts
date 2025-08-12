@@ -10,10 +10,10 @@ export interface VersionInfo {
 // This will be automatically updated by build scripts
 export const VERSION_INFO: VersionInfo = {
   major: 1,
-  minor: 0,
-  build: 1,
-  version: '1.0.1',
-  buildDate: '2025-08-12T20:50:00.000Z',
+  minor: 1,
+  build: 0,
+  version: '1.1.0',
+  buildDate: '2025-08-12T22:31:10.780Z',
   description: 'NASA Space Explorer - Initial Release',
 };
 

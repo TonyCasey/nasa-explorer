@@ -25,13 +25,14 @@
 - [x] Add version numbering to git commit messaging
 
 ### Days 3-4: API Integration
-- [ ] Set up Express server with middleware stack
-- [ ] Implement NASA API service layer
-- [ ] Configure caching strategy (Redis/in-memory)
-- [ ] Create API endpoints for APOD
-- [ ] Create API endpoints for Mars Rovers
-- [ ] Create API endpoints for NEO
-- [ ] Implement rate limiting and error handling
+- [x] Set up Express server with middleware stack
+- [x] Implement NASA API service layer
+- [x] Configure caching strategy (Redis/in-memory)
+- [x] Create API endpoints for APOD
+- [x] Create API endpoints for Mars Rovers
+- [x] Create API endpoints for NEO
+- [x] Create API endpoints for EPIC (Earth imagery)
+- [x] Implement rate limiting and error handling
 
 ### Days 5-7: Core UI Components
 - [ ] Design and implement Space Mission Control Dashboard layout

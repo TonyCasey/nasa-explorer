@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(cmd /c \"dir \"\"C:\\Users\\tony\\My Drive\\Personal\\Jobs\\Bounce Insight\\coding-project\"\" /a /s\")",
+      "Bash(git init:*)",
+      "Bash(mkdir:*)",
+      "Bash(npx create-react-app:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss init:*)",
+      "Bash(npm start)",
+      "Bash(npm run format:*)",
+      "Bash(git add:*)",
+      "Bash(git config:*)",
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)",
+      "Bash(node:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

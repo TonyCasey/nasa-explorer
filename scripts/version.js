@@ -110,7 +110,7 @@ function bumpVersion(type, message) {
   }
   
   // Update version string and build date
-  versionData.version = \`\${versionData.major}.\${versionData.minor}.\${versionData.build}\`;
+  versionData.version = `${versionData.major}.${versionData.minor}.${versionData.build}`;
   versionData.buildDate = new Date().toISOString();
   
   // Add changelog entry
@@ -132,13 +132,13 @@ function bumpVersion(type, message) {
   saveVersion(versionData);
   updateVersionFiles(versionData);
   
-  console.log(\`Version bumped to \${versionData.version}\`);
+  console.log(`Version bumped to ${versionData.version}`);
   return versionData;
 }
 
 function getCommitMessage(message, versionData) {
   const version = versionData ? versionData.version : loadVersion().version;
-  return \`v\${version}: \${message}\`;
+  return `v${version}: ${message}`;
 }
 
 // CLI interface
@@ -159,7 +159,7 @@ switch(command) {
     
   case 'current':
     const current = loadVersion();
-    console.log(\`v\${current.version}\`);
+    console.log(`v${current.version}`);
     break;
     
   default:
