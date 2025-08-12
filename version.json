@@ -1,0 +1,22 @@
+{
+  "major": 1,
+  "minor": 0,
+  "build": 1,
+  "version": "1.0.1",
+  "buildDate": "2025-08-12T20:50:00.000Z",
+  "description": "NASA Space Explorer - Initial Release",
+  "changelog": [
+    {
+      "version": "1.0.1",
+      "date": "2025-08-12",
+      "changes": [
+        "Initial project setup and foundation",
+        "React frontend with TypeScript and Tailwind CSS",
+        "Space-themed UI design system",
+        "Error boundary and loading components",
+        "API client with interceptors",
+        "Routing structure with navigation"
+      ]
+    }
+  ]
+}

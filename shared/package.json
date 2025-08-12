@@ -1,0 +1,18 @@
+{
+  "name": "@nasa-explorer/shared",
+  "version": "1.0.0",
+  "description": "Shared types and utilities for NASA Explorer",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
