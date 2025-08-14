@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { asyncHandler, createError } from '../middleware/errorHandler';
 import { nasaService } from '../services/nasa.service';
+import logger from '../utils/logger';
 
 const router = Router();
 
@@ -15,6 +16,8 @@ const VALID_CAMERAS = {
 
 // Get rover information
 router.get('/', asyncHandler(async (req: Request, res: Response) => {
+  logger.info('Mars rovers info request received');
+  
   res.json({
     success: true,
     data: {
@@ -33,12 +36,16 @@ router.get('/', asyncHandler(async (req: Request, res: Response) => {
 // Get specific rover information
 router.get('/:rover', asyncHandler(async (req: Request, res: Response) => {
   const { rover } = req.params;
+  logger.info('Rover info request received', { rover });
   
   if (!VALID_ROVERS.includes(rover.toLowerCase())) {
+    logger.warn('Invalid rover name requested', { rover });
     throw createError(`Invalid rover name. Valid rovers: ${VALID_ROVERS.join(', ')}`, 400);
   }
   
+  logger.debug('Fetching rover info', { rover: rover.toLowerCase() });
   const data = await nasaService.getRoverInfo(rover.toLowerCase());
+  logger.info('Rover info fetched successfully', { rover: rover.toLowerCase(), hasData: !!data });
   
   res.json({
     success: true,

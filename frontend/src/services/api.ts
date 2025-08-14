@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import logger, { logApiRequest, logApiResponse, logApiError } from '../utils/logger';
 
 // Create axios instance with base configuration
 const api: AxiosInstance = axios.create({
@@ -18,13 +19,11 @@ api.interceptors.request.use(
       _t: Date.now(),
     };
 
-    console.log(
-      `🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`
-    );
+    logApiRequest(config.method?.toUpperCase() || 'GET', config.url || '');
     return config;
   },
   (error: AxiosError) => {
-    console.error('❌ Request Error:', error);
+    logger.error('❌ Request Error:', error);
     return Promise.reject(error);
   }
 );
@@ -32,25 +31,31 @@ api.interceptors.request.use(
 // Response interceptor
 api.interceptors.response.use(
   (response: AxiosResponse) => {
-    console.log(`✅ API Response: ${response.status} ${response.config.url}`);
+    logApiResponse(
+      response.config.method?.toUpperCase() || 'GET',
+      response.config.url || '',
+      response.status,
+      response.data
+    );
     return response;
   },
   (error: AxiosError) => {
     const message =
       error.response?.data || error.message || 'An error occurred';
 
-    console.error(
-      `❌ API Error: ${error.response?.status || 'Unknown'} ${error.config?.url}`,
-      message
+    logApiError(
+      error.config?.method?.toUpperCase() || 'GET',
+      error.config?.url || '',
+      error
     );
 
     // Handle specific error cases
     if (error.response?.status === 429) {
-      console.warn('⚠️ Rate limit exceeded. Please try again later.');
+      logger.warn('⚠️ Rate limit exceeded. Please try again later.');
     } else if (error.response?.status === 500) {
-      console.error('🔥 Server error. Please try again later.');
+      logger.error('🔥 Server error. Please try again later.');
     } else if (error.code === 'ECONNABORTED') {
-      console.error('⏱️ Request timeout. Please check your connection.');
+      logger.error('⏱️ Request timeout. Please check your connection.');
     }
 
     return Promise.reject({

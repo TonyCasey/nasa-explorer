@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { createError } from '../middleware/errorHandler';
+import logger from '../utils/logger';
 
 export class NASAService {
   private client: AxiosInstance;
@@ -9,7 +10,7 @@ export class NASAService {
     this.apiKey = process.env.NASA_API_KEY || 'DEMO_KEY';
     
     if (this.apiKey === 'DEMO_KEY') {
-      console.warn('⚠️ Using NASA DEMO_KEY - limited to 30 requests per hour');
+      logger.warn('⚠️ Using NASA DEMO_KEY - limited to 30 requests per hour');
     }
 
     this.client = axios.create({
@@ -23,11 +24,11 @@ export class NASAService {
     // Request interceptor
     this.client.interceptors.request.use(
       (config) => {
-        console.log(`🚀 NASA API Request: ${config.method?.toUpperCase()} ${config.url}`);
+        logger.debug(`🚀 NASA API Request: ${config.method?.toUpperCase()} ${config.url}`);
         return config;
       },
       (error) => {
-        console.error('❌ NASA API Request Error:', error);
+        logger.error('❌ NASA API Request Error:', error);
         return Promise.reject(error);
       }
     );
@@ -35,11 +36,11 @@ export class NASAService {
     // Response interceptor
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
-        console.log(`✅ NASA API Response: ${response.status} ${response.config.url}`);
+        logger.debug(`✅ NASA API Response: ${response.status} ${response.config.url}`);
         return response;
       },
       (error) => {
-        console.error(`❌ NASA API Error: ${error.response?.status || 'Unknown'} ${error.config?.url}`);
+        logger.error(`❌ NASA API Error: ${error.response?.status || 'Unknown'} ${error.config?.url}`);
         
         // Transform NASA API errors
         if (error.response?.status === 429) {
@@ -75,7 +76,7 @@ export class NASAService {
       const response = await this.client.get('/planetary/apod', { params });
       return response.data;
     } catch (error) {
-      console.error('APOD API Error:', error);
+      logger.error('APOD API Error:', error);
       throw error;
     }
   }
@@ -90,7 +91,7 @@ export class NASAService {
       });
       return response.data;
     } catch (error) {
-      console.error('APOD Range API Error:', error);
+      logger.error('APOD Range API Error:', error);
       throw error;
     }
   }
@@ -127,7 +128,7 @@ export class NASAService {
       
       return response.data;
     } catch (error) {
-      console.error('Mars Rover Photos API Error:', error);
+      logger.error('Mars Rover Photos API Error:', error);
       throw error;
     }
   }
@@ -137,7 +138,7 @@ export class NASAService {
       const response = await this.client.get(`/mars-photos/api/v1/rovers/${roverName}`);
       return response.data;
     } catch (error) {
-      console.error('Rover Info API Error:', error);
+      logger.error('Rover Info API Error:', error);
       throw error;
     }
   }
@@ -160,7 +161,7 @@ export class NASAService {
       const response = await this.client.get('/neo/rest/v1/feed', { params });
       return response.data;
     } catch (error) {
-      console.error('NEO Feed API Error:', error);
+      logger.error('NEO Feed API Error:', error);
       throw error;
     }
   }
@@ -170,7 +171,7 @@ export class NASAService {
       const response = await this.client.get(`/neo/rest/v1/neo/${neoId}`);
       return response.data;
     } catch (error) {
-      console.error('NEO by ID API Error:', error);
+      logger.error('NEO by ID API Error:', error);
       throw error;
     }
   }
@@ -186,7 +187,7 @@ export class NASAService {
       const response = await this.client.get(endpoint);
       return response.data;
     } catch (error) {
-      console.error('EPIC API Error:', error);
+      logger.error('EPIC API Error:', error);
       throw error;
     }
   }
@@ -196,7 +197,7 @@ export class NASAService {
       const response = await this.client.get('/EPIC/api/natural/available');
       return response.data;
     } catch (error) {
-      console.error('EPIC Archive API Error:', error);
+      logger.error('EPIC Archive API Error:', error);
       throw error;
     }
   }

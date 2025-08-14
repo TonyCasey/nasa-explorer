@@ -1,6 +1,11 @@
 import React from 'react';
+import logger from '../utils/logger';
 
 const Dashboard: React.FC = () => {
+  React.useEffect(() => {
+    logger.info('Dashboard page loaded');
+  }, []);
+
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">

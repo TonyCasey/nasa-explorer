@@ -7,8 +7,13 @@ import Dashboard from './pages/Dashboard';
 import APOD from './pages/APOD';
 import MarsRovers from './pages/MarsRovers';
 import NEOTracker from './pages/NEOTracker';
+import logger from './utils/logger';
 
 function App() {
+  React.useEffect(() => {
+    logger.info('NASA Space Explorer App initialized');
+  }, []);
+
   return (
     <ErrorBoundary>
       <Router>

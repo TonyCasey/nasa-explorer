@@ -1,6 +1,11 @@
 import React from 'react';
+import logger from '../utils/logger';
 
 const NEOTracker: React.FC = () => {
+  React.useEffect(() => {
+    logger.info('NEO Tracker page loaded');
+  }, []);
+
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-6xl mx-auto">
