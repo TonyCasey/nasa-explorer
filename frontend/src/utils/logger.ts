@@ -26,24 +26,29 @@ class FrontendLogger {
       debug: 0,
       info: 1,
       warn: 2,
-      error: 3
+      error: 3,
     };
     return levels[level] >= levels[this.logLevel];
   }
 
-  private createLogEntry(level: LogLevel, message: string, data?: any, error?: Error): LogEntry {
+  private createLogEntry(
+    level: LogLevel,
+    message: string,
+    data?: any,
+    error?: Error
+  ): LogEntry {
     const entry: LogEntry = {
       timestamp: new Date().toISOString(),
       level,
       message,
-      data
+      data,
     };
 
     if (error) {
       entry.error = {
         message: error.message,
         stack: error.stack,
-        name: error.name
+        name: error.name,
       };
     }
 
@@ -57,12 +62,20 @@ class FrontendLogger {
     }
 
     if (process.env.NODE_ENV === 'development') {
-      const consoleMethod = entry.level === 'error' ? 'error' : 
-                           entry.level === 'warn' ? 'warn' : 
-                           entry.level === 'debug' ? 'debug' : 'log';
-      
-      console[consoleMethod](`[${entry.timestamp}] ${entry.level.toUpperCase()}: ${entry.message}`, 
-        entry.data || '', entry.error || '');
+      const consoleMethod =
+        entry.level === 'error'
+          ? 'error'
+          : entry.level === 'warn'
+            ? 'warn'
+            : entry.level === 'debug'
+              ? 'debug'
+              : 'log';
+
+      console[consoleMethod](
+        `[${entry.timestamp}] ${entry.level.toUpperCase()}: ${entry.message}`,
+        entry.data || '',
+        entry.error || ''
+      );
     }
 
     this.saveToStorage();
@@ -72,7 +85,7 @@ class FrontendLogger {
     try {
       const today = new Date().toISOString().split('T')[0];
       const storageKey = `nasa_explorer_logs_${today}`;
-      const todayLogs = this.logs.filter(log => 
+      const todayLogs = this.logs.filter((log) =>
         log.timestamp.startsWith(today)
       );
       localStorage.setItem(storageKey, JSON.stringify(todayLogs));
@@ -143,7 +156,12 @@ export const logApiRequest = (method: string, url: string, data?: any) => {
   logger.debug(`API Request: ${method} ${url}`, { method, url, data });
 };
 
-export const logApiResponse = (method: string, url: string, status: number, data?: any) => {
+export const logApiResponse = (
+  method: string,
+  url: string,
+  status: number,
+  data?: any
+) => {
   const message = `API Response: ${method} ${url} - ${status}`;
   if (status >= 400) {
     logger.error(message, undefined, { method, url, status, data });

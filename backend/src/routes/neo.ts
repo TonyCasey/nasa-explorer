@@ -22,13 +22,14 @@ router.get('/feed', asyncHandler(async (req: Request, res: Response) => {
     const startDate = new Date(start_date as string);
     const endDate = new Date(end_date as string);
     const today = new Date();
+    today.setHours(23, 59, 59, 999); // End of today
     
     if (startDate > endDate) {
       throw createError('start_date must be before end_date.', 400);
     }
     
     if (endDate > today) {
-      throw createError('end_date cannot be in the future.', 400);
+      throw createError(`end_date cannot be in the future. Maximum allowed date: ${today.toISOString().split('T')[0]}`, 400);
     }
     
     // NASA NEO API has a 7-day limit

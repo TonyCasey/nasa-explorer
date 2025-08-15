@@ -5,12 +5,16 @@ import logger from '../utils/logger';
 export class NASAService {
   private client: AxiosInstance;
   private apiKey: string;
+  private cache: Map<string, { data: any; timestamp: number }> = new Map();
+  private readonly CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 
   constructor() {
     this.apiKey = process.env.NASA_API_KEY || 'DEMO_KEY';
     
     if (this.apiKey === 'DEMO_KEY') {
       logger.warn('⚠️ Using NASA DEMO_KEY - limited to 30 requests per hour');
+    } else {
+      logger.info(`🔑 NASA API key configured (${this.apiKey.slice(0, 8)}...)`);
     }
 
     this.client = axios.create({
@@ -65,6 +69,31 @@ export class NASAService {
     );
   }
 
+  // Cache helper methods
+  private getCacheKey(endpoint: string, params?: any): string {
+    return `${endpoint}_${JSON.stringify(params || {})}`;
+  }
+
+  private getFromCache(key: string): any | null {
+    const cached = this.cache.get(key);
+    if (cached && Date.now() - cached.timestamp < this.CACHE_TTL) {
+      logger.debug(`📦 Cache hit: ${key}`);
+      return cached.data;
+    }
+    
+    if (cached) {
+      this.cache.delete(key); // Remove expired entry
+      logger.debug(`🗑️ Cache expired: ${key}`);
+    }
+    
+    return null;
+  }
+
+  private setCache(key: string, data: any): void {
+    this.cache.set(key, { data, timestamp: Date.now() });
+    logger.debug(`💾 Cached: ${key}`);
+  }
+
   // Astronomy Picture of the Day
   async getAPOD(date?: string): Promise<any> {
     try {
@@ -73,7 +102,16 @@ export class NASAService {
         params.date = date;
       }
 
+      // Check cache first
+      const cacheKey = this.getCacheKey('/planetary/apod', params);
+      const cached = this.getFromCache(cacheKey);
+      if (cached) return cached;
+
       const response = await this.client.get('/planetary/apod', { params });
+      
+      // Cache the response
+      this.setCache(cacheKey, response.data);
+      
       return response.data;
     } catch (error) {
       logger.error('APOD API Error:', error);
@@ -122,9 +160,18 @@ export class NASAService {
         queryParams.camera = camera;
       }
 
-      const response = await this.client.get(`/mars-photos/api/v1/rovers/${rover}/photos`, {
+      // Check cache first
+      const endpoint = `/mars-photos/api/v1/rovers/${rover}/photos`;
+      const cacheKey = this.getCacheKey(endpoint, queryParams);
+      const cached = this.getFromCache(cacheKey);
+      if (cached) return cached;
+
+      const response = await this.client.get(endpoint, {
         params: queryParams,
       });
+      
+      // Cache the response
+      this.setCache(cacheKey, response.data);
       
       return response.data;
     } catch (error) {
@@ -135,7 +182,17 @@ export class NASAService {
 
   async getRoverInfo(roverName: string): Promise<any> {
     try {
-      const response = await this.client.get(`/mars-photos/api/v1/rovers/${roverName}`);
+      // Check cache first
+      const endpoint = `/mars-photos/api/v1/rovers/${roverName}`;
+      const cacheKey = this.getCacheKey(endpoint);
+      const cached = this.getFromCache(cacheKey);
+      if (cached) return cached;
+
+      const response = await this.client.get(endpoint);
+      
+      // Cache the response
+      this.setCache(cacheKey, response.data);
+      
       return response.data;
     } catch (error) {
       logger.error('Rover Info API Error:', error);
@@ -158,7 +215,17 @@ export class NASAService {
         params.end_date = today;
       }
 
-      const response = await this.client.get('/neo/rest/v1/feed', { params });
+      // Check cache first
+      const endpoint = '/neo/rest/v1/feed';
+      const cacheKey = this.getCacheKey(endpoint, params);
+      const cached = this.getFromCache(cacheKey);
+      if (cached) return cached;
+
+      const response = await this.client.get(endpoint, { params });
+      
+      // Cache the response
+      this.setCache(cacheKey, response.data);
+      
       return response.data;
     } catch (error) {
       logger.error('NEO Feed API Error:', error);
@@ -168,7 +235,17 @@ export class NASAService {
 
   async getNEOById(neoId: string): Promise<any> {
     try {
-      const response = await this.client.get(`/neo/rest/v1/neo/${neoId}`);
+      // Check cache first
+      const endpoint = `/neo/rest/v1/neo/${neoId}`;
+      const cacheKey = this.getCacheKey(endpoint);
+      const cached = this.getFromCache(cacheKey);
+      if (cached) return cached;
+
+      const response = await this.client.get(endpoint);
+      
+      // Cache the response
+      this.setCache(cacheKey, response.data);
+      
       return response.data;
     } catch (error) {
       logger.error('NEO by ID API Error:', error);
@@ -184,7 +261,16 @@ export class NASAService {
         endpoint += `/date/${date}`;
       }
 
+      // Check cache first
+      const cacheKey = this.getCacheKey(endpoint);
+      const cached = this.getFromCache(cacheKey);
+      if (cached) return cached;
+
       const response = await this.client.get(endpoint);
+      
+      // Cache the response
+      this.setCache(cacheKey, response.data);
+      
       return response.data;
     } catch (error) {
       logger.error('EPIC API Error:', error);
@@ -194,7 +280,17 @@ export class NASAService {
 
   async getEPICImageArchive(): Promise<any> {
     try {
-      const response = await this.client.get('/EPIC/api/natural/available');
+      // Check cache first
+      const endpoint = '/EPIC/api/natural/available';
+      const cacheKey = this.getCacheKey(endpoint);
+      const cached = this.getFromCache(cacheKey);
+      if (cached) return cached;
+
+      const response = await this.client.get(endpoint);
+      
+      // Cache the response
+      this.setCache(cacheKey, response.data);
+      
       return response.data;
     } catch (error) {
       logger.error('EPIC Archive API Error:', error);

@@ -1,0 +1,150 @@
+{"level":"warn","message":"⚠️ Using NASA DEMO_KEY - limited to 30 requests per hour","timestamp":"2025-08-15T07:11:17.212Z"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T07:14:25.338Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T07:14:25.430Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T07:14:25.430Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T07:14:25.431Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T07:14:25.431Z","timestamp":"2025-08-15T07:14:25.431Z"}
+{"level":"info","message":"APOD request received","timestamp":"2025-08-15T07:14:55.516Z"}
+{"level":"info","message":"APOD request received","timestamp":"2025-08-15T07:14:55.571Z"}
+{"hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:14:56.434Z"}
+{"duration":"867ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:14:56.437Z","url":"/?_t=1755242095509","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:14:56.495Z"}
+{"duration":"983ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:14:56.497Z","url":"/?_t=1755242095508","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:15:12.939Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:15:13.774Z"}
+{"duration":"840ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:15:13.778Z","url":"/?date=2025-08-15&_t=1755242112935","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:15:13.780Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:15:13.780Z"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:15:13.782Z","url":"/?date=2025-08-15&_t=1755242112935","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-14","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:15:47.139Z"}
+{"date":"2025-08-14","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:15:47.946Z"}
+{"duration":"811ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:15:47.950Z","url":"/?date=2025-08-14&_t=1755242147135","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"436ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:15:51.345Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755242150906","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:15:51.350Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755242150906","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:16:01.546Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:16:01.547Z"}
+{"duration":"4ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:16:01.550Z","url":"/?date=2025-08-15&_t=1755242161543","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:16:01.552Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:16:01.553Z"}
+{"duration":"4ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:16:01.555Z","url":"/?date=2025-08-15&_t=1755242161543","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"2ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:16:14.896Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755242174890","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:16:14.900Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755242174890","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"2ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:16:27.826Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755242187820","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:16:27.831Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755242187820","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:16:32.457Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755242192452","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:16:32.463Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755242192452","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:17:07.501Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:17:07.502Z"}
+{"duration":"4ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:17:07.504Z","url":"/?date=2025-08-15&_t=1755242227498","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:17:07.504Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:17:07.505Z"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:17:07.507Z","url":"/?date=2025-08-15&_t=1755242227498","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"1191ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:17:10.746Z","url":"/feed?start_date=2025-08-08&end_date=2025-08-15&_t=1755242229553","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"4ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:17:10.752Z","url":"/feed?start_date=2025-08-08&end_date=2025-08-15&_t=1755242229553","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:14.266Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755242294259","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:14.270Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755242294259","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:18:15.483Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:18:15.484Z"}
+{"duration":"5ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:15.487Z","url":"/?date=2025-08-15&_t=1755242295480","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:18:15.488Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:18:15.489Z"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:15.491Z","url":"/?date=2025-08-15&_t=1755242295480","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"level":"info","message":"APOD request received","timestamp":"2025-08-15T07:18:16.203Z"}
+{"hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:18:16.204Z"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:16.206Z","url":"/?_t=1755242296199","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"level":"info","message":"APOD request received","timestamp":"2025-08-15T07:18:16.208Z"}
+{"hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:18:16.208Z"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:16.210Z","url":"/?_t=1755242296199","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:18:25.266Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:18:25.267Z"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:25.270Z","url":"/?date=2025-08-15&_t=1755242305262","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:18:25.271Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:18:25.272Z"}
+{"duration":"2ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:25.273Z","url":"/?date=2025-08-15&_t=1755242305262","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-14","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:18:32.256Z"}
+{"date":"2025-08-14","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:18:32.257Z"}
+{"duration":"4ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:32.259Z","url":"/?date=2025-08-14&_t=1755242312252","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-08","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:18:33.784Z"}
+{"date":"2025-08-08","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:18:34.734Z"}
+{"duration":"952ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:34.735Z","url":"/?date=2025-08-08&_t=1755242313781","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2018-03-30","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:18:39.155Z"}
+{"date":"2018-03-30","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:18:39.466Z"}
+{"duration":"313ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:18:39.468Z","url":"/?date=2018-03-30&_t=1755242319152","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T07:39:32.660Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T07:39:32.744Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T07:39:32.745Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T07:39:32.745Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T07:39:32.745Z","timestamp":"2025-08-15T07:39:32.745Z"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T07:39:57.107Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T07:39:57.196Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T07:39:57.196Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T07:39:57.196Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T07:39:57.197Z","timestamp":"2025-08-15T07:39:57.197Z"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T07:40:19.892Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T07:40:19.982Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T07:40:19.982Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T07:40:19.982Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T07:40:19.982Z","timestamp":"2025-08-15T07:40:19.982Z"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T07:40:48.347Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T07:40:48.451Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T07:40:48.452Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T07:40:48.453Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T07:40:48.453Z","timestamp":"2025-08-15T07:40:48.453Z"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T07:41:23.409Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T07:41:23.497Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T07:41:23.497Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T07:41:23.497Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T07:41:23.498Z","timestamp":"2025-08-15T07:41:23.498Z"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T07:42:04.151Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T07:42:04.271Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T07:42:04.272Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T07:42:04.272Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T07:42:04.272Z","timestamp":"2025-08-15T07:42:04.272Z"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T07:44:59.673Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T07:44:59.772Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T07:44:59.773Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T07:44:59.773Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T07:44:59.773Z","timestamp":"2025-08-15T07:44:59.773Z"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T07:45:36.800Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T07:45:36.894Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T07:45:36.895Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T07:45:36.895Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T07:45:36.895Z","timestamp":"2025-08-15T07:45:36.895Z"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:56:59.761Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:57:00.759Z"}
+{"duration":"1008ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:57:00.767Z","url":"/?date=2025-08-15&_t=1755244619754","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T07:57:00.770Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T07:57:00.771Z"}
+{"duration":"4ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T07:57:00.773Z","url":"/?date=2025-08-15&_t=1755244619754","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T08:00:47.833Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T08:00:47.834Z"}
+{"duration":"4ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T08:00:47.836Z","url":"/?date=2025-08-15&_t=1755244847827","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T08:00:47.837Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T08:00:47.837Z"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T08:00:47.840Z","url":"/?date=2025-08-15&_t=1755244847827","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T08:11:23.912Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T08:11:23.994Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T08:11:23.995Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T08:11:23.995Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T08:11:23.995Z","timestamp":"2025-08-15T08:11:23.995Z"}
+{"level":"info","message":"🔑 NASA API key configured (EnvhAJZk...)","timestamp":"2025-08-15T08:12:26.737Z"}
+{"level":"info","message":"🚀 NASA Space Explorer Backend v2.1.0","timestamp":"2025-08-15T08:12:26.839Z"}
+{"level":"info","message":"🌍 Server running on port 5000","timestamp":"2025-08-15T08:12:26.839Z"}
+{"level":"info","message":"📡 Environment: development","timestamp":"2025-08-15T08:12:26.839Z"}
+{"level":"info","message":"⏰ Started at: 2025-08-15T08:12:26.840Z","timestamp":"2025-08-15T08:12:26.840Z"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T08:14:12.916Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T08:14:13.897Z"}
+{"duration":"988ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T08:14:13.903Z","url":"/?date=2025-08-15&_t=1755245652907","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"date":"2025-08-15","level":"info","message":"APOD request received","timestamp":"2025-08-15T08:14:13.904Z"}
+{"date":"2025-08-15","hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T08:14:13.905Z"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T08:14:13.907Z","url":"/?date=2025-08-15&_t=1755245652907","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"1033ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T08:16:15.863Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755245774827","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"3ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T08:16:15.867Z","url":"/photos?rover=curiosity&sol=1000&page=1&_t=1755245774827","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"648ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T08:16:17.284Z","url":"/feed?start_date=2025-08-08&end_date=2025-08-15&_t=1755245776634","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"duration":"6ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T08:16:17.292Z","url":"/feed?start_date=2025-08-08&end_date=2025-08-15&_t=1755245776634","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"level":"info","message":"APOD request received","timestamp":"2025-08-15T08:16:21.991Z"}
+{"hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T08:16:22.265Z"}
+{"duration":"278ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T08:16:22.268Z","url":"/?_t=1755245781987","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}
+{"level":"info","message":"APOD request received","timestamp":"2025-08-15T08:16:22.270Z"}
+{"hasData":true,"level":"info","message":"APOD data fetched successfully","timestamp":"2025-08-15T08:16:22.271Z"}
+{"duration":"4ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","statusCode":200,"timestamp":"2025-08-15T08:16:22.273Z","url":"/?_t=1755245781987","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"}

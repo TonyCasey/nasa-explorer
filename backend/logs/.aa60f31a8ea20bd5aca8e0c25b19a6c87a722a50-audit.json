@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\tony\\My Drive\\Personal\\Jobs\\Bounce Insight\\coding-project\\backend\\logs\\.aa60f31a8ea20bd5aca8e0c25b19a6c87a722a50-audit.json",
+    "files": [
+        {
+            "date": 1755241877203,
+            "name": "C:\\Users\\tony\\My Drive\\Personal\\Jobs\\Bounce Insight\\coding-project\\backend\\logs\\rejections-2025-08-15.log",
+            "hash": "effd4c597fe5fa154b53f79a9fae98f0a36dcaf5ad1e44d40b588d8fdebbd096"
+        }
+    ],
+    "hashType": "sha256"
+}

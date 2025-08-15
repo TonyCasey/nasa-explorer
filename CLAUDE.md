@@ -192,3 +192,6 @@ REDIS_URL=redis://localhost:6379
 - Pre-commit hooks with Husky
 - Minimum 80% test coverage for new code
 - Atomic commits with clear messages
+
+## Current Todos
+[TODO.md](docs/TODO.md)

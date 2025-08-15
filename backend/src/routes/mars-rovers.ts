@@ -33,27 +33,6 @@ router.get('/', asyncHandler(async (req: Request, res: Response) => {
   });
 }));
 
-// Get specific rover information
-router.get('/:rover', asyncHandler(async (req: Request, res: Response) => {
-  const { rover } = req.params;
-  logger.info('Rover info request received', { rover });
-  
-  if (!VALID_ROVERS.includes(rover.toLowerCase())) {
-    logger.warn('Invalid rover name requested', { rover });
-    throw createError(`Invalid rover name. Valid rovers: ${VALID_ROVERS.join(', ')}`, 400);
-  }
-  
-  logger.debug('Fetching rover info', { rover: rover.toLowerCase() });
-  const data = await nasaService.getRoverInfo(rover.toLowerCase());
-  logger.info('Rover info fetched successfully', { rover: rover.toLowerCase(), hasData: !!data });
-  
-  res.json({
-    success: true,
-    data,
-    timestamp: new Date().toISOString(),
-  });
-}));
-
 // Get rover photos with filters
 router.get('/photos', asyncHandler(async (req: Request, res: Response) => {
   const { rover, sol, earth_date, camera, page = '1' } = req.query;
@@ -124,6 +103,27 @@ router.get('/photos', asyncHandler(async (req: Request, res: Response) => {
       current_page: params.page,
       total_photos: data.photos?.length || 0,
     },
+    timestamp: new Date().toISOString(),
+  });
+}));
+
+// Get specific rover information
+router.get('/:rover', asyncHandler(async (req: Request, res: Response) => {
+  const { rover } = req.params;
+  logger.info('Rover info request received', { rover });
+  
+  if (!VALID_ROVERS.includes(rover.toLowerCase())) {
+    logger.warn('Invalid rover name requested', { rover });
+    throw createError(`Invalid rover name. Valid rovers: ${VALID_ROVERS.join(', ')}`, 400);
+  }
+  
+  logger.debug('Fetching rover info', { rover: rover.toLowerCase() });
+  const data = await nasaService.getRoverInfo(rover.toLowerCase());
+  logger.info('Rover info fetched successfully', { rover: rover.toLowerCase(), hasData: !!data });
+  
+  res.json({
+    success: true,
+    data,
     timestamp: new Date().toISOString(),
   });
 }));

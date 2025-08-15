@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import APOD from './pages/APOD';
 import MarsRovers from './pages/MarsRovers';
 import NEOTracker from './pages/NEOTracker';
+import Favorites from './pages/Favorites';
 import logger from './utils/logger';
 
 function App() {
@@ -18,14 +19,15 @@ function App() {
     <ErrorBoundary>
       <Router>
         <div className="flex flex-col min-h-screen bg-space-gradient">
-          <div className="flex flex-1">
+          <div className="flex flex-1 relative">
             <Navigation />
-            <main className="flex-1">
+            <main className="flex-1 w-full lg:w-auto">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/apod" element={<APOD />} />
                 <Route path="/mars-rovers" element={<MarsRovers />} />
                 <Route path="/neo-tracker" element={<NEOTracker />} />
+                <Route path="/favorites" element={<Favorites />} />
               </Routes>
             </main>
           </div>

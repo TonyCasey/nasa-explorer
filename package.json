@@ -1,6 +1,6 @@
 {
   "name": "nasa-space-explorer",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "NASA Space Explorer - Full-stack web application showcasing NASA's space data",
   "main": "index.js",
   "scripts": {
@@ -9,18 +9,30 @@
     "version:bump:minor": "node scripts/version.js bump minor",
     "version:bump:build": "node scripts/version.js bump build",
     "version:current": "node scripts/version.js current",
+    "version:sync": "node scripts/update-version.js",
     "commit": "node scripts/version.js commit-message",
     "dev:frontend": "cd frontend && npm start",
     "dev:backend": "cd backend && npm run dev",
+    "prebuild:frontend": "node scripts/version.js bump build 'Build frontend'",
     "build:frontend": "cd frontend && npm run build",
+    "prebuild:backend": "node scripts/version.js bump build 'Build backend'",
     "build:backend": "cd backend && npm run build",
+    "prebuild:shared": "node scripts/version.js bump build 'Build shared'",
     "build:shared": "cd shared && npm run build",
+    "prebuild:all": "node scripts/version.js bump build 'Build all packages'",
     "build:all": "npm run build:shared && npm run build:backend && npm run build:frontend",
     "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ../shared && npm install",
     "lint:all": "cd frontend && npm run lint && cd ../backend && npm run lint",
     "format:all": "cd frontend && npm run format && cd ../backend && npm run format"
   },
-  "keywords": ["nasa", "space", "react", "typescript", "express", "api"],
+  "keywords": [
+    "nasa",
+    "space",
+    "react",
+    "typescript",
+    "express",
+    "api"
+  ],
   "author": "Tony Casey",
   "license": "ISC",
   "repository": {
@@ -30,5 +42,9 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   }
 }

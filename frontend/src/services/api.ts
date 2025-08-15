@@ -1,5 +1,9 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
-import logger, { logApiRequest, logApiResponse, logApiError } from '../utils/logger';
+import logger, {
+  logApiRequest,
+  logApiResponse,
+  logApiError,
+} from '../utils/logger';
 
 // Create axios instance with base configuration
 const api: AxiosInstance = axios.create({
