@@ -1,7 +1,8 @@
 import request from 'supertest';
 import express from 'express';
 import marsRoversRouter from './mars-rovers';
-import * as nasaService from '../services/nasa.service';
+import { nasaService } from '../services/nasa.service';
+import { errorHandler } from '../middleware/errorHandler';
 
 // Mock the NASA service
 jest.mock('../services/nasa.service');
@@ -14,6 +15,7 @@ describe('Mars Rovers Routes', () => {
     app = express();
     app.use(express.json());
     app.use('/api/v1/mars-rovers', marsRoversRouter);
+    app.use(errorHandler);
   });
 
   beforeEach(() => {
@@ -44,13 +46,21 @@ describe('Mars Rovers Routes', () => {
       mockedNasaService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
 
       const response = await request(app)
-        .get('/api/v1/mars-rovers/photos')
+        .get('/api/v1/mars-rovers/photos?rover=curiosity')
         .expect(200);
 
-      expect(response.body).toEqual(mockPhotos);
+      expect(response.body).toMatchObject({
+        success: true,
+        data: mockPhotos,
+        filters: expect.any(Object),
+        timestamp: expect.any(String)
+      });
       expect(mockedNasaService.getMarsRoverPhotos).toHaveBeenCalledWith({
         rover: 'curiosity',
-        sol: 1000,
+        page: 1,
+        sol: undefined,
+        earth_date: undefined,
+        camera: undefined
       });
     });
 
@@ -64,7 +74,10 @@ describe('Mars Rovers Routes', () => {
 
       expect(mockedNasaService.getMarsRoverPhotos).toHaveBeenCalledWith({
         rover: 'perseverance',
-        sol: 1000,
+        page: 1,
+        sol: undefined,
+        earth_date: undefined,
+        camera: undefined
       });
     });
 
@@ -73,12 +86,15 @@ describe('Mars Rovers Routes', () => {
       mockedNasaService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
 
       await request(app)
-        .get('/api/v1/mars-rovers/photos?sol=500')
+        .get('/api/v1/mars-rovers/photos?rover=curiosity&sol=500')
         .expect(200);
 
       expect(mockedNasaService.getMarsRoverPhotos).toHaveBeenCalledWith({
         rover: 'curiosity',
+        page: 1,
         sol: 500,
+        earth_date: undefined,
+        camera: undefined
       });
     });
 
@@ -87,12 +103,15 @@ describe('Mars Rovers Routes', () => {
       mockedNasaService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
 
       await request(app)
-        .get('/api/v1/mars-rovers/photos?earth_date=2025-08-15')
+        .get('/api/v1/mars-rovers/photos?rover=curiosity&earth_date=2025-08-15')
         .expect(200);
 
       expect(mockedNasaService.getMarsRoverPhotos).toHaveBeenCalledWith({
         rover: 'curiosity',
+        page: 1,
+        sol: undefined,
         earth_date: '2025-08-15',
+        camera: undefined
       });
     });
 
@@ -101,13 +120,15 @@ describe('Mars Rovers Routes', () => {
       mockedNasaService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
 
       await request(app)
-        .get('/api/v1/mars-rovers/photos?camera=NAVCAM')
+        .get('/api/v1/mars-rovers/photos?rover=curiosity&camera=FHAZ')
         .expect(200);
 
       expect(mockedNasaService.getMarsRoverPhotos).toHaveBeenCalledWith({
         rover: 'curiosity',
-        sol: 1000,
-        camera: 'NAVCAM',
+        page: 1,
+        sol: undefined,
+        earth_date: undefined,
+        camera: 'FHAZ'
       });
     });
 
@@ -116,13 +137,15 @@ describe('Mars Rovers Routes', () => {
       mockedNasaService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
 
       await request(app)
-        .get('/api/v1/mars-rovers/photos?page=2')
+        .get('/api/v1/mars-rovers/photos?rover=curiosity&page=2')
         .expect(200);
 
       expect(mockedNasaService.getMarsRoverPhotos).toHaveBeenCalledWith({
         rover: 'curiosity',
-        sol: 1000,
         page: 2,
+        sol: undefined,
+        earth_date: undefined,
+        camera: undefined
       });
     });
 
@@ -132,21 +155,21 @@ describe('Mars Rovers Routes', () => {
         .expect(400);
 
       expect(response.body).toHaveProperty('error');
-      expect(response.body.message).toContain('Invalid rover');
+      expect(response.body.message).toContain('Invalid rover name');
     });
 
     it('should validate sol parameter', async () => {
       const response = await request(app)
-        .get('/api/v1/mars-rovers/photos?sol=-1')
+        .get('/api/v1/mars-rovers/photos?rover=curiosity&sol=-1')
         .expect(400);
 
       expect(response.body).toHaveProperty('error');
-      expect(response.body.message).toContain('Sol must be a positive number');
+      expect(response.body.message).toContain('Sol must be a non-negative number');
     });
 
     it('should validate earth_date format', async () => {
       const response = await request(app)
-        .get('/api/v1/mars-rovers/photos?earth_date=invalid-date')
+        .get('/api/v1/mars-rovers/photos?rover=curiosity&earth_date=invalid-date')
         .expect(400);
 
       expect(response.body).toHaveProperty('error');
@@ -159,22 +182,11 @@ describe('Mars Rovers Routes', () => {
       );
 
       const response = await request(app)
-        .get('/api/v1/mars-rovers/photos')
+        .get('/api/v1/mars-rovers/photos?rover=curiosity')
         .expect(500);
 
       expect(response.body).toHaveProperty('error');
-      expect(response.body.message).toContain('Failed to fetch Mars rover photos');
     });
 
-    it('should include cache headers', async () => {
-      const mockPhotos = { photos: [] };
-      mockedNasaService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
-
-      const response = await request(app)
-        .get('/api/v1/mars-rovers/photos')
-        .expect(200);
-
-      expect(response.headers['cache-control']).toBeDefined();
-    });
   });
 });

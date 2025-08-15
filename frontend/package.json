@@ -43,7 +43,7 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "node_modules/(?!(axios)/)"
+      "node_modules/(?!(axios|react-router|react-router-dom|@tanstack)/)"
     ],
     "moduleNameMapper": {
       "^axios$": "axios/dist/node/axios.cjs"
@@ -62,8 +62,10 @@
     ]
   },
   "devDependencies": {
+    "@types/axios-mock-adapter": "^1.10.4",
     "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.21",
+    "axios-mock-adapter": "^2.1.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "postcss": "^8.5.6",

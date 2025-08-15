@@ -61,7 +61,8 @@ class FrontendLogger {
       this.logs = this.logs.slice(-this.maxLogs);
     }
 
-    if (process.env.NODE_ENV === 'development') {
+    // Only log errors in production to reduce noise
+    if (process.env.NODE_ENV === 'development' || entry.level === 'error') {
       const consoleMethod =
         entry.level === 'error'
           ? 'error'
@@ -82,6 +83,11 @@ class FrontendLogger {
   }
 
   private saveToStorage(): void {
+    // Skip localStorage in production for simplicity
+    if (process.env.NODE_ENV === 'production') {
+      return;
+    }
+    
     try {
       const today = new Date().toISOString().split('T')[0];
       const storageKey = `nasa_explorer_logs_${today}`;

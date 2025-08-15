@@ -1,0 +1,32 @@
+{
+  "summary": {
+    "timestamp": "2025-08-15T14:32:50.545Z",
+    "title": "Nasa Explorer",
+    "totalErrors": 1,
+    "categories": {
+      "consoleErrors": 0,
+      "networkErrors": 0,
+      "jsErrors": 0,
+      "cssErrors": 0,
+      "accessibilityIssues": 0,
+      "performanceIssues": 0,
+      "uiIssues": 1
+    }
+  },
+  "details": {
+    "consoleErrors": [],
+    "networkErrors": [],
+    "jsErrors": [],
+    "cssErrors": [],
+    "accessibilityIssues": [],
+    "performanceIssues": [],
+    "uiIssues": [
+      {
+        "type": "Route Navigation Error",
+        "route": "/mars-rovers",
+        "message": "Navigation timeout of 10000 ms exceeded",
+        "timestamp": "2025-08-15T14:32:42.730Z"
+      }
+    ]
+  }
+}

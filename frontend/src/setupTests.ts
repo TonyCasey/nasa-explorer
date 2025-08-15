@@ -38,3 +38,5 @@ window.location = { ...window.location, href: 'http://localhost:3000' };
 
 // Mock environment variables
 process.env.REACT_APP_API_URL = 'http://localhost:5000/api/v1';
+
+// Individual test files will handle their own mocking

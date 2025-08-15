@@ -6,9 +6,9 @@ import dotenv from 'dotenv';
 import { getVersionString } from './utils/version';
 import { errorHandler } from './middleware/errorHandler';
 import { rateLimiter } from './middleware/rateLimiter';
-import { requestLogger } from './middleware/requestLogger';
+// import { requestLogger } from './middleware/requestLogger';
 import { cacheMiddleware } from './middleware/cache';
-import apiRoutes from './routes';
+import simpleRoutes from './routes/simple';
 
 // Load environment variables
 dotenv.config();
@@ -30,9 +30,31 @@ app.use(helmet({
   },
 }));
 
-// CORS configuration
+// CORS configuration - allow multiple origins for development and production
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://frontend-qsyjnxvbq-tonys-projects-e30b27a9.vercel.app',
+  'https://frontend-n4s0vnmxl-tonys-projects-e30b27a9.vercel.app',
+  'https://frontend-f64eio70y-tonys-projects-e30b27a9.vercel.app'
+];
+
+if (process.env.CLIENT_URL) {
+  allowedOrigins.push(process.env.CLIENT_URL);
+}
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log(`CORS blocked origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 
@@ -44,13 +66,11 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Request logging
-app.use(requestLogger);
+// app.use(requestLogger);
 
-// Rate limiting
-app.use('/api', rateLimiter);
-
-// Cache middleware for API responses
-app.use('/api', cacheMiddleware);
+// Temporarily disable middleware for debugging
+// app.use('/api', rateLimiter);
+// app.use('/api', cacheMiddleware);
 
 // Health check endpoint
 app.get('/health', (_req, res) => {
@@ -64,11 +84,18 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// API routes
-app.use('/api/v1', apiRoutes);
+// Simple test route first
+app.get('/api/v1/test', (req, res) => {
+  res.json({ message: 'Backend is working!', timestamp: new Date().toISOString() });
+});
 
-// 404 handler
-app.use('*', (req, res) => {
+// API routes - using simple routes for now
+console.log('About to mount simple API routes');
+app.use('/api/v1', simpleRoutes);
+console.log('Simple API routes mounted successfully');
+
+// 404 handler - removed wildcard pattern to fix path-to-regexp error
+app.use((req, res) => {
   res.status(404).json({
     error: 'Not Found',
     message: `Route ${req.originalUrl} not found`,

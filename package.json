@@ -23,7 +23,17 @@
     "build:all": "npm run build:shared && npm run build:backend && npm run build:frontend",
     "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ../shared && npm install",
     "lint:all": "cd frontend && npm run lint && cd ../backend && npm run lint",
-    "format:all": "cd frontend && npm run format && cd ../backend && npm run format"
+    "format:all": "cd frontend && npm run format && cd ../backend && npm run format",
+    "test:unit": "cd frontend && npm test -- --watchAll=false && cd ../backend && npm test",
+    "test:e2e": "npx playwright test",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test:e2e:headed": "npx playwright test --headed",
+    "test:e2e:debug": "npx playwright test --debug",
+    "test:all": "npm run test:unit && npm run test:e2e",
+    "deploy:frontend": "cd frontend && vercel --prod --yes",
+    "deploy:backend:heroku": "cd backend && git push heroku main",
+    "deploy:backend:railway": "cd backend && railway up",
+    "deploy:all": "npm run build:all && npm run deploy:backend:heroku && npm run deploy:frontend"
   },
   "keywords": [
     "nasa",
@@ -44,7 +54,11 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
+    "puppeteer": "^24.16.2",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
   }
 }

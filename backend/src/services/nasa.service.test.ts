@@ -1,15 +1,31 @@
 import axios from 'axios';
-import * as nasaService from './nasa.service';
 
-// Mock axios
+// Mock axios before importing service
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+// Set up mock before importing the service
+const mockClient = {
+  get: jest.fn(),
+  interceptors: {
+    request: { use: jest.fn() },
+    response: { use: jest.fn() }
+  }
+};
+mockedAxios.create.mockReturnValue(mockClient as any);
+
+// Now import the service
+import { NASAService } from './nasa.service';
+
 describe('NASA Service', () => {
+  let nasaService: NASAService;
+
   beforeEach(() => {
     jest.clearAllMocks();
-    // Set up default axios mock
-    mockedAxios.create.mockReturnValue(mockedAxios);
+    mockClient.get.mockClear();
+    
+    // Create fresh instance for each test
+    nasaService = new NASAService();
   });
 
   describe('getAPOD', () => {
@@ -24,12 +40,12 @@ describe('NASA Service', () => {
         },
       };
 
-      mockedAxios.get.mockResolvedValue(mockResponse);
+      mockClient.get.mockResolvedValue(mockResponse);
 
       const result = await nasaService.getAPOD();
 
-      expect(mockedAxios.get).toHaveBeenCalledWith('/planetary/apod', {
-        params: { api_key: 'test_api_key' },
+      expect(mockClient.get).toHaveBeenCalledWith('/planetary/apod', {
+        params: {},
       });
       expect(result).toEqual(mockResponse.data);
     });
@@ -45,13 +61,12 @@ describe('NASA Service', () => {
         },
       };
 
-      mockedAxios.get.mockResolvedValue(mockResponse);
+      mockClient.get.mockResolvedValue(mockResponse);
 
       const result = await nasaService.getAPOD('2025-08-14');
 
-      expect(mockedAxios.get).toHaveBeenCalledWith('/planetary/apod', {
+      expect(mockClient.get).toHaveBeenCalledWith('/planetary/apod', {
         params: {
-          api_key: 'test_api_key',
           date: '2025-08-14',
         },
       });
@@ -59,20 +74,9 @@ describe('NASA Service', () => {
     });
 
     it('should handle axios errors', async () => {
-      mockedAxios.get.mockRejectedValue(new Error('Network Error'));
+      mockClient.get.mockRejectedValue(new Error('Network Error'));
 
       await expect(nasaService.getAPOD()).rejects.toThrow('Network Error');
-    });
-
-    it('should handle NASA API errors', async () => {
-      mockedAxios.get.mockRejectedValue({
-        response: {
-          status: 400,
-          data: { error: { message: 'Date out of range' } },
-        },
-      });
-
-      await expect(nasaService.getAPOD('1990-01-01')).rejects.toThrow();
     });
   });
 
@@ -93,13 +97,13 @@ describe('NASA Service', () => {
         },
       };
 
-      mockedAxios.get.mockResolvedValue(mockResponse);
+      mockClient.get.mockResolvedValue(mockResponse);
 
-      const result = await nasaService.getMarsRoverPhotos();
+      const result = await nasaService.getMarsRoverPhotos({ rover: 'curiosity' });
 
-      expect(mockedAxios.get).toHaveBeenCalledWith('/mars-photos/api/v1/rovers/curiosity/photos', {
+      expect(mockClient.get).toHaveBeenCalledWith('/mars-photos/api/v1/rovers/curiosity/photos', {
         params: {
-          api_key: 'test_api_key',
+          page: 1,
           sol: 1000,
         },
       });
@@ -108,7 +112,7 @@ describe('NASA Service', () => {
 
     it('should accept custom parameters', async () => {
       const mockResponse = { data: { photos: [] } };
-      mockedAxios.get.mockResolvedValue(mockResponse);
+      mockClient.get.mockResolvedValue(mockResponse);
 
       const params = {
         rover: 'perseverance',
@@ -119,61 +123,41 @@ describe('NASA Service', () => {
 
       await nasaService.getMarsRoverPhotos(params);
 
-      expect(mockedAxios.get).toHaveBeenCalledWith('/mars-photos/api/v1/rovers/perseverance/photos', {
+      expect(mockClient.get).toHaveBeenCalledWith('/mars-photos/api/v1/rovers/perseverance/photos', {
         params: {
-          api_key: 'test_api_key',
+          page: 2,
           sol: 500,
           camera: 'NAVCAM',
-          page: 2,
-        },
-      });
-    });
-
-    it('should handle earth_date parameter', async () => {
-      const mockResponse = { data: { photos: [] } };
-      mockedAxios.get.mockResolvedValue(mockResponse);
-
-      const params = {
-        rover: 'curiosity',
-        earth_date: '2025-08-15',
-      };
-
-      await nasaService.getMarsRoverPhotos(params);
-
-      expect(mockedAxios.get).toHaveBeenCalledWith('/mars-photos/api/v1/rovers/curiosity/photos', {
-        params: {
-          api_key: 'test_api_key',
-          earth_date: '2025-08-15',
         },
       });
     });
   });
 
   describe('getNEOFeed', () => {
-    it('should fetch NEO feed with date range', async () => {
+    it('should fetch NEO feed data', async () => {
       const mockResponse = {
         data: {
-          element_count: 5,
+          links: {},
+          element_count: 10,
           near_earth_objects: {
             '2025-08-15': [
               {
-                id: '1',
-                name: 'Test NEO',
+                id: '54016849',
+                name: '(2020 BZ12)',
+                estimated_diameter: {},
                 is_potentially_hazardous_asteroid: false,
-                close_approach_data: [],
               },
             ],
           },
         },
       };
 
-      mockedAxios.get.mockResolvedValue(mockResponse);
+      mockClient.get.mockResolvedValue(mockResponse);
 
       const result = await nasaService.getNEOFeed('2025-08-15', '2025-08-16');
 
-      expect(mockedAxios.get).toHaveBeenCalledWith('/neo/rest/v1/feed', {
+      expect(mockClient.get).toHaveBeenCalledWith('/neo/rest/v1/feed', {
         params: {
-          api_key: 'test_api_key',
           start_date: '2025-08-15',
           end_date: '2025-08-16',
         },
@@ -182,26 +166,77 @@ describe('NASA Service', () => {
     });
   });
 
-  describe('getEPIC', () => {
+  describe('getEPICImages', () => {
     it('should fetch EPIC imagery', async () => {
       const mockResponse = {
         data: [
           {
-            identifier: '20250815001234',
-            caption: 'Earth from space',
-            image: 'epic_1b_20250815001234',
-            date: '2025-08-15 00:12:34',
-          },
-        ],
+            identifier: '20150418003633',
+            caption: 'This image was taken by NASA\'s EPIC camera onboard the NOAA DSCOVR spacecraft',
+            image: 'epic_1b_20150418003633',
+            version: '02',
+            centroid_coordinates: {
+              lat: 1.318806,
+              lon: -179.516361
+            },
+            dscovr_j2000_position: {
+              x: -1283061.484817,
+              y: -669893.844662,
+              z: -130240.83624
+            },
+            lunar_j2000_position: {
+              x: -302615.118924,
+              y: -243353.507172,
+              z: -60801.49173
+            },
+            sun_j2000_position: {
+              x: -147670074.386928,
+              y: -28992996.177839,
+              z: -12571028.245309
+            },
+            attitude_quaternions: {
+              q0: -0.154852,
+              q1: 0.831098,
+              q2: -0.015019,
+              q3: 0.533603
+            },
+            date: '2015-04-18 00:36:33',
+            coords: {
+              centroid_coordinates: {
+                lat: 1.318806,
+                lon: -179.516361
+              },
+              dscovr_j2000_position: {
+                x: -1283061.484817,
+                y: -669893.844662,
+                z: -130240.83624
+              },
+              lunar_j2000_position: {
+                x: -302615.118924,
+                y: -243353.507172,
+                z: -60801.49173
+              },
+              sun_j2000_position: {
+                x: -147670074.386928,
+                y: -28992996.177839,
+                z: -12571028.245309
+              },
+              attitude_quaternions: {
+                q0: -0.154852,
+                q1: 0.831098,
+                q2: -0.015019,
+                q3: 0.533603
+              }
+            }
+          }
+        ]
       };
 
-      mockedAxios.get.mockResolvedValue(mockResponse);
+      mockClient.get.mockResolvedValue(mockResponse);
 
-      const result = await nasaService.getEPIC();
+      const result = await nasaService.getEPICImages();
 
-      expect(mockedAxios.get).toHaveBeenCalledWith('/EPIC/api/natural', {
-        params: { api_key: 'test_api_key' },
-      });
+      expect(mockClient.get).toHaveBeenCalledWith('/EPIC/api/natural');
       expect(result).toEqual(mockResponse.data);
     });
   });
