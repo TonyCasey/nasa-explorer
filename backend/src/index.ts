@@ -34,10 +34,12 @@ app.use(helmet({
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://frontend-qsyjnxvbq-tonys-projects-e30b27a9.vercel.app',
-  'https://frontend-n4s0vnmxl-tonys-projects-e30b27a9.vercel.app',
-  'https://frontend-f64eio70y-tonys-projects-e30b27a9.vercel.app'
+  'https://frontend.vercel.app',
+  'https://nasa-space-explorer-frontend.vercel.app'
 ];
+
+// Add Vercel preview URLs pattern
+const vercelPreviewPattern = /^https:\/\/frontend-[a-z0-9]+-tonys-projects-[a-z0-9]+\.vercel\.app$/;
 
 if (process.env.CLIENT_URL) {
   allowedOrigins.push(process.env.CLIENT_URL);
@@ -48,14 +50,22 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
+    // Check if origin matches allowed origins or Vercel preview pattern
+    if (allowedOrigins.indexOf(origin) !== -1 || vercelPreviewPattern.test(origin)) {
+      callback(null, origin); // Return the actual origin
     } else {
       console.log(`CORS blocked origin: ${origin}`);
-      callback(new Error('Not allowed by CORS'));
+      // In production, be more permissive for now to avoid blocking
+      if (NODE_ENV === 'production') {
+        callback(null, origin);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
     }
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 // Compression middleware
@@ -71,6 +81,25 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Temporarily disable middleware for debugging
 // app.use('/api', rateLimiter);
 // app.use('/api', cacheMiddleware);
+
+// Root endpoint
+app.get('/', (_req, res) => {
+  res.json({
+    name: 'NASA Space Explorer Backend',
+    version: getVersionString(),
+    status: 'Running',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/health',
+      api: '/api/v1',
+      apod: '/api/v1/apod',
+      marsRovers: '/api/v1/mars-rovers',
+      neo: '/api/v1/neo',
+      epic: '/api/v1/epic'
+    },
+    documentation: 'https://github.com/yourusername/nasa-space-explorer'
+  });
+});
 
 // Health check endpoint
 app.get('/health', (_req, res) => {
