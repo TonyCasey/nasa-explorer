@@ -19,7 +19,7 @@ export class NASAService {
 
     this.client = axios.create({
       baseURL: process.env.NASA_API_BASE_URL || 'https://api.nasa.gov',
-      timeout: 30000,
+      timeout: 10000, // Reduced timeout to 10 seconds
       params: {
         api_key: this.apiKey,
       },
@@ -94,6 +94,22 @@ export class NASAService {
     logger.debug(`💾 Cached: ${key}`);
   }
 
+  // Fallback data when NASA API is unavailable
+  private getFallbackAPOD(date?: string): any {
+    const fallbackImages = [
+      {
+        date: date || new Date().toISOString().split('T')[0],
+        title: "Eagle Nebula (Fallback Data)",
+        explanation: "The Eagle Nebula, a stellar nursery located 7,000 light-years away in the constellation Serpens. This fallback data is displayed when the NASA API is unavailable.",
+        url: "https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_eagle_nebula.jpg",
+        hdurl: "https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_eagle_nebula.jpg",
+        media_type: "image",
+        service_version: "v1"
+      }
+    ];
+    return fallbackImages[0];
+  }
+
   // Astronomy Picture of the Day
   async getAPOD(date?: string): Promise<any> {
     try {
@@ -107,14 +123,22 @@ export class NASAService {
       const cached = this.getFromCache(cacheKey);
       if (cached) return cached;
 
+      logger.info('APOD request received');
       const response = await this.client.get('/planetary/apod', { params });
       
       // Cache the response
       this.setCache(cacheKey, response.data);
       
       return response.data;
-    } catch (error) {
-      logger.error('APOD API Error:', error);
+    } catch (error: any) {
+      logger.error('❌ NASA API Error:', error.code || error.message);
+      
+      // Return fallback data when NASA API is unavailable
+      if (error.code === 'ECONNABORTED' || error.code === 'ENOTFOUND' || error.code === 'ETIMEDOUT') {
+        logger.warn('⚠️  NASA API unavailable, returning fallback data');
+        return this.getFallbackAPOD(date);
+      }
+      
       throw error;
     }
   }
