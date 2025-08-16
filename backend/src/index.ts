@@ -34,6 +34,7 @@ app.use(helmet({
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
+  'https://nasa.tonycasey.dev',
   'https://frontend.vercel.app',
   'https://nasa-space-explorer-frontend.vercel.app'
 ];
