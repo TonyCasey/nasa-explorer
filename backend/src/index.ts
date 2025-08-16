@@ -8,7 +8,7 @@ import { errorHandler } from './middleware/errorHandler';
 import { rateLimiter } from './middleware/rateLimiter';
 // import { requestLogger } from './middleware/requestLogger';
 import { cacheMiddleware } from './middleware/cache';
-import apiRoutes from './routes';
+import simpleRoutes from './routes/simple';
 
 // Load environment variables
 dotenv.config();
@@ -119,10 +119,8 @@ app.get('/api/v1/test', (req, res) => {
   res.json({ message: 'Backend is working!', timestamp: new Date().toISOString() });
 });
 
-// API routes - using real NASA API routes
-app.use('/api/v1', rateLimiter);
-app.use('/api/v1', cacheMiddleware);
-app.use('/api/v1', apiRoutes);
+// API routes - using simple routes for now (NASA API timing out)
+app.use('/api/v1', simpleRoutes);
 
 // 404 handler - removed wildcard pattern to fix path-to-regexp error
 app.use((req, res) => {
