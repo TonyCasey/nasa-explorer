@@ -18,7 +18,13 @@ jest.mock('../services/nasa.service', () => ({
 
 // Mock components
 jest.mock('../components/DatePicker', () => {
-  return function MockDatePicker({ value, onChange }: { value: string; onChange: (date: string) => void }) {
+  return function MockDatePicker({
+    value,
+    onChange,
+  }: {
+    value: string;
+    onChange: (date: string) => void;
+  }) {
     return (
       <input
         data-testid="date-picker"
@@ -33,7 +39,8 @@ jest.mock('../components/NEOCard', () => {
   return function MockNEOCard({ neo }: { neo: any }) {
     return (
       <div data-testid={`neo-card-${neo.id}`}>
-        {neo.name} - {neo.is_potentially_hazardous_asteroid ? 'Hazardous' : 'Safe'}
+        {neo.name} -{' '}
+        {neo.is_potentially_hazardous_asteroid ? 'Hazardous' : 'Safe'}
       </div>
     );
   };
@@ -42,9 +49,7 @@ jest.mock('../components/NEOCard', () => {
 jest.mock('../components/NEOChart', () => {
   return function MockNEOChart({ data }: { data: any[] }) {
     return (
-      <div data-testid="neo-chart">
-        Chart with {data.length} data points
-      </div>
+      <div data-testid="neo-chart">Chart with {data.length} data points</div>
     );
   };
 });
@@ -56,7 +61,11 @@ jest.mock('../components/LoadingSpinner', () => {
 });
 
 jest.mock('../components/ErrorBoundary', () => {
-  return function MockErrorBoundary({ children }: { children: React.ReactNode }) {
+  return function MockErrorBoundary({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) {
     return <div>{children}</div>;
   };
 });
@@ -69,9 +78,7 @@ const renderWithProviders = (component: React.ReactElement) => {
   });
 
   return render(
-    <QueryClientProvider client={queryClient}>
-      {component}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{component}</QueryClientProvider>
   );
 };
 
@@ -134,20 +141,20 @@ describe('NEOTracker', () => {
 
   it('renders NEO Tracker page title', () => {
     renderWithProviders(<NEOTracker />);
-    
+
     expect(screen.getByText('Near Earth Objects Tracker')).toBeInTheDocument();
   });
 
   it('renders date picker for date range selection', () => {
     renderWithProviders(<NEOTracker />);
-    
+
     const datePickers = screen.getAllByTestId('date-picker');
     expect(datePickers).toHaveLength(2); // Start and end date
   });
 
   it('shows loading state initially', () => {
     renderWithProviders(<NEOTracker />);
-    
+
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
@@ -201,11 +208,14 @@ describe('NEOTracker', () => {
 
     const datePickers = screen.getAllByTestId('date-picker');
     const startDatePicker = datePickers[0];
-    
+
     await user.clear(startDatePicker);
     await user.type(startDatePicker, '2025-08-14');
 
-    expect(nasaService.getNEOFeed).toHaveBeenCalledWith('2025-08-14', expect.any(String));
+    expect(nasaService.getNEOFeed).toHaveBeenCalledWith(
+      '2025-08-14',
+      expect.any(String)
+    );
   });
 
   it('shows error state when API fails', async () => {

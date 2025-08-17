@@ -27,10 +27,12 @@ describe('NASAService', () => {
         media_type: 'image',
       };
 
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockAPOD } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockAPOD },
+      });
 
       const result = await NASAService.getAPOD();
-      
+
       expect(mockedApi.get).toHaveBeenCalledWith('/apod', {
         params: {},
       });
@@ -46,10 +48,12 @@ describe('NASAService', () => {
         media_type: 'image',
       };
 
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockAPOD } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockAPOD },
+      });
 
       const result = await NASAService.getAPOD('2025-08-14');
-      
+
       expect(mockedApi.get).toHaveBeenCalledWith('/apod', {
         params: { date: '2025-08-14' },
       });
@@ -70,7 +74,10 @@ describe('NASAService', () => {
           {
             id: 1,
             sol: 1000,
-            camera: { name: 'FHAZ', full_name: 'Front Hazard Avoidance Camera' },
+            camera: {
+              name: 'FHAZ',
+              full_name: 'Front Hazard Avoidance Camera',
+            },
             img_src: 'https://mars.nasa.gov/test.jpg',
             earth_date: '2025-08-15',
             rover: { name: 'Curiosity', status: 'active' },
@@ -78,10 +85,14 @@ describe('NASAService', () => {
         ],
       };
 
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockPhotos } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockPhotos },
+      });
 
-      const result = await NASAService.getMarsRoverPhotos({ rover: 'curiosity' });
-      
+      const result = await NASAService.getMarsRoverPhotos({
+        rover: 'curiosity',
+      });
+
       expect(mockedApi.get).toHaveBeenCalledWith('/mars-rovers/photos', {
         params: {
           rover: 'curiosity',
@@ -96,7 +107,9 @@ describe('NASAService', () => {
 
     it('fetches Mars rover photos with custom params', async () => {
       const mockPhotos = { photos: [] };
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockPhotos } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockPhotos },
+      });
 
       const params = {
         rover: 'perseverance',
@@ -106,7 +119,7 @@ describe('NASAService', () => {
       };
 
       await NASAService.getMarsRoverPhotos(params);
-      
+
       expect(mockedApi.get).toHaveBeenCalledWith('/mars-rovers/photos', {
         params: {
           rover: 'perseverance',
@@ -135,10 +148,12 @@ describe('NASAService', () => {
         },
       };
 
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockNEOs } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockNEOs },
+      });
 
       const result = await NASAService.getNEOFeed();
-      
+
       expect(mockedApi.get).toHaveBeenCalledWith('/neo/feed', {
         params: {
           start_date: undefined,
@@ -154,10 +169,15 @@ describe('NASAService', () => {
         near_earth_objects: {},
       };
 
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockNEOs } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockNEOs },
+      });
 
-      const result = await NASAService.getNEOFeed({ startDate: '2025-08-10', endDate: '2025-08-15' });
-      
+      const result = await NASAService.getNEOFeed({
+        startDate: '2025-08-10',
+        endDate: '2025-08-15',
+      });
+
       expect(mockedApi.get).toHaveBeenCalledWith('/neo/feed', {
         params: {
           start_date: '2025-08-10',
@@ -187,10 +207,12 @@ describe('NASAService', () => {
         },
       ];
 
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockAPODRange } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockAPODRange },
+      });
 
       const result = await NASAService.getAPODRange('2025-08-14', '2025-08-15');
-      
+
       expect(mockedApi.get).toHaveBeenCalledWith('/apod/range', {
         params: { start_date: '2025-08-14', end_date: '2025-08-15' },
       });
@@ -205,13 +227,16 @@ describe('NASAService', () => {
       mockedApi.get.mockResolvedValue({ data: { success: true, data: [] } });
 
       const result = await NASAService.getAPODRange('2025-08-14', '2025-08-15');
-      
+
       expect(result).toEqual([]);
-      expect(logger.info).toHaveBeenCalledWith('APOD range data fetched successfully', {
-        startDate: '2025-08-14',
-        endDate: '2025-08-15',
-        count: 0,
-      });
+      expect(logger.info).toHaveBeenCalledWith(
+        'APOD range data fetched successfully',
+        {
+          startDate: '2025-08-14',
+          endDate: '2025-08-15',
+          count: 0,
+        }
+      );
     });
   });
 
@@ -224,10 +249,12 @@ describe('NASAService', () => {
         absolute_magnitude_h: 22.1,
       };
 
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockNEO } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockNEO },
+      });
 
       const result = await NASAService.getNEOById('54016');
-      
+
       expect(mockedApi.get).toHaveBeenCalledWith('/neo/54016');
       expect(result).toEqual(mockNEO);
     });
@@ -245,21 +272,27 @@ describe('NASAService', () => {
         },
       ];
 
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockEPIC } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockEPIC },
+      });
 
       const result = await NASAService.getEPICImages();
-      
+
       expect(mockedApi.get).toHaveBeenCalledWith('/epic', { params: {} });
       expect(result).toEqual(mockEPIC);
     });
 
     it('fetches EPIC images for specific date', async () => {
       const mockEPIC = [];
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockEPIC } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockEPIC },
+      });
 
       const result = await NASAService.getEPICImages('2025-08-15');
-      
-      expect(mockedApi.get).toHaveBeenCalledWith('/epic', { params: { date: '2025-08-15' } });
+
+      expect(mockedApi.get).toHaveBeenCalledWith('/epic', {
+        params: { date: '2025-08-15' },
+      });
       expect(result).toEqual(mockEPIC);
     });
   });
@@ -273,10 +306,12 @@ describe('NASAService', () => {
         max_sol: 3000,
       };
 
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockRoverInfo } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockRoverInfo },
+      });
 
       const result = await NASAService.getRoverInfo('curiosity');
-      
+
       expect(mockedApi.get).toHaveBeenCalledWith('/mars-rovers/curiosity');
       expect(result).toEqual(mockRoverInfo);
     });
@@ -289,10 +324,12 @@ describe('NASAService', () => {
         timestamp: '2025-08-15T12:00:00Z',
       };
 
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockHealth } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockHealth },
+      });
 
       const result = await NASAService.healthCheck();
-      
+
       expect(mockedApi.get).toHaveBeenCalledWith('/health');
       expect(result).toEqual(mockHealth);
     });
@@ -319,41 +356,60 @@ describe('NASAService', () => {
       const apiError = new Error('Rate limit exceeded');
       mockedApi.get.mockRejectedValue(apiError);
 
-      await expect(NASAService.getNEOFeed()).rejects.toThrow('Rate limit exceeded');
+      await expect(NASAService.getNEOFeed()).rejects.toThrow(
+        'Rate limit exceeded'
+      );
     });
   });
 
   describe('Logging behavior', () => {
     it('logs successful APOD requests', async () => {
       const mockAPOD = { title: 'Test', date: '2025-08-15' };
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockAPOD } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockAPOD },
+      });
 
       await NASAService.getAPOD('2025-08-15');
 
-      expect(logger.debug).toHaveBeenCalledWith('Fetching APOD data', { date: '2025-08-15' });
-      expect(logger.info).toHaveBeenCalledWith('APOD data fetched successfully', {
+      expect(logger.debug).toHaveBeenCalledWith('Fetching APOD data', {
         date: '2025-08-15',
-        hasData: true,
       });
+      expect(logger.info).toHaveBeenCalledWith(
+        'APOD data fetched successfully',
+        {
+          date: '2025-08-15',
+          hasData: true,
+        }
+      );
     });
 
     it('logs successful Mars rover requests', async () => {
       const mockPhotos = { photos: [] };
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockPhotos } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockPhotos },
+      });
 
       const params = { rover: 'curiosity', sol: 1000 };
       await NASAService.getMarsRoverPhotos(params);
 
-      expect(logger.debug).toHaveBeenCalledWith('Fetching Mars rover photos', params);
-      expect(logger.info).toHaveBeenCalledWith('Mars rover photos fetched successfully', {
-        rover: 'curiosity',
-        photoCount: 0,
-      });
+      expect(logger.debug).toHaveBeenCalledWith(
+        'Fetching Mars rover photos',
+        params
+      );
+      expect(logger.info).toHaveBeenCalledWith(
+        'Mars rover photos fetched successfully',
+        {
+          rover: 'curiosity',
+          photoCount: 0,
+        }
+      );
     });
 
     it('logs successful NEO feed requests', async () => {
       const mockNEOs = { element_count: 5, near_earth_objects: {} };
-      mockedApi.get.mockResolvedValue({ data: { success: true, data: mockNEOs } });
+      mockedApi.get.mockResolvedValue({
+        data: { success: true, data: mockNEOs },
+      });
 
       await NASAService.getNEOFeed('2025-08-15', '2025-08-15');
 
@@ -361,11 +417,14 @@ describe('NASAService', () => {
         startDate: '2025-08-15',
         endDate: '2025-08-15',
       });
-      expect(logger.info).toHaveBeenCalledWith('NEO feed data fetched successfully', {
-        startDate: '2025-08-15',
-        endDate: '2025-08-15',
-        objectCount: 5,
-      });
+      expect(logger.info).toHaveBeenCalledWith(
+        'NEO feed data fetched successfully',
+        {
+          startDate: '2025-08-15',
+          endDate: '2025-08-15',
+          objectCount: 5,
+        }
+      );
     });
   });
 });

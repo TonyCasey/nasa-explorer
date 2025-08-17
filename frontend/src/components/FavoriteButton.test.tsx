@@ -45,17 +45,17 @@ describe('FavoriteButton', () => {
     render(<FavoriteButton item={mockItem} />);
     const button = screen.getByRole('button');
     const svg = button.querySelector('svg');
-    
+
     // Initially should not be favorited
     expect(svg).toHaveAttribute('stroke', 'currentColor');
     expect(svg).toHaveAttribute('fill', 'none');
-    
+
     fireEvent.click(button);
-    
+
     await waitFor(() => {
       expect(mockToggleFavorite).toHaveBeenCalledWith(mockItem);
     });
-    
+
     // After click, the component state should update
     await waitFor(() => {
       const updatedSvg = button.querySelector('svg');
@@ -91,10 +91,10 @@ describe('FavoriteButton', () => {
         <FavoriteButton item={mockItem} />
       </div>
     );
-    
+
     const button = screen.getByRole('button');
     fireEvent.click(button);
-    
+
     expect(handleParentClick).not.toHaveBeenCalled();
   });
 });

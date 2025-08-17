@@ -6,8 +6,8 @@
 const mockRender = jest.fn();
 jest.mock('react-dom/client', () => ({
   createRoot: jest.fn(() => ({
-    render: mockRender
-  }))
+    render: mockRender,
+  })),
 }));
 
 // Mock the App component
@@ -35,24 +35,26 @@ describe('Index', () => {
   it('should render app when imported', () => {
     // Import the index file to trigger the render
     require('./index');
-    
+
     // Verify that render was called
     expect(mockRender).toHaveBeenCalled();
   });
 
   it('should create React root', () => {
     const { createRoot } = require('react-dom/client');
-    
+
     // Import index to trigger createRoot
     require('./index');
-    
+
     expect(createRoot).toHaveBeenCalled();
   });
 
   it('should handle DOM ready state', () => {
     // Test that document is ready
     expect(document.readyState).toBeDefined();
-    expect(['loading', 'interactive', 'complete']).toContain(document.readyState);
+    expect(['loading', 'interactive', 'complete']).toContain(
+      document.readyState
+    );
   });
 
   it('should have HTML structure', () => {

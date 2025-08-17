@@ -8,21 +8,21 @@ const mockNEO = {
   estimated_diameter: {
     kilometers: {
       estimated_diameter_min: 0.1234,
-      estimated_diameter_max: 0.2759
-    }
+      estimated_diameter_max: 0.2759,
+    },
   },
   close_approach_data: [
     {
       close_approach_date: '2025-08-15',
       relative_velocity: {
-        kilometers_per_hour: '45123.456'
+        kilometers_per_hour: '45123.456',
       },
       miss_distance: {
-        kilometers: '12345678.123'
-      }
-    }
+        kilometers: '12345678.123',
+      },
+    },
   ],
-  is_potentially_hazardous_asteroid: false
+  is_potentially_hazardous_asteroid: false,
 };
 
 describe('NEOCard', () => {
@@ -61,7 +61,10 @@ describe('NEOCard', () => {
   });
 
   it('should indicate hazardous asteroid', () => {
-    const hazardousNEO = { ...mockNEO, is_potentially_hazardous_asteroid: true };
+    const hazardousNEO = {
+      ...mockNEO,
+      is_potentially_hazardous_asteroid: true,
+    };
     render(<NEOCard neo={hazardousNEO} />);
     expect(screen.getByText(/hazardous/i)).toBeInTheDocument();
   });
@@ -77,7 +80,7 @@ describe('NEOCard', () => {
       id: '123',
       name: 'Test NEO',
       estimated_diameter: {},
-      close_approach_data: []
+      close_approach_data: [],
     };
     render(<NEOCard neo={incompleteNEO} />);
     expect(screen.getByText('Test NEO')).toBeInTheDocument();

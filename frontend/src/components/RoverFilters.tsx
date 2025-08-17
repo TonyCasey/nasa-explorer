@@ -59,7 +59,9 @@ const RoverFilters: React.FC<RoverFiltersProps> = ({
   isLoading = false,
   className = '',
 }) => {
-  const [localSolValue, setLocalSolValue] = useState(filters.sol?.toString() || '');
+  const [localSolValue, setLocalSolValue] = useState(
+    filters.sol?.toString() || ''
+  );
   const availableCameras = CAMERAS[filters.rover as keyof typeof CAMERAS] || [];
 
   // Sync local sol value with filters when filters change externally
@@ -97,7 +99,6 @@ const RoverFilters: React.FC<RoverFiltersProps> = ({
     }
   };
 
-
   const handleCameraChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onFiltersChange({
       ...filters,
@@ -126,173 +127,333 @@ const RoverFilters: React.FC<RoverFiltersProps> = ({
     });
   };
 
+  const isHorizontal = className.includes('horizontal-layout');
+
   return (
-    <div className={`space-y-6 ${className}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-inter font-semibold text-white">
-          🔍 Filter Mars Photos
-        </h2>
-        <button
-          onClick={clearFilters}
-          disabled={isLoading}
-          className="text-sm text-gray-400 hover:text-white transition-colors duration-200 disabled:opacity-50"
-        >
-          Clear All
-        </button>
-      </div>
-
-      {/* Rover Selection */}
-      <div className="space-y-3">
-        <label className="text-white font-medium text-sm">Select Rover:</label>
-        <div className="grid grid-cols-2 gap-3">
-          {ROVERS.map((rover) => (
+    <div className={isHorizontal ? `${className}` : `space-y-6 ${className}`}>
+      {isHorizontal ? (
+        // Horizontal Layout
+        <div className="space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-inter font-semibold text-white">
+              🔍 Filter Mars Photos
+            </h2>
             <button
-              key={rover.id}
-              onClick={() => handleRoverChange(rover.id)}
+              onClick={clearFilters}
               disabled={isLoading}
-              className={`
-                p-4 rounded-xl border-2 transition-all duration-200 disabled:opacity-50
-                ${
-                  filters.rover === rover.id
-                    ? 'border-cosmic-purple bg-cosmic-purple/20 text-white'
-                    : 'border-white/20 bg-white/5 text-gray-300 hover:border-white/40 hover:bg-white/10'
-                }
-              `}
+              className="text-sm text-gray-400 hover:text-white transition-colors duration-200 disabled:opacity-50"
             >
-              <div className="text-center space-y-2">
-                <div className="text-2xl">{rover.emoji}</div>
-                <div className="font-medium text-sm leading-tight break-words">{rover.name}</div>
-                <div
-                  className={`text-xs ${
-                    rover.status === 'active'
-                      ? 'text-aurora-green'
-                      : 'text-gray-400'
-                  }`}
-                >
-                  {rover.status === 'active'
-                    ? '🟢 Active'
-                    : '🔴 Mission Complete'}
-                </div>
+              Clear All
+            </button>
+          </div>
+
+          {/* Horizontal Filters Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Rover Selection */}
+            <div className="space-y-2">
+              <label className="text-white font-medium text-sm">
+                Select Rover:
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {ROVERS.map((rover) => (
+                  <button
+                    key={rover.id}
+                    onClick={() => handleRoverChange(rover.id)}
+                    disabled={isLoading}
+                    className={`
+                      p-2 rounded-lg border transition-all duration-200 disabled:opacity-50
+                      ${
+                        filters.rover === rover.id
+                          ? 'border-cosmic-purple bg-cosmic-purple/20 text-white'
+                          : 'border-white/20 bg-white/5 text-gray-300 hover:border-white/40 hover:bg-white/10'
+                      }
+                    `}
+                  >
+                    <div className="text-center">
+                      <div className="text-lg">{rover.emoji}</div>
+                      <div className="font-medium text-xs">{rover.name}</div>
+                      <div
+                        className={`text-[10px] ${
+                          rover.status === 'active'
+                            ? 'text-aurora-green'
+                            : 'text-gray-400'
+                        }`}
+                      >
+                        {rover.status === 'active' ? 'Active' : 'Complete'}
+                      </div>
+                    </div>
+                  </button>
+                ))}
               </div>
-            </button>
-          ))}
+            </div>
+
+            {/* Sol Input */}
+            <div className="space-y-2">
+              <label className="text-white font-medium text-sm">
+                Mars Sol:
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  max="4000"
+                  placeholder="e.g., 1000"
+                  value={localSolValue}
+                  onChange={handleSolChange}
+                  onBlur={handleSolBlur}
+                  onKeyPress={handleSolKeyPress}
+                  disabled={isLoading}
+                  className="flex-1 glass-effect rounded-lg p-2 text-white placeholder-gray-400 border border-white/20 focus:border-cosmic-purple/50 focus:outline-none transition-colors duration-200 disabled:opacity-50"
+                />
+                <button
+                  onClick={getRandomSol}
+                  className="px-3 py-2 text-xs bg-cosmic-purple/20 text-cosmic-purple hover:bg-cosmic-purple/30 rounded-lg transition-colors duration-200"
+                >
+                  🎲
+                </button>
+              </div>
+              <p className="text-xs text-gray-400">Sol = Martian day</p>
+            </div>
+
+            {/* Earth Date Input */}
+            <div className="space-y-2">
+              <label className="text-white font-medium text-sm">
+                Earth Date:
+              </label>
+              <DatePicker
+                selectedDate={
+                  filters.earthDate || new Date().toISOString().split('T')[0]
+                }
+                onDateChange={(date) =>
+                  onFiltersChange({
+                    ...filters,
+                    earthDate: date,
+                    sol: undefined,
+                  })
+                }
+                minDate="2004-01-01"
+                maxDate="2025-08-01"
+                className="w-full"
+                opacity={70}
+              />
+              <p className="text-xs text-gray-400">📡 Latest: Aug 1, 2025</p>
+            </div>
+
+            {/* Camera Selection */}
+            <div className="space-y-2">
+              <label className="text-white font-medium text-sm">Camera:</label>
+              <select
+                value={filters.camera || ''}
+                onChange={handleCameraChange}
+                disabled={isLoading || availableCameras.length === 0}
+                className="w-full glass-effect rounded-lg p-2 text-white border border-white/20 focus:border-cosmic-purple/50 focus:outline-none transition-colors duration-200 disabled:opacity-50"
+              >
+                <option value="">All Cameras</option>
+                {availableCameras.map((camera) => (
+                  <option key={camera.id} value={camera.id}>
+                    {camera.id}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-400">
+                {availableCameras.length === 0
+                  ? 'Select rover first'
+                  : `${availableCameras.length} cameras`}
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Date/Sol Selection */}
-      <div className="space-y-4">
-        <label className="text-white font-medium text-sm">
-          Select Date or Sol:
-        </label>
-
-        {/* Sol Input */}
-        <div className="space-y-2">
-          <div className="flex items-center space-x-2">
-            <label className="text-gray-300 text-sm">Mars Sol:</label>
+      ) : (
+        // Original Vertical Layout
+        <>
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-inter font-semibold text-white">
+              🔍 Filter Mars Photos
+            </h2>
             <button
-              onClick={getRandomSol}
-              className="text-xs text-cosmic-purple hover:text-cosmic-purple/80 transition-colors duration-200"
+              onClick={clearFilters}
+              disabled={isLoading}
+              className="text-sm text-gray-400 hover:text-white transition-colors duration-200 disabled:opacity-50"
             >
-              🎲 Random
+              Clear All
             </button>
           </div>
-          <input
-            type="number"
-            min="1"
-            max="4000"
-            placeholder="e.g., 1000"
-            value={localSolValue}
-            onChange={handleSolChange}
-            onBlur={handleSolBlur}
-            onKeyPress={handleSolKeyPress}
-            disabled={isLoading}
-            className="w-full glass-effect rounded-lg p-3 text-white placeholder-gray-400 border border-white/20 focus:border-cosmic-purple/50 focus:outline-none transition-colors duration-200 disabled:opacity-50"
-          />
-          <p className="text-xs text-gray-400">
-            Sol = Martian day (leave empty for latest photos)
-          </p>
-        </div>
 
-        {/* Earth Date Input */}
-        <div className="space-y-2">
-          <div className="flex items-center space-x-2">
-            <label className="text-gray-300 text-sm">Or Earth Date:</label>
-            <button
-              onClick={() => onFiltersChange({ ...filters, earthDate: '2025-08-01', sol: undefined })}
-              className="text-xs text-cosmic-purple hover:text-cosmic-purple/80 transition-colors duration-200"
+          {/* Rover Selection */}
+          <div className="space-y-3">
+            <label className="text-white font-medium text-sm">
+              Select Rover:
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              {ROVERS.map((rover) => (
+                <button
+                  key={rover.id}
+                  onClick={() => handleRoverChange(rover.id)}
+                  disabled={isLoading}
+                  className={`
+                    p-4 rounded-xl border-2 transition-all duration-200 disabled:opacity-50
+                    ${
+                      filters.rover === rover.id
+                        ? 'border-cosmic-purple bg-cosmic-purple/20 text-white'
+                        : 'border-white/20 bg-white/5 text-gray-300 hover:border-white/40 hover:bg-white/10'
+                    }
+                  `}
+                >
+                  <div className="text-center space-y-2">
+                    <div className="text-2xl">{rover.emoji}</div>
+                    <div className="font-medium text-sm leading-tight break-words">
+                      {rover.name}
+                    </div>
+                    <div
+                      className={`text-xs ${
+                        rover.status === 'active'
+                          ? 'text-aurora-green'
+                          : 'text-gray-400'
+                      }`}
+                    >
+                      {rover.status === 'active'
+                        ? '🟢 Active'
+                        : '🔴 Mission Complete'}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Date/Sol Selection */}
+          <div className="space-y-4">
+            <label className="text-white font-medium text-sm">
+              Select Date or Sol:
+            </label>
+
+            {/* Sol Input */}
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <label className="text-gray-300 text-sm">Mars Sol:</label>
+                <button
+                  onClick={getRandomSol}
+                  className="text-xs text-cosmic-purple hover:text-cosmic-purple/80 transition-colors duration-200"
+                >
+                  🎲 Random
+                </button>
+              </div>
+              <input
+                type="number"
+                min="1"
+                max="4000"
+                placeholder="e.g., 1000"
+                value={localSolValue}
+                onChange={handleSolChange}
+                onBlur={handleSolBlur}
+                onKeyPress={handleSolKeyPress}
+                disabled={isLoading}
+                className="w-full glass-effect rounded-lg p-3 text-white placeholder-gray-400 border border-white/20 focus:border-cosmic-purple/50 focus:outline-none transition-colors duration-200 disabled:opacity-50"
+              />
+              <p className="text-xs text-gray-400">
+                Sol = Martian day (leave empty for latest photos)
+              </p>
+            </div>
+
+            {/* Earth Date Input */}
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <label className="text-gray-300 text-sm">Or Earth Date:</label>
+                <button
+                  onClick={() =>
+                    onFiltersChange({
+                      ...filters,
+                      earthDate: '2025-08-01',
+                      sol: undefined,
+                    })
+                  }
+                  className="text-xs text-cosmic-purple hover:text-cosmic-purple/80 transition-colors duration-200"
+                >
+                  📡 Latest
+                </button>
+              </div>
+              <DatePicker
+                selectedDate={
+                  filters.earthDate || new Date().toISOString().split('T')[0]
+                }
+                onDateChange={(date) =>
+                  onFiltersChange({
+                    ...filters,
+                    earthDate: date,
+                    sol: undefined,
+                  })
+                }
+                minDate="2004-01-01"
+                maxDate="2025-08-01"
+                className="w-full"
+                opacity={70}
+              />
+              <p className="text-xs text-gray-400">
+                📡 Latest available photos are from August 1, 2025 (NASA data
+                has processing delays)
+              </p>
+            </div>
+          </div>
+
+          {/* Camera Selection */}
+          <div className="space-y-3">
+            <label className="text-white font-medium text-sm">
+              Camera (Optional):
+            </label>
+            <select
+              value={filters.camera || ''}
+              onChange={handleCameraChange}
+              disabled={isLoading || availableCameras.length === 0}
+              className="w-full glass-effect rounded-lg p-3 text-white border border-white/20 focus:border-cosmic-purple/50 focus:outline-none transition-colors duration-200 disabled:opacity-50"
             >
-              📡 Latest
-            </button>
+              <option value="">All Cameras</option>
+              {availableCameras.map((camera) => (
+                <option key={camera.id} value={camera.id}>
+                  {camera.id} - {camera.name}
+                </option>
+              ))}
+            </select>
+            {availableCameras.length === 0 && (
+              <p className="text-xs text-gray-400">
+                Select a rover first to see available cameras
+              </p>
+            )}
           </div>
-          <DatePicker
-            selectedDate={filters.earthDate || new Date().toISOString().split('T')[0]}
-            onDateChange={(date) => onFiltersChange({ ...filters, earthDate: date, sol: undefined })}
-            minDate="2004-01-01"
-            maxDate="2025-08-01"
-            className="w-full"
-            opacity={70}
-          />
-          <p className="text-xs text-gray-400">
-            📡 Latest available photos are from August 1, 2025 (NASA data has processing delays)
-          </p>
-        </div>
-      </div>
 
-      {/* Camera Selection */}
-      <div className="space-y-3">
-        <label className="text-white font-medium text-sm">
-          Camera (Optional):
-        </label>
-        <select
-          value={filters.camera || ''}
-          onChange={handleCameraChange}
-          disabled={isLoading || availableCameras.length === 0}
-          className="w-full glass-effect rounded-lg p-3 text-white border border-white/20 focus:border-cosmic-purple/50 focus:outline-none transition-colors duration-200 disabled:opacity-50"
-        >
-          <option value="">All Cameras</option>
-          {availableCameras.map((camera) => (
-            <option key={camera.id} value={camera.id}>
-              {camera.id} - {camera.name}
-            </option>
-          ))}
-        </select>
-        {availableCameras.length === 0 && (
-          <p className="text-xs text-gray-400">
-            Select a rover first to see available cameras
-          </p>
-        )}
-      </div>
-
-      {/* Filter Summary */}
-      <div className="glass-effect rounded-lg p-4 border border-white/10">
-        <h3 className="text-sm font-medium text-white mb-2">
-          Current Filters:
-        </h3>
-        <div className="space-y-1 text-xs text-gray-300">
-          <div>
-            🔴 Rover: <span className="text-white">{filters.rover}</span>
+          {/* Filter Summary */}
+          <div className="glass-effect rounded-lg p-4 border border-white/10">
+            <h3 className="text-sm font-medium text-white mb-2">
+              Current Filters:
+            </h3>
+            <div className="space-y-1 text-xs text-gray-300">
+              <div>
+                🔴 Rover: <span className="text-white">{filters.rover}</span>
+              </div>
+              {filters.sol && (
+                <div>
+                  📅 Sol: <span className="text-white">{filters.sol}</span>
+                </div>
+              )}
+              {filters.earthDate && (
+                <div>
+                  🌍 Date:{' '}
+                  <span className="text-white">
+                    {new Date(filters.earthDate).toLocaleDateString()}
+                  </span>
+                </div>
+              )}
+              {filters.camera && (
+                <div>
+                  📷 Camera:{' '}
+                  <span className="text-white">{filters.camera}</span>
+                </div>
+              )}
+            </div>
           </div>
-          {filters.sol && (
-            <div>
-              📅 Sol: <span className="text-white">{filters.sol}</span>
-            </div>
-          )}
-          {filters.earthDate && (
-            <div>
-              🌍 Date:{' '}
-              <span className="text-white">
-                {new Date(filters.earthDate).toLocaleDateString()}
-              </span>
-            </div>
-          )}
-          {filters.camera && (
-            <div>
-              📷 Camera: <span className="text-white">{filters.camera}</span>
-            </div>
-          )}
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

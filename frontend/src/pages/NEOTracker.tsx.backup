@@ -67,7 +67,7 @@ const NEOTracker: React.FC = () => {
         selectedDate,
         endDate,
       });
-
+      
       // Check for 408 timeout error
       if (err.status === 408) {
         setError('NASA Server Timeout');
@@ -83,16 +83,14 @@ const NEOTracker: React.FC = () => {
     setSelectedDate(date);
     // Auto-adjust end date to be 7 days after start date, but never exceed today
     const startDate = new Date(date);
-    const potentialEndDate = new Date(
-      startDate.getTime() + 7 * 24 * 60 * 60 * 1000
-    );
+    const potentialEndDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
     const today = new Date();
     today.setHours(23, 59, 59, 999); // End of today
-
+    
     // Use the earlier of: 7 days after start date OR today
     const newEndDate = potentialEndDate > today ? today : potentialEndDate;
     setEndDate(newEndDate.toISOString().split('T')[0]);
-
+    
     logger.info('NEO date range changed', {
       startDate: date,
       endDate: newEndDate.toISOString().split('T')[0],
@@ -181,69 +179,74 @@ const NEOTracker: React.FC = () => {
           </div>
         </div>
 
-        {/* Date Range Selection */}
-        <div className="space-y-8">
-          <div className="glass-effect rounded-xl p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <h2 className="text-xl font-inter font-semibold text-white mb-4">
-                  📅 Select Date Range
-                </h2>
-                <DatePicker
-                  selectedDate={selectedDate}
-                  onDateChange={handleDateChange}
-                  maxDate={new Date().toISOString().split('T')[0]}
-                />
-              </div>
-              <div>
-                <h3 className="text-xl font-inter font-semibold text-white mb-4">
-                  ⚠️ Risk Levels
-                </h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-mars-red">🔴</span>
-                    <span className="text-gray-300 font-medium">
-                      Potentially Hazardous
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-stellar-yellow">🟡</span>
-                    <span className="text-gray-300 font-medium">
-                      Close Approach (&lt;10 LD)
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-aurora-green">🟢</span>
-                    <span className="text-gray-300 font-medium">
-                      Safe Distance
-                    </span>
-                  </div>
+        {/* Horizontal Date Range Selection and Risk Levels */}
+        <div className="glass-effect rounded-xl p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Date Range Selection */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-inter font-semibold text-white">
+                📅 Select Date Range
+              </h2>
+              <DatePicker
+                selectedDate={selectedDate}
+                onDateChange={handleDateChange}
+                maxDate={
+                  new Date().toISOString().split('T')[0]
+                }
+              />
+              <p className="text-xs text-gray-300">
+                Auto-adjusts end date to 7 days after start date
+              </p>
+            </div>
+
+            {/* Risk Levels Legend */}
+            <div className="space-y-4">
+              <h3 className="text-xl font-inter font-semibold text-white">
+                ⚠️ Risk Levels
+              </h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center space-x-2">
+                  <span className="text-mars-red">🔴</span>
+                  <span className="text-gray-300 font-medium">Potentially Hazardous</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-stellar-yellow">🟡</span>
+                  <span className="text-gray-300 font-medium">
+                    Close Approach (&lt;10 LD)
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-aurora-green">🟢</span>
+                  <span className="text-gray-300 font-medium">Safe Distance</span>
                 </div>
               </div>
-              <div>
-                <h3 className="text-xl font-inter font-semibold text-white mb-4">
-                  📡 Current Scan
-                </h3>
-                <div className="space-y-2 text-sm">
-                  <div className="text-gray-300">
-                    <span className="font-medium">Objects:</span>{' '}
-                    <span className="text-white font-semibold">
-                      {neos.length}
-                    </span>
-                  </div>
-                  <div className="text-gray-300">
-                    <span className="font-medium">Hazardous:</span>{' '}
-                    <span className="text-mars-red font-semibold">
-                      {hazardousNEOs.length}
-                    </span>
-                  </div>
+            </div>
+
+            {/* Current Scan Info */}
+            <div className="space-y-4">
+              <h3 className="text-xl font-inter font-semibold text-white">
+                📡 Current Scan
+              </h3>
+              <div className="space-y-2 text-sm">
+                <div className="text-gray-300">
+                  <span className="font-medium">Start:</span> {new Date(selectedDate).toLocaleDateString()}
+                </div>
+                <div className="text-gray-300">
+                  <span className="font-medium">End:</span> {new Date(endDate).toLocaleDateString()}
+                </div>
+                <div className="text-gray-300">
+                  <span className="font-medium">Objects:</span> <span className="text-white font-semibold">{neos.length}</span>
+                </div>
+                <div className="text-gray-300">
+                  <span className="font-medium">Hazardous:</span> <span className="text-mars-red font-semibold">{hazardousNEOs.length}</span>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Main Content */}
-          <div className="space-y-8">
+        {/* Main Content */}
+        <div className="space-y-8">
             {/* Data Visualization */}
             {!isLoading && !error && <NEOChart neos={neos} />}
 
@@ -339,7 +342,6 @@ const NEOTracker: React.FC = () => {
                 )}
               </div>
             )}
-          </div>
         </div>
 
         {/* NEO Detail Modal */}

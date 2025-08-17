@@ -16,7 +16,7 @@ describe('NASA Types', () => {
     test('accepts valid media types', () => {
       const imageType: MediaType = 'image';
       const videoType: MediaType = 'video';
-      
+
       expect(imageType).toBe('image');
       expect(videoType).toBe('video');
     });
@@ -26,7 +26,7 @@ describe('NASA Types', () => {
     test('accepts valid rover statuses', () => {
       const activeStatus: RoverStatus = 'active';
       const completeStatus: RoverStatus = 'complete';
-      
+
       expect(activeStatus).toBe('active');
       expect(completeStatus).toBe('complete');
     });
@@ -248,7 +248,7 @@ describe('NASA Types', () => {
         estimated_diameter: {
           kilometers: {
             estimated_diameter_min: 0.1020318156,
-            estimated_diameter_max: 0.2282262240,
+            estimated_diameter_max: 0.228226224,
           },
         },
         is_potentially_hazardous_asteroid: false,
@@ -298,7 +298,8 @@ describe('NASA Types', () => {
     test('creates valid EPIC image object', () => {
       const epic: EPICImage = {
         identifier: 'epic_1b_20190630003633',
-        caption: 'This image was taken by the EPIC camera aboard the NOAA DSCOVR spacecraft',
+        caption:
+          'This image was taken by the EPIC camera aboard the NOAA DSCOVR spacecraft',
         image: 'epic_1b_20190630003633',
         version: '03',
         centroid_coordinates: {
@@ -389,7 +390,12 @@ describe('NASA Types', () => {
         neo_reference_id: '1',
         name: 'Safe Asteroid',
         absolute_magnitude_h: 22,
-        estimated_diameter: { kilometers: { estimated_diameter_min: 0.1, estimated_diameter_max: 0.2 } },
+        estimated_diameter: {
+          kilometers: {
+            estimated_diameter_min: 0.1,
+            estimated_diameter_max: 0.2,
+          },
+        },
         is_potentially_hazardous_asteroid: false,
         close_approach_data: [],
       };
@@ -399,7 +405,12 @@ describe('NASA Types', () => {
         neo_reference_id: '2',
         name: 'Hazardous Asteroid',
         absolute_magnitude_h: 18,
-        estimated_diameter: { kilometers: { estimated_diameter_min: 0.5, estimated_diameter_max: 1.0 } },
+        estimated_diameter: {
+          kilometers: {
+            estimated_diameter_min: 0.5,
+            estimated_diameter_max: 1.0,
+          },
+        },
         is_potentially_hazardous_asteroid: true,
         close_approach_data: [],
       };

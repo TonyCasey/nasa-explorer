@@ -17,9 +17,9 @@ describe('reportWebVitals', () => {
   it('should call web-vitals functions when callback provided', () => {
     const mockCallback = jest.fn();
     const webVitals = require('web-vitals');
-    
+
     reportWebVitals(mockCallback);
-    
+
     expect(webVitals.getCLS).toHaveBeenCalledWith(mockCallback);
     expect(webVitals.getFID).toHaveBeenCalledWith(mockCallback);
     expect(webVitals.getFCP).toHaveBeenCalledWith(mockCallback);
@@ -42,7 +42,7 @@ describe('reportWebVitals', () => {
   it('should validate callback is function', () => {
     const mockCallback = jest.fn();
     reportWebVitals(mockCallback);
-    
+
     expect(mockCallback).toEqual(expect.any(Function));
   });
 
@@ -50,33 +50,33 @@ describe('reportWebVitals', () => {
     const mockMetric = {
       name: 'CLS',
       value: 0.1,
-      id: 'test-id'
+      id: 'test-id',
     };
-    
+
     const mockCallback = jest.fn();
     reportWebVitals(mockCallback);
-    
+
     // Simulate web vitals callback
     const webVitals = require('web-vitals');
     const clsCallback = webVitals.getCLS.mock.calls[0][0];
     clsCallback(mockMetric);
-    
+
     expect(mockCallback).toHaveBeenCalledWith(mockMetric);
   });
 
   it('should handle different metric types', () => {
     const metrics = ['CLS', 'FID', 'FCP', 'LCP', 'TTFB'];
     const mockCallback = jest.fn();
-    
+
     reportWebVitals(mockCallback);
-    
-    metrics.forEach(metric => {
+
+    metrics.forEach((metric) => {
       const mockMetricData = {
         name: metric,
         value: Math.random(),
-        id: `${metric}-id`
+        id: `${metric}-id`,
       };
-      
+
       expect(typeof mockMetricData.name).toBe('string');
       expect(typeof mockMetricData.value).toBe('number');
     });

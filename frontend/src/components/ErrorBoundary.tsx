@@ -43,7 +43,10 @@ class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="min-h-screen flex items-center justify-center p-6">
           <div className="max-w-md w-full">
-            <div className="glass-effect rounded-xl p-8 text-center">
+            <div
+              className="glass-effect rounded-xl p-8 text-center bg-red-50"
+              role="alert"
+            >
               <div className="text-6xl mb-4">🚀💥</div>
               <h1 className="text-2xl font-inter font-bold text-white mb-4">
                 Houston, we have a problem!
@@ -53,24 +56,12 @@ class ErrorBoundary extends Component<Props, State> {
                 working on it.
               </p>
 
-              {process.env.NODE_ENV === 'development' && this.state.error && (
-                <details className="text-left mb-6">
-                  <summary className="text-mars-red cursor-pointer mb-2">
-                    Error Details (Development)
-                  </summary>
-                  <pre className="text-xs text-gray-400 bg-black/20 p-4 rounded overflow-auto">
-                    {this.state.error.toString()}
-                    {this.state.errorInfo?.componentStack}
-                  </pre>
-                </details>
-              )}
-
               <div className="space-y-3">
                 <button
                   onClick={this.handleReset}
                   className="w-full bg-cosmic-purple hover:bg-cosmic-purple/80 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
                 >
-                  🔄 Restart Mission
+                  🔄 Try Again
                 </button>
                 <button
                   onClick={() => window.location.reload()}
@@ -78,6 +69,17 @@ class ErrorBoundary extends Component<Props, State> {
                 >
                   🌍 Return to Earth (Reload)
                 </button>
+                {process.env.NODE_ENV === 'development' && this.state.error && (
+                  <details className="text-left">
+                    <summary className="text-mars-red cursor-pointer mb-2">
+                      Details
+                    </summary>
+                    <pre className="text-xs text-gray-400 bg-black/20 p-4 rounded overflow-auto">
+                      {this.state.error.toString()}
+                      {this.state.errorInfo?.componentStack}
+                    </pre>
+                  </details>
+                )}
               </div>
             </div>
           </div>

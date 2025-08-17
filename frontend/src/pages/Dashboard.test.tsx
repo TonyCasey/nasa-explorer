@@ -19,7 +19,14 @@ jest.mock('../services/nasa.service', () => ({
 
 // Mock components
 jest.mock('../components/DataWidget', () => {
-  return function MockDataWidget({ title, value, icon, loading, error, onClick }: any) {
+  return function MockDataWidget({
+    title,
+    value,
+    icon,
+    loading,
+    error,
+    onClick,
+  }: any) {
     return (
       <div data-testid="data-widget" onClick={onClick}>
         <div data-testid="widget-title">{title}</div>
@@ -63,7 +70,7 @@ const mockAPODData = {
   url: 'https://example.com/image.jpg',
   date: '2025-08-15',
   media_type: 'image' as const,
-  hdurl: 'https://example.com/image-hd.jpg'
+  hdurl: 'https://example.com/image-hd.jpg',
 };
 
 const renderWithRouter = () => {
@@ -81,18 +88,22 @@ describe('Dashboard', () => {
 
   test('renders dashboard header', () => {
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     renderWithRouter();
-    
-    expect(screen.getByText(/Space Mission Control Dashboard/)).toBeInTheDocument();
-    expect(screen.getByText(/Real-time monitoring of NASA space data/)).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/Space Mission Control Dashboard/)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Real-time monitoring of NASA space data/)
+    ).toBeInTheDocument();
   });
 
   test('loads APOD data on mount', async () => {
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     renderWithRouter();
-    
+
     await waitFor(() => {
       expect(NASAService.getAPOD).toHaveBeenCalled();
     });
@@ -100,41 +111,46 @@ describe('Dashboard', () => {
 
   test('displays APOD data when loaded successfully', async () => {
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     renderWithRouter();
-    
+
     await waitFor(() => {
-      expect(screen.getAllByTestId('data-widget')).toHaveLength(expect.any(Number));
+      expect(screen.getAllByTestId('data-widget')).toHaveLength(
+        expect.any(Number)
+      );
     });
   });
 
   test('handles APOD loading error', async () => {
     const mockError = new Error('Failed to fetch APOD');
     (NASAService.getAPOD as jest.Mock).mockRejectedValue(mockError);
-    
+
     renderWithRouter();
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('widget-error')).toBeInTheDocument();
     });
   });
 
   test('shows loading state initially', () => {
-    (NASAService.getAPOD as jest.Mock).mockImplementation(() => 
-      new Promise(resolve => setTimeout(() => resolve(mockAPODData), 100))
+    (NASAService.getAPOD as jest.Mock).mockImplementation(
+      () =>
+        new Promise((resolve) => setTimeout(() => resolve(mockAPODData), 100))
     );
-    
+
     renderWithRouter();
-    
-    expect(screen.queryAllByTestId('widget-loading')).toHaveLength(expect.any(Number));
+
+    expect(screen.queryAllByTestId('widget-loading')).toHaveLength(
+      expect.any(Number)
+    );
   });
 
   test('logs dashboard initialization', () => {
     const logger = require('../utils/logger');
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     renderWithRouter();
-    
+
     expect(logger.info).toHaveBeenCalledWith('Dashboard page loaded');
     expect(logger.debug).toHaveBeenCalledWith('Loading dashboard data');
   });
@@ -142,11 +158,13 @@ describe('Dashboard', () => {
   test('logs successful APOD loading', async () => {
     const logger = require('../utils/logger');
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     renderWithRouter();
-    
+
     await waitFor(() => {
-      expect(logger.info).toHaveBeenCalledWith('Dashboard APOD loaded successfully');
+      expect(logger.info).toHaveBeenCalledWith(
+        'Dashboard APOD loaded successfully'
+      );
     });
   });
 
@@ -154,61 +172,72 @@ describe('Dashboard', () => {
     const logger = require('../utils/logger');
     const mockError = new Error('API Error');
     (NASAService.getAPOD as jest.Mock).mockRejectedValue(mockError);
-    
+
     renderWithRouter();
-    
+
     await waitFor(() => {
-      expect(logger.error).toHaveBeenCalledWith('Failed to load dashboard data', mockError);
+      expect(logger.error).toHaveBeenCalledWith(
+        'Failed to load dashboard data',
+        mockError
+      );
     });
   });
 
   test('renders metric cards', () => {
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     renderWithRouter();
-    
-    expect(screen.getAllByTestId('metric-card')).toHaveLength(expect.any(Number));
+
+    expect(screen.getAllByTestId('metric-card')).toHaveLength(
+      expect.any(Number)
+    );
   });
 
   test('renders status indicators', () => {
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     renderWithRouter();
-    
-    expect(screen.getAllByTestId('status-indicator')).toHaveLength(expect.any(Number));
+
+    expect(screen.getAllByTestId('status-indicator')).toHaveLength(
+      expect.any(Number)
+    );
   });
 
   test('renders data widgets', () => {
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     renderWithRouter();
-    
-    expect(screen.getAllByTestId('data-widget')).toHaveLength(expect.any(Number));
+
+    expect(screen.getAllByTestId('data-widget')).toHaveLength(
+      expect.any(Number)
+    );
   });
 
   test('has responsive layout classes', () => {
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     const { container } = renderWithRouter();
-    
+
     expect(container.querySelector('.min-h-screen')).toBeInTheDocument();
     expect(container.querySelector('.max-w-7xl')).toBeInTheDocument();
   });
 
   test('displays system status correctly', () => {
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     renderWithRouter();
-    
+
     const statusIndicators = screen.getAllByTestId('status-indicator');
     expect(statusIndicators.length).toBeGreaterThan(0);
   });
 
   test('handles navigation correctly', () => {
     (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
-    
+
     renderWithRouter();
-    
-    expect(screen.getByText(/Space Mission Control Dashboard/)).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/Space Mission Control Dashboard/)
+    ).toBeInTheDocument();
   });
 });

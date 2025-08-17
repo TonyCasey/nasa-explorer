@@ -4,10 +4,12 @@ import App from './App';
 
 // Mock all the complex dependencies
 jest.mock('react-router-dom', () => ({
-  BrowserRouter: ({ children }: any) => <div data-testid="router">{children}</div>,
+  BrowserRouter: ({ children }: any) => (
+    <div data-testid="router">{children}</div>
+  ),
   Routes: ({ children }: any) => <div data-testid="routes">{children}</div>,
   Route: ({ children }: any) => <div data-testid="route">{children}</div>,
-  Navigate: () => <div data-testid="navigate">Navigate</div>
+  Navigate: () => <div data-testid="navigate">Navigate</div>,
 }));
 
 jest.mock('./pages/Dashboard', () => {

@@ -8,7 +8,7 @@ describe('MetricCard', () => {
     value: 1234,
     icon: '👥',
     trend: 'up' as const,
-    change: 15.2
+    change: 15.2,
   };
 
   it('should render metric title', () => {
@@ -49,6 +49,8 @@ describe('MetricCard', () => {
 
   it('should handle animation states', () => {
     render(<MetricCard {...mockData} animate={true} />);
-    expect(screen.getByText('Total Users').closest('.metric-card')).toHaveClass('animate-fade-in');
+    expect(screen.getByText('Total Users').closest('.metric-card')).toHaveClass(
+      'animate-fade-in'
+    );
   });
 });

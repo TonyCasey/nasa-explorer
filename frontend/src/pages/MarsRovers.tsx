@@ -85,14 +85,14 @@ const MarsRovers: React.FC = () => {
       });
     } catch (err: any) {
       logger.error('Mars rover photos load error', err as Error, filters);
-      
+
       // Check for 408 timeout error
       if (err.status === 408) {
         setError('NASA Server Timeout');
       } else {
         setError('Failed to load Mars rover photos');
       }
-      
+
       if (reset) {
         setPhotos([]);
       }
@@ -169,44 +169,40 @@ const MarsRovers: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Filters Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="glass-effect rounded-xl p-6 sticky top-6">
-              <RoverFilters
-                filters={filters}
-                onFiltersChange={handleFiltersChange}
-                isLoading={isLoading}
-              />
-            </div>
-          </div>
+        {/* Horizontal Filters */}
+        <div className="glass-effect rounded-xl p-6">
+          <RoverFilters
+            filters={filters}
+            onFiltersChange={handleFiltersChange}
+            isLoading={isLoading}
+            className="horizontal-layout"
+          />
+        </div>
 
-          {/* Photo Gallery */}
-          <div className="lg:col-span-3">
-            {isLoading && photos.length === 0 ? (
-              <div className="glass-effect rounded-xl p-12">
-                <div className="flex flex-col items-center justify-center space-y-4">
-                  <LoadingSpinner size="lg" />
-                  <p className="text-gray-300">Loading Mars rover photos...</p>
-                  <p className="text-gray-400 text-sm">
-                    Fetching images from{' '}
-                    {filters.rover.charAt(0).toUpperCase() +
-                      filters.rover.slice(1)}{' '}
-                    rover
-                  </p>
-                </div>
+        {/* Photo Gallery */}
+        <div className="w-full">
+          {isLoading && photos.length === 0 ? (
+            <div className="glass-effect rounded-xl p-12">
+              <div className="flex flex-col items-center justify-center space-y-4">
+                <LoadingSpinner size="lg" />
+                <p className="text-gray-300">Loading Mars rover photos...</p>
+                <p className="text-gray-400 text-sm">
+                  Fetching images from{' '}
+                  {filters.rover.charAt(0).toUpperCase() +
+                    filters.rover.slice(1)}{' '}
+                  rover
+                </p>
               </div>
-            ) : (
-              <PhotoGallery
-                photos={photos}
-                isLoading={isLoading}
-                error={error}
-                onLoadMore={handleLoadMore}
-                hasMore={hasMore}
-              />
-            )}
-          </div>
+            </div>
+          ) : (
+            <PhotoGallery
+              photos={photos}
+              isLoading={isLoading}
+              error={error}
+              onLoadMore={handleLoadMore}
+              hasMore={hasMore}
+            />
+          )}
         </div>
 
         {/* Rover Information Panel */}

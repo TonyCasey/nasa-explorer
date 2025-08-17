@@ -24,8 +24,11 @@ describe('FavoritesService', () => {
 
     it('returns stored favorites', () => {
       const testFavorites = [{ ...mockFavorite, savedAt: new Date() }];
-      localStorage.setItem('nasa-explorer-favorites', JSON.stringify(testFavorites));
-      
+      localStorage.setItem(
+        'nasa-explorer-favorites',
+        JSON.stringify(testFavorites)
+      );
+
       const favorites = favoritesService.getFavorites();
       expect(favorites).toHaveLength(1);
       expect(favorites[0].id).toBe('test-1');
@@ -33,7 +36,7 @@ describe('FavoritesService', () => {
 
     it('handles corrupted localStorage data', () => {
       localStorage.setItem('nasa-explorer-favorites', 'invalid json');
-      
+
       const favorites = favoritesService.getFavorites();
       expect(favorites).toEqual([]);
     });
@@ -42,7 +45,7 @@ describe('FavoritesService', () => {
   describe('addFavorite', () => {
     it('adds a new favorite to storage', () => {
       favoritesService.addFavorite(mockFavorite);
-      
+
       const favorites = favoritesService.getFavorites();
       expect(favorites).toHaveLength(1);
       expect(favorites[0].id).toBe('test-1');
@@ -52,7 +55,7 @@ describe('FavoritesService', () => {
     it('does not add duplicate favorites', () => {
       favoritesService.addFavorite(mockFavorite);
       favoritesService.addFavorite(mockFavorite);
-      
+
       const favorites = favoritesService.getFavorites();
       expect(favorites).toHaveLength(1);
     });
@@ -60,9 +63,9 @@ describe('FavoritesService', () => {
     it('dispatches favoritesUpdated event', () => {
       const mockEventListener = jest.fn();
       window.addEventListener('favoritesUpdated', mockEventListener);
-      
+
       favoritesService.addFavorite(mockFavorite);
-      
+
       expect(mockEventListener).toHaveBeenCalled();
       window.removeEventListener('favoritesUpdated', mockEventListener);
     });
@@ -72,7 +75,7 @@ describe('FavoritesService', () => {
     it('removes a favorite from storage', () => {
       favoritesService.addFavorite(mockFavorite);
       expect(favoritesService.getFavorites()).toHaveLength(1);
-      
+
       favoritesService.removeFavorite('test-1');
       expect(favoritesService.getFavorites()).toHaveLength(0);
     });
@@ -114,7 +117,7 @@ describe('FavoritesService', () => {
       favoritesService.addFavorite(mockFavorite);
       favoritesService.addFavorite({ ...mockFavorite, id: 'test-2' });
       expect(favoritesService.getFavorites()).toHaveLength(2);
-      
+
       favoritesService.clearFavorites();
       expect(favoritesService.getFavorites()).toHaveLength(0);
     });
@@ -128,11 +131,11 @@ describe('FavoritesService', () => {
         id: 'test-2',
         type: 'mars-photo',
       });
-      
+
       const apodFavorites = favoritesService.getFavoritesByType('apod');
       expect(apodFavorites).toHaveLength(1);
       expect(apodFavorites[0].type).toBe('apod');
-      
+
       const marsFavorites = favoritesService.getFavoritesByType('mars-photo');
       expect(marsFavorites).toHaveLength(1);
       expect(marsFavorites[0].type).toBe('mars-photo');

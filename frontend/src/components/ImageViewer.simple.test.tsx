@@ -7,7 +7,7 @@ describe('ImageViewer', () => {
     url: 'https://example.com/image.jpg',
     title: 'Test Image',
     description: 'Test description',
-    date: '2025-08-15'
+    date: '2025-08-15',
   };
 
   it('should render image', () => {
@@ -45,7 +45,7 @@ describe('ImageViewer', () => {
   it('should handle zoom functionality', () => {
     render(<ImageViewer {...mockImage} zoomable={true} />);
     const image = screen.getByRole('img');
-    
+
     fireEvent.click(image);
     expect(image).toHaveClass('cursor-zoom-in');
   });
@@ -59,7 +59,7 @@ describe('ImageViewer', () => {
   it('should handle download functionality', () => {
     const mockOnDownload = jest.fn();
     render(<ImageViewer {...mockImage} onDownload={mockOnDownload} />);
-    
+
     const downloadButton = screen.getByText(/download/i);
     fireEvent.click(downloadButton);
     expect(mockOnDownload).toHaveBeenCalledWith(mockImage.url);
@@ -68,7 +68,7 @@ describe('ImageViewer', () => {
   it('should handle favorite toggle', () => {
     const mockOnFavorite = jest.fn();
     render(<ImageViewer {...mockImage} onFavorite={mockOnFavorite} />);
-    
+
     const favoriteButton = screen.getByLabelText(/favorite/i);
     fireEvent.click(favoriteButton);
     expect(mockOnFavorite).toHaveBeenCalled();
@@ -83,7 +83,7 @@ describe('ImageViewer', () => {
   it('should handle keyboard navigation', () => {
     render(<ImageViewer {...mockImage} />);
     const image = screen.getByRole('img');
-    
+
     fireEvent.keyDown(image, { key: 'Enter' });
     expect(image).toHaveFocus();
   });

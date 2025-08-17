@@ -151,7 +151,9 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                 <span className="text-cosmic-purple font-medium text-sm leading-tight break-words flex-shrink min-w-0">
                   🔴 {photo.rover.name}
                 </span>
-                <span className="text-gray-400 text-xs flex-shrink-0 ml-2">Sol {photo.sol}</span>
+                <span className="text-gray-400 text-xs flex-shrink-0 ml-2">
+                  Sol {photo.sol}
+                </span>
               </div>
               <div className="text-gray-300 text-sm">
                 <div className="flex justify-between items-center">
@@ -211,12 +213,15 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
               No Photos Found
             </h3>
             <p className="text-gray-400 mb-4">
-              No photos are available for the selected filters. This could be because:
+              No photos are available for the selected filters. This could be
+              because:
             </p>
             <div className="text-left max-w-md mx-auto space-y-2 mb-6">
               <div className="flex items-start space-x-2 text-sm text-gray-400">
                 <span>•</span>
-                <span>The rover didn't take photos on that specific date/sol</span>
+                <span>
+                  The rover didn't take photos on that specific date/sol
+                </span>
               </div>
               <div className="flex items-start space-x-2 text-sm text-gray-400">
                 <span>•</span>
@@ -224,11 +229,14 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
               </div>
               <div className="flex items-start space-x-2 text-sm text-gray-400">
                 <span>•</span>
-                <span>The date is too recent (rovers need time to transmit data)</span>
+                <span>
+                  The date is too recent (rovers need time to transmit data)
+                </span>
               </div>
             </div>
             <p className="text-gray-300 text-sm">
-              💡 Try using <strong>Sol numbers</strong> (like 1000, 2000) or <strong>older Earth dates</strong> for better results.
+              💡 Try using <strong>Sol numbers</strong> (like 1000, 2000) or{' '}
+              <strong>older Earth dates</strong> for better results.
             </p>
           </div>
         </div>

@@ -1,5 +1,10 @@
 // Type validation tests for NASA types
-import type { APODResponse, MarsRoverPhoto, NEOData, EPICImage } from './nasa.types';
+import type {
+  APODResponse,
+  MarsRoverPhoto,
+  NEOData,
+  EPICImage,
+} from './nasa.types';
 
 describe('NASA Types', () => {
   describe('APOD Response Type', () => {
@@ -8,7 +13,7 @@ describe('NASA Types', () => {
         date: '2025-08-15',
         explanation: 'Test explanation',
         title: 'Test Title',
-        url: 'https://example.com/image.jpg'
+        url: 'https://example.com/image.jpg',
       };
 
       expect(mockAPOD.date).toBe('2025-08-15');
@@ -20,7 +25,7 @@ describe('NASA Types', () => {
     it('should handle optional APOD fields', () => {
       const mockAPOD: Partial<APODResponse> = {
         date: '2025-08-15',
-        title: 'Test Title'
+        title: 'Test Title',
       };
 
       expect(mockAPOD.date).toBeDefined();
@@ -33,7 +38,7 @@ describe('NASA Types', () => {
       const mockPhoto: Partial<MarsRoverPhoto> = {
         id: 12345,
         img_src: 'https://example.com/mars.jpg',
-        earth_date: '2025-08-15'
+        earth_date: '2025-08-15',
       };
 
       expect(typeof mockPhoto.id).toBe('number');
@@ -50,9 +55,9 @@ describe('NASA Types', () => {
         estimated_diameter: {
           kilometers: {
             estimated_diameter_min: 0.1,
-            estimated_diameter_max: 0.2
-          }
-        }
+            estimated_diameter_max: 0.2,
+          },
+        },
       };
 
       expect(typeof mockNEO.id).toBe('string');
@@ -67,7 +72,7 @@ describe('NASA Types', () => {
         identifier: '20150418003633',
         caption: 'Test caption',
         image: 'epic_1b_20150418003633',
-        date: '2015-04-18 00:36:33'
+        date: '2015-04-18 00:36:33',
       };
 
       expect(typeof mockEPIC.identifier).toBe('string');
@@ -84,7 +89,7 @@ describe('NASA Types', () => {
         apod: {} as APODResponse,
         photo: {} as MarsRoverPhoto,
         neo: {} as NEOData,
-        epic: {} as EPICImage
+        epic: {} as EPICImage,
       };
 
       expect(typeof testTypes).toBe('object');

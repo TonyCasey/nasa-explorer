@@ -9,7 +9,7 @@ describe('DataWidget', () => {
         <div>Widget Content</div>
       </DataWidget>
     );
-    
+
     expect(screen.getByText('Test Widget')).toBeInTheDocument();
     expect(screen.getByText('Widget Content')).toBeInTheDocument();
   });
@@ -20,7 +20,7 @@ describe('DataWidget', () => {
         <div>Content</div>
       </DataWidget>
     );
-    
+
     expect(screen.getByText('Loading Widget')).toBeInTheDocument();
     expect(screen.getByTestId('loading-skeleton')).toBeInTheDocument();
   });
@@ -31,7 +31,7 @@ describe('DataWidget', () => {
         <div>Content</div>
       </DataWidget>
     );
-    
+
     expect(screen.getByText('Error Widget')).toBeInTheDocument();
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /retry/i })).toBeInTheDocument();
@@ -43,7 +43,7 @@ describe('DataWidget', () => {
         <div>Normal Content</div>
       </DataWidget>
     );
-    
+
     expect(screen.getByText('Normal Widget')).toBeInTheDocument();
     expect(screen.getByText('Normal Content')).toBeInTheDocument();
     expect(screen.queryByTestId('loading-skeleton')).not.toBeInTheDocument();
@@ -55,19 +55,19 @@ describe('DataWidget', () => {
         <div>Content</div>
       </DataWidget>
     );
-    
+
     expect(container.firstChild).toHaveClass('custom-widget');
   });
 
   it('handles refresh functionality', () => {
     const mockRefresh = jest.fn();
-    
+
     render(
       <DataWidget title="Refreshable Widget" onRefresh={mockRefresh}>
         <div>Content</div>
       </DataWidget>
     );
-    
+
     const refreshButton = screen.getByRole('button', { name: /refresh/i });
     expect(refreshButton).toBeInTheDocument();
   });

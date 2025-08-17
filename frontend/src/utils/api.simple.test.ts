@@ -12,7 +12,7 @@ const mockValidateDate = (dateStr: string): boolean => {
 
 const mockDebounce = (func: Function, wait: number) => {
   let timeout: NodeJS.Timeout;
-  return function(...args: any[]) {
+  return function (...args: any[]) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
@@ -20,11 +20,11 @@ const mockDebounce = (func: Function, wait: number) => {
 
 const mockThrottle = (func: Function, limit: number) => {
   let inThrottle: boolean;
-  return function(...args: any[]) {
+  return function (...args: any[]) {
     if (!inThrottle) {
       func.apply(this, args);
       inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
+      setTimeout(() => (inThrottle = false), limit);
     }
   };
 };

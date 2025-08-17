@@ -8,7 +8,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
   useLocation: () => ({ pathname: '/dashboard' }),
   Link: ({ children, to }: any) => <a href={to}>{children}</a>,
-  NavLink: ({ children, to }: any) => <a href={to}>{children}</a>
+  NavLink: ({ children, to }: any) => <a href={to}>{children}</a>,
 }));
 
 describe('Navigation', () => {
@@ -82,7 +82,7 @@ describe('Navigation', () => {
   it('should handle keyboard navigation', () => {
     render(<Navigation />);
     const links = screen.getAllByRole('link');
-    links.forEach(link => {
+    links.forEach((link) => {
       expect(link).toHaveAttribute('tabindex', '0');
     });
   });

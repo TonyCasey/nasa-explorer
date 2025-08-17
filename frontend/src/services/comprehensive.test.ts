@@ -24,7 +24,7 @@ describe('Comprehensive Services Coverage', () => {
       const mockResponse = {
         ok: true,
         status: 200,
-        json: jest.fn().mockResolvedValue({ data: 'test data' })
+        json: jest.fn().mockResolvedValue({ data: 'test data' }),
       };
       mockFetch.mockResolvedValue(mockResponse as any);
 
@@ -45,7 +45,7 @@ describe('Comprehensive Services Coverage', () => {
       const mockResponse = {
         ok: false,
         status: 404,
-        json: jest.fn().mockResolvedValue({ error: 'Not found' })
+        json: jest.fn().mockResolvedValue({ error: 'Not found' }),
       };
       mockFetch.mockResolvedValue(mockResponse as any);
 
@@ -72,7 +72,9 @@ describe('Comprehensive Services Coverage', () => {
         }
       };
 
-      await expect(apiCall('/api/test')).rejects.toThrow('Network request failed');
+      await expect(apiCall('/api/test')).rejects.toThrow(
+        'Network request failed'
+      );
     });
 
     it('should handle different HTTP methods', async () => {
@@ -81,17 +83,19 @@ describe('Comprehensive Services Coverage', () => {
 
       const apiService = {
         get: (url: string) => fetch(url, { method: 'GET' }),
-        post: (url: string, data: any) => fetch(url, { 
-          method: 'POST', 
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        }),
-        put: (url: string, data: any) => fetch(url, { 
-          method: 'PUT', 
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        }),
-        delete: (url: string) => fetch(url, { method: 'DELETE' })
+        post: (url: string, data: any) =>
+          fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          }),
+        put: (url: string, data: any) =>
+          fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          }),
+        delete: (url: string) => fetch(url, { method: 'DELETE' }),
       };
 
       await apiService.get('/api/get');
@@ -101,18 +105,20 @@ describe('Comprehensive Services Coverage', () => {
       expect(mockFetch).toHaveBeenCalledWith('/api/post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ test: 'data' })
+        body: JSON.stringify({ test: 'data' }),
       });
 
       await apiService.put('/api/put', { update: 'data' });
       expect(mockFetch).toHaveBeenCalledWith('/api/put', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ update: 'data' })
+        body: JSON.stringify({ update: 'data' }),
       });
 
       await apiService.delete('/api/delete');
-      expect(mockFetch).toHaveBeenCalledWith('/api/delete', { method: 'DELETE' });
+      expect(mockFetch).toHaveBeenCalledWith('/api/delete', {
+        method: 'DELETE',
+      });
     });
 
     it('should handle request timeouts', async () => {
@@ -121,17 +127,16 @@ describe('Comprehensive Services Coverage', () => {
       });
 
       const fetchWithTimeout = (url: string, timeout: number) => {
-        return Promise.race([
-          fetch(url),
-          timeoutPromise
-        ]);
+        return Promise.race([fetch(url), timeoutPromise]);
       };
 
-      mockFetch.mockImplementation(() => 
-        new Promise(resolve => setTimeout(resolve, 200))
+      mockFetch.mockImplementation(
+        () => new Promise((resolve) => setTimeout(resolve, 200))
       );
 
-      await expect(fetchWithTimeout('/api/slow', 100)).rejects.toThrow('Request timeout');
+      await expect(fetchWithTimeout('/api/slow', 100)).rejects.toThrow(
+        'Request timeout'
+      );
     });
 
     it('should handle request retries', async () => {
@@ -143,7 +148,7 @@ describe('Comprehensive Services Coverage', () => {
         }
         return Promise.resolve({
           ok: true,
-          json: () => Promise.resolve({ success: true })
+          json: () => Promise.resolve({ success: true }),
         } as any);
       });
 
@@ -153,7 +158,7 @@ describe('Comprehensive Services Coverage', () => {
             return await fetch(url);
           } catch (error) {
             if (i === maxRetries - 1) throw error;
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await new Promise((resolve) => setTimeout(resolve, 100));
           }
         }
       };
@@ -191,7 +196,7 @@ describe('Comprehensive Services Coverage', () => {
         isFavorite: (id: string) => {
           const favorites = favoritesService.getFavorites();
           return favorites.some((f: any) => f.id === id);
-        }
+        },
       };
 
       // Test getting empty favorites
@@ -200,7 +205,7 @@ describe('Comprehensive Services Coverage', () => {
       // Test adding favorite
       const item = { id: '1', title: 'Test Item', url: 'test.jpg' };
       favoritesService.addFavorite(item);
-      
+
       expect(localStorageMock.setItem).toHaveBeenCalledWith(
         'favorites',
         JSON.stringify([item])
@@ -208,7 +213,7 @@ describe('Comprehensive Services Coverage', () => {
 
       // Mock localStorage to return the item
       localStorageMock.getItem.mockReturnValue(JSON.stringify([item]));
-      
+
       expect(favoritesService.isFavorite('1')).toBe(true);
       expect(favoritesService.isFavorite('2')).toBe(false);
 
@@ -233,7 +238,7 @@ describe('Comprehensive Services Coverage', () => {
           } catch (error) {
             return [];
           }
-        }
+        },
       };
 
       expect(safeFavoritesService.getFavorites()).toEqual([]);
@@ -251,7 +256,7 @@ describe('Comprehensive Services Coverage', () => {
             localStorage.removeItem('favorites');
             return [];
           }
-        }
+        },
       };
 
       expect(robustFavoritesService.getFavorites()).toEqual([]);
@@ -284,7 +289,7 @@ describe('Comprehensive Services Coverage', () => {
           clear: () => {
             cache.clear();
           },
-          size: () => cache.size
+          size: () => cache.size,
         };
       };
 
@@ -319,7 +324,7 @@ describe('Comprehensive Services Coverage', () => {
           },
           set: (key: string, data: any) => {
             cache.set(key, { data, expires: Date.now() + ttl });
-          }
+          },
         };
       };
 
@@ -343,19 +348,21 @@ describe('Comprehensive Services Coverage', () => {
           apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:5000',
           nasaApiKey: process.env.REACT_APP_NASA_API_KEY || 'DEMO_KEY',
           environment: process.env.NODE_ENV || 'development',
-          debug: process.env.NODE_ENV === 'development'
+          debug: process.env.NODE_ENV === 'development',
         },
         get: (key: string) => (configService.config as any)[key],
         set: (key: string, value: any) => {
           (configService.config as any)[key] = value;
         },
         isDevelopment: () => configService.config.environment === 'development',
-        isProduction: () => configService.config.environment === 'production'
+        isProduction: () => configService.config.environment === 'production',
       };
 
       expect(typeof configService.get('apiUrl')).toBe('string');
       expect(typeof configService.get('nasaApiKey')).toBe('string');
-      expect(['development', 'test', 'production']).toContain(configService.get('environment'));
+      expect(['development', 'test', 'production']).toContain(
+        configService.get('environment')
+      );
 
       configService.set('customSetting', 'customValue');
       expect(configService.get('customSetting')).toBe('customValue');
@@ -371,7 +378,7 @@ describe('Comprehensive Services Coverage', () => {
       log: console.log,
       error: console.error,
       warn: console.warn,
-      info: console.info
+      info: console.info,
     };
 
     beforeEach(() => {
@@ -400,7 +407,7 @@ describe('Comprehensive Services Coverage', () => {
         },
         info: (message: string, ...args: any[]) => {
           console.info(`[INFO] ${message}`, ...args);
-        }
+        },
       };
 
       logger.log('Test log message');
@@ -409,7 +416,10 @@ describe('Comprehensive Services Coverage', () => {
       logger.info('Test info message');
 
       expect(console.log).toHaveBeenCalledWith('[LOG] Test log message');
-      expect(console.error).toHaveBeenCalledWith('[ERROR] Test error message', expect.any(Error));
+      expect(console.error).toHaveBeenCalledWith(
+        '[ERROR] Test error message',
+        expect.any(Error)
+      );
       expect(console.warn).toHaveBeenCalledWith('[WARN] Test warning message');
       expect(console.info).toHaveBeenCalledWith('[INFO] Test info message');
     });
@@ -421,13 +431,16 @@ describe('Comprehensive Services Coverage', () => {
             timestamp: new Date().toISOString(),
             level,
             message,
-            meta
+            meta,
           };
           console.log(JSON.stringify(logEntry));
-        }
+        },
       };
 
-      structuredLogger.log('info', 'User action', { userId: '123', action: 'click' });
+      structuredLogger.log('info', 'User action', {
+        userId: '123',
+        action: 'click',
+      });
 
       const logCall = (console.log as jest.Mock).mock.calls[0][0];
       const logEntry = JSON.parse(logCall);
@@ -435,7 +448,7 @@ describe('Comprehensive Services Coverage', () => {
       expect(logEntry).toMatchObject({
         level: 'info',
         message: 'User action',
-        meta: { userId: '123', action: 'click' }
+        meta: { userId: '123', action: 'click' },
       });
       expect(logEntry.timestamp).toBeDefined();
     });
@@ -456,9 +469,11 @@ describe('Comprehensive Services Coverage', () => {
         },
         isDate: (date: string) => !isNaN(Date.parse(date)),
         isNumeric: (value: string) => /^\d+$/.test(value),
-        hasMinLength: (value: string, minLength: number) => value.length >= minLength,
-        isRequired: (value: any) => value !== null && value !== undefined && value !== '',
-        isPhoneNumber: (phone: string) => /^\+?[\d\s\-\(\)]+$/.test(phone)
+        hasMinLength: (value: string, minLength: number) =>
+          value.length >= minLength,
+        isRequired: (value: any) =>
+          value !== null && value !== undefined && value !== '',
+        isPhoneNumber: (phone: string) => /^\+?[\d\s\-\(\)]+$/.test(phone),
       };
 
       // Email validation
@@ -510,15 +525,19 @@ describe('Comprehensive Services Coverage', () => {
 
         return {
           isValid: errors.length === 0,
-          errors
+          errors,
         };
       };
 
-      const validUser = { name: 'John Doe', email: 'john@example.com', age: 30 };
+      const validUser = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        age: 30,
+      };
       const invalidUser = { name: 'J', email: 'invalid', age: -5 };
 
       expect(validateUser(validUser)).toEqual({ isValid: true, errors: [] });
-      
+
       const result = validateUser(invalidUser);
       expect(result.isValid).toBe(false);
       expect(result.errors).toHaveLength(3);

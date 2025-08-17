@@ -7,15 +7,16 @@ import logger from '../utils/logger';
 const Favorites: React.FC = () => {
   const navigate = useNavigate();
   const { favorites } = useFavorites();
-  const [filter, setFilter] = useState<'all' | 'apod' | 'mars-photo' | 'neo'>('all');
+  const [filter, setFilter] = useState<'all' | 'apod' | 'mars-photo' | 'neo'>(
+    'all'
+  );
 
   React.useEffect(() => {
     logger.info('Favorites page loaded', { count: favorites.length });
   }, [favorites.length]);
 
-  const filteredFavorites = filter === 'all' 
-    ? favorites 
-    : favorites.filter(f => f.type === filter);
+  const filteredFavorites =
+    filter === 'all' ? favorites : favorites.filter((f) => f.type === filter);
 
   const handleItemClick = (favorite: any) => {
     switch (favorite.type) {
@@ -144,10 +145,12 @@ const Favorites: React.FC = () => {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-4xl">{getTypeIcon(favorite.type)}</span>
+                      <span className="text-4xl">
+                        {getTypeIcon(favorite.type)}
+                      </span>
                     </div>
                   )}
-                  
+
                   {/* Overlay */}
                   <div className="absolute top-2 right-2">
                     <FavoriteButton
@@ -156,7 +159,7 @@ const Favorites: React.FC = () => {
                       size="sm"
                     />
                   </div>
-                  
+
                   <div className="absolute top-2 left-2">
                     <span className="bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full text-xs text-white flex items-center space-x-1">
                       <span>{getTypeIcon(favorite.type)}</span>
@@ -188,19 +191,19 @@ const Favorites: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="text-3xl font-bold text-cosmic-purple">
-                  {favorites.filter(f => f.type === 'apod').length}
+                  {favorites.filter((f) => f.type === 'apod').length}
                 </div>
                 <div className="text-gray-400 text-sm">APOD Images</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-mars-red">
-                  {favorites.filter(f => f.type === 'mars-photo').length}
+                  {favorites.filter((f) => f.type === 'mars-photo').length}
                 </div>
                 <div className="text-gray-400 text-sm">Mars Photos</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-solar-orange">
-                  {favorites.filter(f => f.type === 'neo').length}
+                  {favorites.filter((f) => f.type === 'neo').length}
                 </div>
                 <div className="text-gray-400 text-sm">NEO Objects</div>
               </div>

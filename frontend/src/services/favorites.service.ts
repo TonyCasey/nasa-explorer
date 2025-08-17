@@ -16,9 +16,11 @@ class FavoritesService {
     try {
       const stored = localStorage.getItem(this.STORAGE_KEY);
       if (!stored) return [];
-      
+
       const favorites = JSON.parse(stored);
-      logger.debug('Retrieved favorites from storage', { count: favorites.length });
+      logger.debug('Retrieved favorites from storage', {
+        count: favorites.length,
+      });
       return favorites;
     } catch (error) {
       logger.error('Failed to get favorites', error as Error);
@@ -33,20 +35,25 @@ class FavoritesService {
         ...favorite,
         savedAt: new Date(),
       };
-      
+
       // Check if already exists
-      const exists = favorites.some(f => f.id === favorite.id);
+      const exists = favorites.some((f) => f.id === favorite.id);
       if (exists) {
         logger.info('Item already in favorites', { id: favorite.id });
         return;
       }
-      
+
       favorites.push(newFavorite);
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(favorites));
-      logger.info('Added to favorites', { id: favorite.id, type: favorite.type });
-      
+      logger.info('Added to favorites', {
+        id: favorite.id,
+        type: favorite.type,
+      });
+
       // Dispatch custom event for UI updates
-      window.dispatchEvent(new CustomEvent('favoritesUpdated', { detail: favorites }));
+      window.dispatchEvent(
+        new CustomEvent('favoritesUpdated', { detail: favorites })
+      );
     } catch (error) {
       logger.error('Failed to add favorite', error as Error);
     }
@@ -55,13 +62,15 @@ class FavoritesService {
   removeFavorite(id: string): void {
     try {
       const favorites = this.getFavorites();
-      const filtered = favorites.filter(f => f.id !== id);
-      
+      const filtered = favorites.filter((f) => f.id !== id);
+
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(filtered));
       logger.info('Removed from favorites', { id });
-      
+
       // Dispatch custom event for UI updates
-      window.dispatchEvent(new CustomEvent('favoritesUpdated', { detail: filtered }));
+      window.dispatchEvent(
+        new CustomEvent('favoritesUpdated', { detail: filtered })
+      );
     } catch (error) {
       logger.error('Failed to remove favorite', error as Error);
     }
@@ -69,7 +78,7 @@ class FavoritesService {
 
   isFavorite(id: string): boolean {
     const favorites = this.getFavorites();
-    return favorites.some(f => f.id === id);
+    return favorites.some((f) => f.id === id);
   }
 
   toggleFavorite(favorite: Omit<Favorite, 'savedAt'>): boolean {
@@ -93,7 +102,7 @@ class FavoritesService {
   }
 
   getFavoritesByType(type: 'apod' | 'mars-photo' | 'neo'): Favorite[] {
-    return this.getFavorites().filter(f => f.type === type);
+    return this.getFavorites().filter((f) => f.type === type);
   }
 }
 

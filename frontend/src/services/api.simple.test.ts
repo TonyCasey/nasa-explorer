@@ -10,8 +10,8 @@ jest.mock('axios', () => ({
     defaults: {},
     interceptors: {
       request: { use: jest.fn() },
-      response: { use: jest.fn() }
-    }
+      response: { use: jest.fn() },
+    },
   })),
   get: jest.fn(),
   post: jest.fn(),

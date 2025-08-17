@@ -1,15 +1,16 @@
 import React from 'react';
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSkeleton from './LoadingSkeleton';
 
 interface DataWidgetProps {
   title: string;
-  icon: string;
+  icon?: string;
   description?: string;
   children: React.ReactNode;
   isLoading?: boolean;
   error?: string;
   className?: string;
   onClick?: () => void;
+  onRefresh?: () => void;
 }
 
 const DataWidget: React.FC<DataWidgetProps> = ({
@@ -21,6 +22,7 @@ const DataWidget: React.FC<DataWidgetProps> = ({
   error,
   className = '',
   onClick,
+  onRefresh,
 }) => {
   const baseClasses = `glass-effect rounded-xl p-6 transition-all duration-300 ${
     onClick ? 'cursor-pointer hover:scale-105 card-hover' : ''
@@ -30,9 +32,11 @@ const DataWidget: React.FC<DataWidgetProps> = ({
     <div className={baseClasses} onClick={onClick}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-3">
-          <span className="text-2xl" role="img" aria-label={title}>
-            {icon}
-          </span>
+          {icon && (
+            <span className="text-2xl" role="img" aria-label={title}>
+              {icon}
+            </span>
+          )}
           <div>
             <h3 className="text-xl font-inter font-semibold text-white">
               {title}
@@ -42,13 +46,23 @@ const DataWidget: React.FC<DataWidgetProps> = ({
             )}
           </div>
         </div>
+        {onRefresh && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onRefresh();
+            }}
+            className="text-gray-400 hover:text-white transition-colors duration-200"
+            aria-label="Refresh"
+          >
+            🔄
+          </button>
+        )}
       </div>
 
       <div className="relative min-h-[120px]">
         {isLoading ? (
-          <div className="flex items-center justify-center h-32">
-            <LoadingSpinner size="sm" />
-          </div>
+          <LoadingSkeleton data-testid="loading-skeleton" />
         ) : error ? (
           <div className="flex items-center justify-center h-32">
             <div className="text-center">
@@ -56,6 +70,15 @@ const DataWidget: React.FC<DataWidgetProps> = ({
                 ⚠️ Error loading data
               </p>
               <p className="text-gray-400 text-xs">{error}</p>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRefresh?.();
+                }}
+                className="mt-2 px-3 py-1 bg-cosmic-purple hover:bg-cosmic-purple/80 text-white text-xs rounded transition-colors duration-200"
+              >
+                Retry
+              </button>
             </div>
           </div>
         ) : (

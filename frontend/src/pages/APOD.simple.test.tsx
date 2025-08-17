@@ -33,9 +33,9 @@ jest.mock('../services/nasa.service', () => ({
       title: 'Test APOD',
       explanation: 'Test explanation',
       url: 'https://example.com/image.jpg',
-      date: '2025-08-15'
-    })
-  }
+      date: '2025-08-15',
+    }),
+  },
 }));
 
 describe('APOD Page', () => {

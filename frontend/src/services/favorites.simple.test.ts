@@ -17,12 +17,12 @@ describe('Favorites Service - Simple Test', () => {
       type: 'apod',
       title: 'Test Image',
       url: 'https://example.com/image.jpg',
-      date: '2025-08-15'
+      date: '2025-08-15',
     };
 
     favoritesService.addFavorite(favorite);
     const favorites = favoritesService.getFavorites();
-    
+
     expect(favorites).toHaveLength(1);
     expect(favorites[0]).toMatchObject(favorite);
     expect(favorites[0].savedAt).toBeDefined();
@@ -34,7 +34,7 @@ describe('Favorites Service - Simple Test', () => {
       type: 'apod',
       title: 'Test Image',
       url: 'https://example.com/image.jpg',
-      date: '2025-08-15'
+      date: '2025-08-15',
     };
 
     favoritesService.addFavorite(favorite);
@@ -50,11 +50,11 @@ describe('Favorites Service - Simple Test', () => {
       type: 'apod',
       title: 'Test Image',
       url: 'https://example.com/image.jpg',
-      date: '2025-08-15'
+      date: '2025-08-15',
     };
 
     expect(favoritesService.isFavorite('1')).toBe(false);
-    
+
     favoritesService.addFavorite(favorite);
     expect(favoritesService.isFavorite('1')).toBe(true);
   });
@@ -65,14 +65,14 @@ describe('Favorites Service - Simple Test', () => {
       type: 'apod',
       title: 'Test Image 1',
       url: 'https://example.com/image1.jpg',
-      date: '2025-08-15'
+      date: '2025-08-15',
     };
     const favorite2 = {
       id: '2',
       type: 'apod',
       title: 'Test Image 2',
       url: 'https://example.com/image2.jpg',
-      date: '2025-08-16'
+      date: '2025-08-16',
     };
 
     favoritesService.addFavorite(favorite1);

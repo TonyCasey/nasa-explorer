@@ -4,7 +4,7 @@ import DataWidget from './DataWidget';
 describe('DataWidget', () => {
   const mockData = {
     title: 'Test Widget',
-    icon: '📊'
+    icon: '📊',
   };
 
   it('should render widget with title', () => {
@@ -13,7 +13,7 @@ describe('DataWidget', () => {
         <div>42</div>
       </DataWidget>
     );
-    
+
     expect(screen.getByText('Test Widget')).toBeInTheDocument();
     expect(screen.getByText('42')).toBeInTheDocument();
   });

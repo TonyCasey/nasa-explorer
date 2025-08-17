@@ -12,12 +12,16 @@ const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
 
 // Suppress error output during testing
 const originalError = console.error;
+const originalNodeEnv = process.env.NODE_ENV;
+
 beforeAll(() => {
   console.error = jest.fn();
+  process.env.NODE_ENV = 'development';
 });
 
 afterAll(() => {
   console.error = originalError;
+  process.env.NODE_ENV = originalNodeEnv;
 });
 
 describe('ErrorBoundary', () => {
@@ -27,7 +31,7 @@ describe('ErrorBoundary', () => {
         <ThrowError shouldThrow={false} />
       </ErrorBoundary>
     );
-    
+
     expect(screen.getByText('No error')).toBeInTheDocument();
   });
 
@@ -37,7 +41,7 @@ describe('ErrorBoundary', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
   });
 
@@ -47,7 +51,7 @@ describe('ErrorBoundary', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     expect(screen.getByText(/try again/i)).toBeInTheDocument();
   });
 
@@ -57,7 +61,7 @@ describe('ErrorBoundary', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     expect(screen.getByText(/details/i)).toBeInTheDocument();
   });
 
@@ -67,7 +71,7 @@ describe('ErrorBoundary', () => {
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
-    
+
     const errorContainer = screen.getByRole('alert');
     expect(errorContainer).toHaveClass('bg-red-50');
   });

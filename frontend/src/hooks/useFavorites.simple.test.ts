@@ -8,7 +8,7 @@ describe('useFavorites Hook', () => {
 
   it('should initialize with empty favorites', () => {
     const { result } = renderHook(() => useFavorites());
-    
+
     expect(result.current.favorites).toEqual([]);
     expect(result.current.favorites.length).toBe(0);
   });
@@ -19,7 +19,7 @@ describe('useFavorites Hook', () => {
       id: '1',
       title: 'Test Item',
       url: 'https://example.com/test.jpg',
-      type: 'apod' as const
+      type: 'apod' as const,
     };
 
     act(() => {
@@ -36,7 +36,7 @@ describe('useFavorites Hook', () => {
       id: '1',
       title: 'Test Item',
       url: 'https://example.com/test.jpg',
-      type: 'apod' as const
+      type: 'apod' as const,
     };
 
     act(() => {
@@ -56,7 +56,7 @@ describe('useFavorites Hook', () => {
       id: '1',
       title: 'Test Item',
       url: 'https://example.com/test.jpg',
-      type: 'apod' as const
+      type: 'apod' as const,
     };
 
     expect(result.current.isFavorite('1')).toBe(false);
@@ -74,7 +74,7 @@ describe('useFavorites Hook', () => {
       id: '1',
       title: 'Test Item',
       url: 'https://example.com/test.jpg',
-      type: 'apod' as const
+      type: 'apod' as const,
     };
 
     expect(result.current.isFavorite('1')).toBe(false);
@@ -96,11 +96,11 @@ describe('useFavorites Hook', () => {
     const { result } = renderHook(() => useFavorites());
     const testItems = [
       { id: '1', title: 'Item 1', url: 'url1', type: 'apod' as const },
-      { id: '2', title: 'Item 2', url: 'url2', type: 'mars' as const }
+      { id: '2', title: 'Item 2', url: 'url2', type: 'mars' as const },
     ];
 
     act(() => {
-      testItems.forEach(item => result.current.addFavorite(item));
+      testItems.forEach((item) => result.current.addFavorite(item));
     });
 
     expect(result.current.favorites).toHaveLength(2);
@@ -118,7 +118,7 @@ describe('useFavorites Hook', () => {
       id: '1',
       title: 'Test Item',
       url: 'https://example.com/test.jpg',
-      type: 'apod' as const
+      type: 'apod' as const,
     };
 
     act(() => {

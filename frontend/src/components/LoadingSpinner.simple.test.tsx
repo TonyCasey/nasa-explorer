@@ -16,7 +16,7 @@ describe('LoadingSpinner', () => {
   it('should render with different sizes', () => {
     const { rerender } = render(<LoadingSpinner size="small" />);
     expect(screen.getByRole('status')).toBeInTheDocument();
-    
+
     rerender(<LoadingSpinner size="large" />);
     expect(screen.getByRole('status')).toBeInTheDocument();
   });

@@ -22,7 +22,13 @@ jest.mock('../services/favorites.service', () => ({
 
 // Mock components
 jest.mock('../components/FavoriteButton', () => {
-  return function MockFavoriteButton({ item, onRemove }: { item: any; onRemove?: () => void }) {
+  return function MockFavoriteButton({
+    item,
+    onRemove,
+  }: {
+    item: any;
+    onRemove?: () => void;
+  }) {
     return (
       <button data-testid={`favorite-button-${item.id}`} onClick={onRemove}>
         Remove from Favorites
@@ -52,7 +58,11 @@ jest.mock('../components/LoadingSpinner', () => {
 });
 
 jest.mock('../components/ErrorBoundary', () => {
-  return function MockErrorBoundary({ children }: { children: React.ReactNode }) {
+  return function MockErrorBoundary({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) {
     return <div>{children}</div>;
   };
 });
@@ -65,9 +75,7 @@ const renderWithProviders = (component: React.ReactElement) => {
   });
 
   return render(
-    <QueryClientProvider client={queryClient}>
-      {component}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{component}</QueryClientProvider>
   );
 };
 
@@ -109,13 +117,13 @@ describe('Favorites', () => {
 
   it('renders Favorites page title', () => {
     renderWithProviders(<Favorites />);
-    
+
     expect(screen.getByText('My Favorites')).toBeInTheDocument();
   });
 
   it('shows loading state initially', () => {
     renderWithProviders(<Favorites />);
-    
+
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
@@ -255,10 +263,10 @@ describe('Favorites', () => {
 
     // APOD favorite
     expect(screen.getByText('Amazing Galaxy')).toBeInTheDocument();
-    
+
     // Mars photo favorite
     expect(screen.getByText(/Curiosity/)).toBeInTheDocument();
-    
+
     // NEO favorite
     expect(screen.getByText('(2020 BZ12)')).toBeInTheDocument();
   });

@@ -1,4 +1,4 @@
-import logger from './logger';
+import { FrontendLogger } from './logger';
 
 // Mock console methods
 const originalConsole = {
@@ -12,7 +12,9 @@ const originalConsole = {
 beforeAll(() => {
   // Set NODE_ENV to development so logger actually logs to console
   process.env.NODE_ENV = 'development';
-  
+  // Set log level to debug so all messages are logged
+  process.env.REACT_APP_LOG_LEVEL = 'debug';
+
   console.log = jest.fn();
   console.error = jest.fn();
   console.warn = jest.fn();
@@ -29,8 +31,12 @@ afterAll(() => {
 });
 
 describe('Logger Utility', () => {
+  let logger: FrontendLogger;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    // Create fresh logger instance after environment is set
+    logger = new FrontendLogger();
   });
 
   it('should log info messages', () => {
@@ -79,7 +85,7 @@ describe('Logger Utility', () => {
     logger.info('Test with object', testObj);
     expect(console.log).toHaveBeenCalledWith(
       expect.stringContaining('INFO'),
-      expect.any(String),
+      testObj,
       expect.any(String)
     );
   });

@@ -13,7 +13,7 @@ jest.mock('../utils/logger', () => ({
     error: jest.fn(),
     warn: jest.fn(),
     debug: jest.fn(),
-  }
+  },
 }));
 
 describe('NASA Service - Simple Tests', () => {
@@ -28,19 +28,19 @@ describe('NASA Service - Simple Tests', () => {
         title: 'Test Image',
         explanation: 'Test explanation',
         url: 'https://example.com/image.jpg',
-        date: '2025-08-15'
-      }
+        date: '2025-08-15',
+      },
     };
     mockedAxios.get.mockResolvedValue(mockResponse);
 
     const result = await nasaService.getAPOD('2025-08-15');
-    
+
     expect(mockedAxios.get).toHaveBeenCalledWith(
       expect.stringContaining('/planetary/apod'),
       expect.objectContaining({
         params: expect.objectContaining({
-          date: '2025-08-15'
-        })
+          date: '2025-08-15',
+        }),
       })
     );
     expect(result).toEqual(mockResponse.data);
@@ -60,21 +60,21 @@ describe('NASA Service - Simple Tests', () => {
           {
             id: 1,
             img_src: 'https://example.com/mars1.jpg',
-            earth_date: '2025-08-15'
-          }
-        ]
-      }
+            earth_date: '2025-08-15',
+          },
+        ],
+      },
     };
     mockedAxios.get.mockResolvedValue(mockResponse);
 
     const result = await nasaService.getMarsRoverPhotos('curiosity', 1000);
-    
+
     expect(mockedAxios.get).toHaveBeenCalledWith(
       expect.stringContaining('/mars-photos/api/v1/rovers/curiosity'),
       expect.objectContaining({
         params: expect.objectContaining({
-          sol: 1000
-        })
+          sol: 1000,
+        }),
       })
     );
     expect(result).toEqual(mockResponse.data);
@@ -84,21 +84,21 @@ describe('NASA Service - Simple Tests', () => {
     const mockResponse = {
       data: {
         near_earth_objects: {
-          '2025-08-15': []
-        }
-      }
+          '2025-08-15': [],
+        },
+      },
     };
     mockedAxios.get.mockResolvedValue(mockResponse);
 
     const result = await nasaService.getNEOFeed('2025-08-15', '2025-08-16');
-    
+
     expect(mockedAxios.get).toHaveBeenCalledWith(
       expect.stringContaining('/neo/rest/v1/feed'),
       expect.objectContaining({
         params: expect.objectContaining({
           start_date: '2025-08-15',
-          end_date: '2025-08-16'
-        })
+          end_date: '2025-08-16',
+        }),
       })
     );
     expect(result).toEqual(mockResponse.data);
@@ -111,14 +111,14 @@ describe('NASA Service - Simple Tests', () => {
           identifier: '20150418003633',
           caption: 'Test caption',
           image: 'epic_1b_20150418003633',
-          date: '2015-04-18 00:36:33'
-        }
-      ]
+          date: '2015-04-18 00:36:33',
+        },
+      ],
     };
     mockedAxios.get.mockResolvedValue(mockResponse);
 
     const result = await nasaService.getEPICImages('2025-08-15');
-    
+
     expect(mockedAxios.get).toHaveBeenCalledWith(
       expect.stringContaining('/EPIC/api/natural/date/2025-08-15')
     );
@@ -129,7 +129,9 @@ describe('NASA Service - Simple Tests', () => {
     mockedAxios.get.mockRejectedValue(new Error('Network Error'));
 
     await expect(nasaService.getAPOD()).rejects.toThrow('Network Error');
-    await expect(nasaService.getMarsRoverPhotos('curiosity')).rejects.toThrow('Network Error');
+    await expect(nasaService.getMarsRoverPhotos('curiosity')).rejects.toThrow(
+      'Network Error'
+    );
     await expect(nasaService.getNEOFeed()).rejects.toThrow('Network Error');
     await expect(nasaService.getEPICImages()).rejects.toThrow('Network Error');
   });
@@ -148,8 +150,8 @@ describe('NASA Service - Simple Tests', () => {
       expect.any(String),
       expect.objectContaining({
         params: expect.objectContaining({
-          api_key: expect.any(String)
-        })
+          api_key: expect.any(String),
+        }),
       })
     );
   });

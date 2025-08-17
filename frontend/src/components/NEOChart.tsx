@@ -47,52 +47,87 @@ interface NEOChartProps {
 const NEOChart: React.FC<NEOChartProps> = ({ neos, className = '' }) => {
   // Prepare data for different charts
   const hazardData = [
-    { name: 'Safe', value: neos.filter(n => !n.is_potentially_hazardous_asteroid).length, color: '#10B981' },
-    { name: 'Hazardous', value: neos.filter(n => n.is_potentially_hazardous_asteroid).length, color: '#EF4444' },
+    {
+      name: 'Safe',
+      value: neos.filter((n) => !n.is_potentially_hazardous_asteroid).length,
+      color: '#10B981',
+    },
+    {
+      name: 'Hazardous',
+      value: neos.filter((n) => n.is_potentially_hazardous_asteroid).length,
+      color: '#EF4444',
+    },
   ];
 
   const sizeData = [
-    { 
-      name: 'Small (<140m)', 
-      value: neos.filter(n => {
-        const avg = (n.estimated_diameter.kilometers.estimated_diameter_min + n.estimated_diameter.kilometers.estimated_diameter_max) / 2;
+    {
+      name: 'Small (<140m)',
+      value: neos.filter((n) => {
+        const avg =
+          (n.estimated_diameter.kilometers.estimated_diameter_min +
+            n.estimated_diameter.kilometers.estimated_diameter_max) /
+          2;
         return avg <= 0.14;
       }).length,
-      color: '#6366F1'
+      color: '#6366F1',
     },
-    { 
-      name: 'Medium (140m-1km)', 
-      value: neos.filter(n => {
-        const avg = (n.estimated_diameter.kilometers.estimated_diameter_min + n.estimated_diameter.kilometers.estimated_diameter_max) / 2;
+    {
+      name: 'Medium (140m-1km)',
+      value: neos.filter((n) => {
+        const avg =
+          (n.estimated_diameter.kilometers.estimated_diameter_min +
+            n.estimated_diameter.kilometers.estimated_diameter_max) /
+          2;
         return avg > 0.14 && avg <= 1;
       }).length,
-      color: '#F59E0B'
+      color: '#F59E0B',
     },
-    { 
-      name: 'Large (>1km)', 
-      value: neos.filter(n => {
-        const avg = (n.estimated_diameter.kilometers.estimated_diameter_min + n.estimated_diameter.kilometers.estimated_diameter_max) / 2;
+    {
+      name: 'Large (>1km)',
+      value: neos.filter((n) => {
+        const avg =
+          (n.estimated_diameter.kilometers.estimated_diameter_min +
+            n.estimated_diameter.kilometers.estimated_diameter_max) /
+          2;
         return avg > 1;
       }).length,
-      color: '#EF4444'
+      color: '#EF4444',
     },
   ];
 
   const distanceData = [
-    { name: '<5 LD', value: neos.filter(n => parseFloat(n.close_approach_data[0].miss_distance.lunar) < 5).length },
-    { name: '5-20 LD', value: neos.filter(n => {
-      const dist = parseFloat(n.close_approach_data[0].miss_distance.lunar);
-      return dist >= 5 && dist < 20;
-    }).length },
-    { name: '>20 LD', value: neos.filter(n => parseFloat(n.close_approach_data[0].miss_distance.lunar) >= 20).length },
+    {
+      name: '<5 LD',
+      value: neos.filter(
+        (n) => parseFloat(n.close_approach_data[0].miss_distance.lunar) < 5
+      ).length,
+    },
+    {
+      name: '5-20 LD',
+      value: neos.filter((n) => {
+        const dist = parseFloat(n.close_approach_data[0].miss_distance.lunar);
+        return dist >= 5 && dist < 20;
+      }).length,
+    },
+    {
+      name: '>20 LD',
+      value: neos.filter(
+        (n) => parseFloat(n.close_approach_data[0].miss_distance.lunar) >= 20
+      ).length,
+    },
   ];
 
   // Prepare scatter plot data for size vs distance
-  const scatterData = neos.slice(0, 50).map(neo => ({
+  const scatterData = neos.slice(0, 50).map((neo) => ({
     name: neo.name,
     distance: parseFloat(neo.close_approach_data[0].miss_distance.lunar),
-    size: (neo.estimated_diameter.kilometers.estimated_diameter_min + neo.estimated_diameter.kilometers.estimated_diameter_max) / 2,
-    velocity: parseFloat(neo.close_approach_data[0].relative_velocity.kilometers_per_second),
+    size:
+      (neo.estimated_diameter.kilometers.estimated_diameter_min +
+        neo.estimated_diameter.kilometers.estimated_diameter_max) /
+      2,
+    velocity: parseFloat(
+      neo.close_approach_data[0].relative_velocity.kilometers_per_second
+    ),
     hazardous: neo.is_potentially_hazardous_asteroid,
   }));
 
@@ -104,8 +139,10 @@ const NEOChart: React.FC<NEOChartProps> = ({ neos, className = '' }) => {
     { range: '>30 km/s', count: 0 },
   ];
 
-  neos.forEach(neo => {
-    const velocity = parseFloat(neo.close_approach_data[0].relative_velocity.kilometers_per_second);
+  neos.forEach((neo) => {
+    const velocity = parseFloat(
+      neo.close_approach_data[0].relative_velocity.kilometers_per_second
+    );
     if (velocity < 10) velocityRanges[0].count++;
     else if (velocity < 20) velocityRanges[1].count++;
     else if (velocity < 30) velocityRanges[2].count++;
@@ -134,10 +171,18 @@ const NEOChart: React.FC<NEOChartProps> = ({ neos, className = '' }) => {
       return (
         <div className="bg-space-dark/90 backdrop-blur-sm border border-white/20 rounded-lg p-3">
           <p className="text-white font-medium">{data.name}</p>
-          <p className="text-gray-300 text-sm">Distance: {data.distance.toFixed(2)} LD</p>
-          <p className="text-gray-300 text-sm">Size: {(data.size * 1000).toFixed(0)} m</p>
-          <p className="text-gray-300 text-sm">Velocity: {data.velocity.toFixed(1)} km/s</p>
-          <p className={`text-sm ${data.hazardous ? 'text-mars-red' : 'text-aurora-green'}`}>
+          <p className="text-gray-300 text-sm">
+            Distance: {data.distance.toFixed(2)} LD
+          </p>
+          <p className="text-gray-300 text-sm">
+            Size: {(data.size * 1000).toFixed(0)} m
+          </p>
+          <p className="text-gray-300 text-sm">
+            Velocity: {data.velocity.toFixed(1)} km/s
+          </p>
+          <p
+            className={`text-sm ${data.hazardous ? 'text-mars-red' : 'text-aurora-green'}`}
+          >
             {data.hazardous ? 'Potentially Hazardous' : 'Safe'}
           </p>
         </div>
@@ -164,27 +209,43 @@ const NEOChart: React.FC<NEOChartProps> = ({ neos, className = '' }) => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="glass-effect rounded-lg p-4 text-center">
           <div className="text-2xl mb-2">🎯</div>
-          <div className="text-2xl font-bold text-white mb-1">{neos.length}</div>
+          <div className="text-2xl font-bold text-white mb-1">
+            {neos.length}
+          </div>
           <div className="text-gray-300 text-sm">Total NEOs</div>
         </div>
         <div className="glass-effect rounded-lg p-4 text-center border-l-4 border-mars-red">
           <div className="text-2xl mb-2">⚠️</div>
           <div className="text-2xl font-bold text-mars-red mb-1">
-            {neos.filter(n => n.is_potentially_hazardous_asteroid).length}
+            {neos.filter((n) => n.is_potentially_hazardous_asteroid).length}
           </div>
           <div className="text-gray-300 text-sm">Hazardous</div>
         </div>
         <div className="glass-effect rounded-lg p-4 text-center border-l-4 border-cosmic-purple">
           <div className="text-2xl mb-2">📏</div>
           <div className="text-2xl font-bold text-cosmic-purple mb-1">
-            {Math.max(...neos.map(n => (n.estimated_diameter.kilometers.estimated_diameter_max * 1000))).toFixed(0)}m
+            {Math.max(
+              ...neos.map(
+                (n) =>
+                  n.estimated_diameter.kilometers.estimated_diameter_max * 1000
+              )
+            ).toFixed(0)}
+            m
           </div>
           <div className="text-gray-300 text-sm">Largest</div>
         </div>
         <div className="glass-effect rounded-lg p-4 text-center border-l-4 border-solar-orange">
           <div className="text-2xl mb-2">🚀</div>
           <div className="text-2xl font-bold text-solar-orange mb-1">
-            {Math.max(...neos.map(n => parseFloat(n.close_approach_data[0].relative_velocity.kilometers_per_second))).toFixed(1)} km/s
+            {Math.max(
+              ...neos.map((n) =>
+                parseFloat(
+                  n.close_approach_data[0].relative_velocity
+                    .kilometers_per_second
+                )
+              )
+            ).toFixed(1)}{' '}
+            km/s
           </div>
           <div className="text-gray-300 text-sm">Fastest</div>
         </div>
@@ -194,7 +255,9 @@ const NEOChart: React.FC<NEOChartProps> = ({ neos, className = '' }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Hazard Status Pie Chart */}
         <div className="glass-effect rounded-xl p-6">
-          <h4 className="text-white font-semibold mb-4">Hazard Classification</h4>
+          <h4 className="text-white font-semibold mb-4">
+            Hazard Classification
+          </h4>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
@@ -236,7 +299,9 @@ const NEOChart: React.FC<NEOChartProps> = ({ neos, className = '' }) => {
 
         {/* Distance Distribution */}
         <div className="glass-effect rounded-xl p-6">
-          <h4 className="text-white font-semibold mb-4">Distance from Earth (Lunar Distances)</h4>
+          <h4 className="text-white font-semibold mb-4">
+            Distance from Earth (Lunar Distances)
+          </h4>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={distanceData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -250,14 +315,22 @@ const NEOChart: React.FC<NEOChartProps> = ({ neos, className = '' }) => {
 
         {/* Velocity Distribution */}
         <div className="glass-effect rounded-xl p-6">
-          <h4 className="text-white font-semibold mb-4">Velocity Distribution</h4>
+          <h4 className="text-white font-semibold mb-4">
+            Velocity Distribution
+          </h4>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={velocityRanges}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
               <XAxis dataKey="range" stroke="#9CA3AF" />
               <YAxis stroke="#9CA3AF" />
               <Tooltip content={<CustomTooltip />} />
-              <Line type="monotone" dataKey="count" stroke="#F59E0B" strokeWidth={2} dot={{ fill: '#F59E0B' }} />
+              <Line
+                type="monotone"
+                dataKey="count"
+                stroke="#F59E0B"
+                strokeWidth={2}
+                dot={{ fill: '#F59E0B' }}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -265,28 +338,37 @@ const NEOChart: React.FC<NEOChartProps> = ({ neos, className = '' }) => {
 
       {/* Size vs Distance Scatter Plot */}
       <div className="glass-effect rounded-xl p-6">
-        <h4 className="text-white font-semibold mb-4">Size vs Distance Analysis (Top 50 NEOs)</h4>
+        <h4 className="text-white font-semibold mb-4">
+          Size vs Distance Analysis (Top 50 NEOs)
+        </h4>
         <ResponsiveContainer width="100%" height={300}>
           <ScatterChart>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis 
-              dataKey="distance" 
-              name="Distance" 
-              unit=" LD" 
+            <XAxis
+              dataKey="distance"
+              name="Distance"
+              unit=" LD"
               stroke="#9CA3AF"
-              label={{ value: 'Distance (Lunar Distances)', position: 'insideBottom', offset: -5 }}
+              label={{
+                value: 'Distance (Lunar Distances)',
+                position: 'insideBottom',
+                offset: -5,
+              }}
             />
-            <YAxis 
-              dataKey="size" 
-              name="Size" 
-              unit=" km" 
+            <YAxis
+              dataKey="size"
+              name="Size"
+              unit=" km"
               stroke="#9CA3AF"
               label={{ value: 'Size (km)', angle: -90, position: 'insideLeft' }}
             />
             <Tooltip content={<ScatterTooltip />} />
             <Scatter name="NEOs" data={scatterData} fill="#6366F1">
               {scatterData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.hazardous ? '#EF4444' : '#10B981'} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.hazardous ? '#EF4444' : '#10B981'}
+                />
               ))}
             </Scatter>
           </ScatterChart>

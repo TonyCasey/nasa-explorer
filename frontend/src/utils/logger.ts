@@ -87,7 +87,7 @@ class FrontendLogger {
     if (process.env.NODE_ENV === 'production') {
       return;
     }
-    
+
     try {
       const today = new Date().toISOString().split('T')[0];
       const storageKey = `nasa_explorer_logs_${today}`;
@@ -157,6 +157,7 @@ class FrontendLogger {
 
 const logger = new FrontendLogger();
 export default logger;
+export { FrontendLogger };
 
 export const logApiRequest = (method: string, url: string, data?: any) => {
   logger.debug(`API Request: ${method} ${url}`, { method, url, data });

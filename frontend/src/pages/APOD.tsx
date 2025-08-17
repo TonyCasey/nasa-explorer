@@ -36,7 +36,7 @@ const APOD: React.FC = () => {
       });
     } catch (err: any) {
       logger.error('APOD load error', err as Error, { date });
-      
+
       // Check for 408 timeout error
       if (err.status === 408) {
         setError('NASA Server Timeout');
@@ -88,59 +88,99 @@ const APOD: React.FC = () => {
         </div>
 
         {/* Date Selection */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1">
-            <div className="glass-effect rounded-xl p-6 sticky top-6 z-20">
-              <h2 className="text-xl font-inter font-semibold text-white mb-4">
-                📅 Select Date
-              </h2>
-              <DatePicker
-                selectedDate={selectedDate}
-                onDateChange={handleDateChange}
-              />
+        <div className="space-y-8">
+          <div className="glass-effect rounded-xl p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <h2 className="text-xl font-inter font-semibold text-white mb-4">
+                  📅 Select Date
+                </h2>
+                <DatePicker
+                  selectedDate={selectedDate}
+                  onDateChange={handleDateChange}
+                />
+              </div>
 
               {apodData && (
-                <div className="mt-6 pt-6 border-t border-white/10 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-sm">Save for later</span>
-                    <FavoriteButton
-                      item={{
-                        id: `apod-${selectedDate}`,
-                        type: 'apod',
-                        title: apodData.title,
-                        thumbnail: apodData.media_type === 'image' ? apodData.url : apodData.url,
-                        data: apodData,
-                      }}
-                      size="lg"
-                      className="text-gray-300 hover:text-solar-orange"
-                    />
+                <>
+                  <div>
+                    <h3 className="text-xl font-inter font-semibold text-white mb-4">
+                      🌟 Quick Actions
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-300 text-sm font-medium">
+                          Save for later
+                        </span>
+                        <FavoriteButton
+                          item={{
+                            id: `apod-${selectedDate}`,
+                            type: 'apod',
+                            title: apodData.title,
+                            thumbnail:
+                              apodData.media_type === 'image'
+                                ? apodData.url
+                                : apodData.url,
+                            data: apodData,
+                          }}
+                          size="lg"
+                          className="text-gray-300 hover:text-solar-orange"
+                        />
+                      </div>
+                      <button
+                        onClick={shareImage}
+                        className="w-full bg-cosmic-purple/20 hover:bg-cosmic-purple/30 text-cosmic-purple border border-cosmic-purple/30 rounded-lg py-2 px-3 transition-colors duration-200 flex items-center justify-center space-x-2 text-sm"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                          />
+                        </svg>
+                        <span>Share Image</span>
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    onClick={shareImage}
-                    className="w-full bg-cosmic-purple/20 hover:bg-cosmic-purple/30 text-cosmic-purple border border-cosmic-purple/30 rounded-lg py-3 px-4 transition-colors duration-200 flex items-center justify-center space-x-2"
-                  >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
-                      />
-                    </svg>
-                    <span>Share Image</span>
-                  </button>
-                </div>
+
+                  <div>
+                    <h3 className="text-xl font-inter font-semibold text-white mb-4">
+                      📊 Image Info
+                    </h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="text-gray-300">
+                        <span className="font-medium">Date:</span>{' '}
+                        <span className="text-white font-semibold">
+                          {new Date(selectedDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="text-gray-300">
+                        <span className="font-medium">Type:</span>{' '}
+                        <span className="text-white font-semibold">
+                          {apodData.media_type === 'image' ? 'Image' : 'Video'}
+                        </span>
+                      </div>
+                      <div className="text-gray-300">
+                        <span className="font-medium">Copyright:</span>{' '}
+                        <span className="text-white font-semibold">
+                          {apodData.copyright || 'NASA'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-2">
+          <div>
             {isLoading ? (
               <div className="glass-effect rounded-xl p-12">
                 <div className="flex flex-col items-center justify-center space-y-4">
@@ -167,7 +207,7 @@ const APOD: React.FC = () => {
             ) : apodData ? (
               <div className="space-y-6">
                 {/* Image/Video */}
-                <div className="glass-effect rounded-xl overflow-hidden">
+                <div className="glass-effect rounded-xl overflow-hidden p-4">
                   {apodData.media_type === 'image' ? (
                     <div className="relative">
                       <img

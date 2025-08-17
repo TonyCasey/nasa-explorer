@@ -145,7 +145,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
         {/* Calendar Dropdown */}
         {showCalendar && (
-          <div 
+          <div
             className="absolute top-full left-0 right-0 mt-2 backdrop-blur-md rounded-xl p-4 z-[9999] border border-white/30 shadow-2xl"
             style={{ backgroundColor: `rgba(15, 23, 42, ${opacity / 100})` }}
           >

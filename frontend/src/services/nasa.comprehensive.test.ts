@@ -2,7 +2,8 @@
 describe('NASA Service Configuration', () => {
   describe('API Configuration', () => {
     it('should have proper base URL configuration', () => {
-      const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1';
+      const baseURL =
+        process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1';
       expect(typeof baseURL).toBe('string');
       expect(baseURL).toContain('api');
     });
@@ -50,16 +51,30 @@ describe('NASA Service Configuration', () => {
     });
 
     it('should validate rover names', () => {
-      const validRovers = ['curiosity', 'opportunity', 'spirit', 'perseverance', 'ingenuity'];
-      validRovers.forEach(rover => {
+      const validRovers = [
+        'curiosity',
+        'opportunity',
+        'spirit',
+        'perseverance',
+        'ingenuity',
+      ];
+      validRovers.forEach((rover) => {
         expect(typeof rover).toBe('string');
         expect(rover.length).toBeGreaterThan(0);
       });
     });
 
     it('should validate camera types', () => {
-      const validCameras = ['fhaz', 'rhaz', 'mast', 'chemcam', 'mahli', 'mardi', 'navcam'];
-      validCameras.forEach(camera => {
+      const validCameras = [
+        'fhaz',
+        'rhaz',
+        'mast',
+        'chemcam',
+        'mahli',
+        'mardi',
+        'navcam',
+      ];
+      validCameras.forEach((camera) => {
         expect(typeof camera).toBe('string');
         expect(camera.length).toBeGreaterThan(0);
       });
@@ -77,9 +92,9 @@ describe('NASA Service Configuration', () => {
       const mockResponse = {
         status: 200,
         data: { success: true },
-        headers: { 'content-type': 'application/json' }
+        headers: { 'content-type': 'application/json' },
       };
-      
+
       expect(mockResponse.status).toBe(200);
       expect(mockResponse.data.success).toBe(true);
     });
@@ -88,9 +103,9 @@ describe('NASA Service Configuration', () => {
       const errorResponse = {
         status: 404,
         message: 'Not Found',
-        error: true
+        error: true,
       };
-      
+
       expect(errorResponse.status).toBe(404);
       expect(errorResponse.error).toBe(true);
     });
@@ -99,9 +114,9 @@ describe('NASA Service Configuration', () => {
       const networkError = {
         code: 'NETWORK_ERROR',
         message: 'Request failed',
-        isNetworkError: true
+        isNetworkError: true,
       };
-      
+
       expect(networkError.isNetworkError).toBe(true);
       expect(networkError.code).toBe('NETWORK_ERROR');
     });
@@ -113,9 +128,9 @@ describe('NASA Service Configuration', () => {
         date: '2025-08-15',
         explanation: 'Test explanation',
         title: 'Test Title',
-        url: 'https://example.com/image.jpg'
+        url: 'https://example.com/image.jpg',
       };
-      
+
       expect(mockAPOD).toHaveProperty('date');
       expect(mockAPOD).toHaveProperty('title');
       expect(mockAPOD.url).toContain('http');
@@ -126,9 +141,9 @@ describe('NASA Service Configuration', () => {
         id: 12345,
         img_src: 'https://example.com/mars.jpg',
         earth_date: '2025-08-15',
-        camera: { name: 'FHAZ' }
+        camera: { name: 'FHAZ' },
       };
-      
+
       expect(typeof mockPhoto.id).toBe('number');
       expect(mockPhoto.img_src).toContain('http');
       expect(mockPhoto.camera).toHaveProperty('name');
@@ -141,11 +156,11 @@ describe('NASA Service Configuration', () => {
         estimated_diameter: {
           kilometers: {
             estimated_diameter_min: 0.1234,
-            estimated_diameter_max: 0.2759
-          }
-        }
+            estimated_diameter_max: 0.2759,
+          },
+        },
       };
-      
+
       expect(typeof mockNEO.id).toBe('string');
       expect(mockNEO.estimated_diameter).toHaveProperty('kilometers');
     });
@@ -176,9 +191,9 @@ describe('NASA Service Configuration', () => {
       const rateLimitError = {
         status: 429,
         message: 'Rate limit exceeded',
-        retryAfter: 3600
+        retryAfter: 3600,
       };
-      
+
       expect(rateLimitError.status).toBe(429);
       expect(typeof rateLimitError.retryAfter).toBe('number');
     });
@@ -187,9 +202,9 @@ describe('NASA Service Configuration', () => {
       const authError = {
         status: 401,
         message: 'Invalid API key',
-        code: 'API_KEY_INVALID'
+        code: 'API_KEY_INVALID',
       };
-      
+
       expect(authError.status).toBe(401);
       expect(authError.code).toBe('API_KEY_INVALID');
     });
@@ -198,9 +213,9 @@ describe('NASA Service Configuration', () => {
       const serverError = {
         status: 500,
         message: 'Internal Server Error',
-        isServerError: true
+        isServerError: true,
       };
-      
+
       expect(serverError.status).toBe(500);
       expect(serverError.isServerError).toBe(true);
     });

@@ -25,16 +25,16 @@ jest.mock('../services/nasa.service', () => ({
   nasaService: {
     getAPOD: jest.fn().mockResolvedValue({}),
     getMarsRoverPhotos: jest.fn().mockResolvedValue({ photos: [] }),
-    getNEOFeed: jest.fn().mockResolvedValue({ near_earth_objects: {} })
-  }
+    getNEOFeed: jest.fn().mockResolvedValue({ near_earth_objects: {} }),
+  },
 }));
 
 jest.mock('../hooks/useFavorites', () => ({
   useFavorites: () => ({
     favorites: [],
     addFavorite: jest.fn(),
-    removeFavorite: jest.fn()
-  })
+    removeFavorite: jest.fn(),
+  }),
 }));
 
 describe('Dashboard', () => {
@@ -63,7 +63,7 @@ describe('Dashboard', () => {
 
   it('should render dashboard sections', () => {
     render(<Dashboard />);
-    
+
     // Check for main dashboard sections
     expect(screen.getByText(/overview/i)).toBeInTheDocument();
     expect(screen.getByText(/recent/i)).toBeInTheDocument();

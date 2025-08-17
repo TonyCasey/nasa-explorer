@@ -23,7 +23,11 @@ jest.mock('../services/nasa.service', () => ({
 
 // Mock components
 jest.mock('../components/RoverFilters', () => {
-  return function MockRoverFilters({ onFilterChange }: { onFilterChange: (filters: any) => void }) {
+  return function MockRoverFilters({
+    onFilterChange,
+  }: {
+    onFilterChange: (filters: any) => void;
+  }) {
     return (
       <div data-testid="rover-filters">
         <button onClick={() => onFilterChange({ rover: 'curiosity' })}>
@@ -55,7 +59,11 @@ jest.mock('../components/LoadingSpinner', () => {
 });
 
 jest.mock('../components/ErrorBoundary', () => {
-  return function MockErrorBoundary({ children }: { children: React.ReactNode }) {
+  return function MockErrorBoundary({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) {
     return <div>{children}</div>;
   };
 });
@@ -68,9 +76,7 @@ const renderWithProviders = (component: React.ReactElement) => {
   });
 
   return render(
-    <QueryClientProvider client={queryClient}>
-      {component}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{component}</QueryClientProvider>
   );
 };
 
@@ -112,19 +118,19 @@ describe('MarsRovers', () => {
 
   it('renders Mars Rovers page title', () => {
     renderWithProviders(<MarsRovers />);
-    
+
     expect(screen.getByText('Mars Rover Photos')).toBeInTheDocument();
   });
 
   it('renders rover filters', () => {
     renderWithProviders(<MarsRovers />);
-    
+
     expect(screen.getByTestId('rover-filters')).toBeInTheDocument();
   });
 
   it('shows loading state initially', () => {
     renderWithProviders(<MarsRovers />);
-    
+
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 

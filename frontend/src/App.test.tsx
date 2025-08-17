@@ -15,7 +15,11 @@ jest.mock('./components/Navigation', () => {
 });
 
 jest.mock('./components/ErrorBoundary', () => {
-  return function MockErrorBoundary({ children }: { children: React.ReactNode }) {
+  return function MockErrorBoundary({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) {
     return <div data-testid="error-boundary">{children}</div>;
   };
 });
@@ -56,7 +60,10 @@ jest.mock('./pages/Favorites', () => {
   };
 });
 
-const renderWithProviders = (component: React.ReactElement, initialRoute = '/') => {
+const renderWithProviders = (
+  component: React.ReactElement,
+  initialRoute = '/'
+) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false },
@@ -65,9 +72,7 @@ const renderWithProviders = (component: React.ReactElement, initialRoute = '/') 
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={[initialRoute]}>
-        {component}
-      </MemoryRouter>
+      <MemoryRouter initialEntries={[initialRoute]}>{component}</MemoryRouter>
     </QueryClientProvider>
   );
 };
@@ -79,7 +84,7 @@ describe('App', () => {
 
   it('renders main layout components', () => {
     renderWithProviders(<App />);
-    
+
     expect(screen.getByTestId('error-boundary')).toBeInTheDocument();
     expect(screen.getByTestId('navigation')).toBeInTheDocument();
     expect(screen.getByTestId('version-footer')).toBeInTheDocument();
@@ -87,20 +92,22 @@ describe('App', () => {
 
   it('renders dashboard by default', () => {
     renderWithProviders(<App />);
-    
+
     expect(screen.getByTestId('dashboard-page')).toBeInTheDocument();
   });
 
   it('logs initialization message', () => {
     const logger = require('./utils/logger');
     renderWithProviders(<App />);
-    
-    expect(logger.info).toHaveBeenCalledWith('NASA Space Explorer App initialized');
+
+    expect(logger.info).toHaveBeenCalledWith(
+      'NASA Space Explorer App initialized'
+    );
   });
 
   it('has correct layout structure with background gradient', () => {
     const { container } = renderWithProviders(<App />);
-    
+
     const rootDiv = container.querySelector('.bg-space-gradient');
     expect(rootDiv).toBeInTheDocument();
     expect(rootDiv).toHaveClass('flex', 'flex-col', 'min-h-screen');
@@ -108,7 +115,7 @@ describe('App', () => {
 
   it('renders main content area', () => {
     renderWithProviders(<App />);
-    
+
     const mainElement = screen.getByRole('main');
     expect(mainElement).toBeInTheDocument();
     expect(mainElement).toHaveClass('flex-1', 'w-full', 'lg:w-auto');
@@ -116,31 +123,31 @@ describe('App', () => {
 
   it('navigates to APOD page', () => {
     renderWithProviders(<App />, '/apod');
-    
+
     expect(screen.getByTestId('apod-page')).toBeInTheDocument();
   });
 
   it('navigates to Mars Rovers page', () => {
     renderWithProviders(<App />, '/mars-rovers');
-    
+
     expect(screen.getByTestId('mars-rovers-page')).toBeInTheDocument();
   });
 
   it('navigates to NEO Tracker page', () => {
     renderWithProviders(<App />, '/neo-tracker');
-    
+
     expect(screen.getByTestId('neo-tracker-page')).toBeInTheDocument();
   });
 
   it('navigates to Favorites page', () => {
     renderWithProviders(<App />, '/favorites');
-    
+
     expect(screen.getByTestId('favorites-page')).toBeInTheDocument();
   });
 
   it('wraps content in error boundary', () => {
     renderWithProviders(<App />);
-    
+
     expect(screen.getByTestId('error-boundary')).toBeInTheDocument();
   });
 });

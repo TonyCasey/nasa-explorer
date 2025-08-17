@@ -111,10 +111,10 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <h3 className="text-white font-inter font-semibold text-lg leading-tight">
+          <h3 className="text-white font-inter font-bold text-lg leading-tight">
             {neo.name.replace(/[()]/g, '')}
           </h3>
-          <p className="text-gray-400 text-sm mt-1">ID: {neo.id}</p>
+          <p className="text-gray-300 text-sm mt-1 font-medium">ID: {neo.id}</p>
         </div>
         <div className={`text-${risk.color} text-2xl`}>{risk.emoji}</div>
       </div>
@@ -138,27 +138,27 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
       {/* Key Stats Grid */}
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="space-y-2">
-          <div className="text-gray-400 text-xs">Size Category</div>
+          <div className="text-gray-300 text-xs font-medium">Size Category</div>
           <div className="flex items-center space-x-2">
             <span className="text-lg">{size.emoji}</span>
             <div>
-              <div className="text-white font-medium text-sm">
+              <div className="text-white font-semibold text-sm">
                 {size.category}
               </div>
-              <div className="text-gray-400 text-xs">{size.description}</div>
+              <div className="text-gray-300 text-xs">{size.description}</div>
             </div>
           </div>
         </div>
 
         <div className="space-y-2">
-          <div className="text-gray-400 text-xs">Approach Date</div>
+          <div className="text-gray-300 text-xs font-medium">Approach Date</div>
           <div className="flex items-center space-x-2">
             <span className="text-lg">📅</span>
             <div>
-              <div className="text-white font-medium text-sm">
+              <div className="text-white font-semibold text-sm">
                 {formatDate(approachData.close_approach_date)}
               </div>
-              <div className="text-gray-400 text-xs">Closest approach</div>
+              <div className="text-gray-300 text-xs">Closest approach</div>
             </div>
           </div>
         </div>
@@ -167,29 +167,31 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
       {/* Detailed Metrics */}
       <div className="space-y-3 pt-4 border-t border-white/10">
         <div className="flex justify-between items-center">
-          <span className="text-gray-400 text-sm">Diameter:</span>
-          <span className="text-white font-medium text-sm">
+          <span className="text-gray-300 text-sm font-medium">Diameter:</span>
+          <span className="text-white font-semibold text-sm">
             {avgDiameter.toFixed(2)} km
           </span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-gray-400 text-sm">Velocity:</span>
-          <span className="text-white font-medium text-sm">
+          <span className="text-gray-300 text-sm font-medium">Velocity:</span>
+          <span className="text-white font-semibold text-sm">
             {velocity.toFixed(1)} km/s
           </span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-gray-400 text-sm">Miss Distance:</span>
-          <span className="text-white font-medium text-sm">
+          <span className="text-gray-300 text-sm font-medium">
+            Miss Distance:
+          </span>
+          <span className="text-white font-semibold text-sm">
             {missDistance.toFixed(2)} LD
           </span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-gray-400 text-sm">Magnitude:</span>
-          <span className="text-white font-medium text-sm">
+          <span className="text-gray-300 text-sm font-medium">Magnitude:</span>
+          <span className="text-white font-semibold text-sm">
             {neo.absolute_magnitude_h.toFixed(1)} H
           </span>
         </div>
@@ -197,7 +199,7 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
 
       {/* Footer Note */}
       <div className="mt-4 pt-3 border-t border-white/10">
-        <p className="text-gray-500 text-xs">
+        <p className="text-gray-300 text-xs">
           LD = Lunar Distance (384,400 km) • PHA = Potentially Hazardous
           Asteroid
         </p>

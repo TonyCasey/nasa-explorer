@@ -42,7 +42,7 @@ const Navigation: React.FC = () => {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
-    
+
     // Return undefined when not adding event listener
     return undefined;
   }, [isMobileMenuOpen]);
@@ -61,15 +61,18 @@ const Navigation: React.FC = () => {
       {isMobile && (
         <button
           onClick={() => {
-            console.log('🍔 Hamburger clicked! Current state:', isMobileMenuOpen);
+            console.log(
+              '🍔 Hamburger clicked! Current state:',
+              isMobileMenuOpen
+            );
             setIsMobileMenuOpen(!isMobileMenuOpen);
           }}
           className="mobile-menu-button lg:hidden fixed top-4 left-4 p-3 glass-effect rounded-lg border border-white/20 text-white hover:bg-white/10 transition-all duration-200 cursor-pointer"
           aria-label="Toggle navigation menu"
-          style={{ 
+          style={{
             pointerEvents: 'auto',
             zIndex: 9999,
-            position: 'fixed'
+            position: 'fixed',
           }}
         >
           <div className="w-6 h-6 flex flex-col justify-center items-center">

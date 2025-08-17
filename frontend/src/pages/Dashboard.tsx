@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
       logger.info('Dashboard APOD loaded successfully');
     } catch (error: any) {
       logger.error('Failed to load dashboard data', error as Error);
-      
+
       // Check for 408 timeout error
       if (error.status === 408) {
         setApodError('NASA Server Timeout');

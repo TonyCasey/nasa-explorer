@@ -8,15 +8,15 @@ const mockPhotos = [
     img_src: 'https://example.com/photo1.jpg',
     earth_date: '2025-08-15',
     camera: { name: 'FHAZ', full_name: 'Front Hazard Avoidance Camera' },
-    rover: { name: 'Curiosity' }
+    rover: { name: 'Curiosity' },
   },
   {
     id: 2,
     img_src: 'https://example.com/photo2.jpg',
     earth_date: '2025-08-15',
     camera: { name: 'RHAZ', full_name: 'Rear Hazard Avoidance Camera' },
-    rover: { name: 'Curiosity' }
-  }
+    rover: { name: 'Curiosity' },
+  },
 ];
 
 describe('PhotoGallery', () => {
@@ -37,8 +37,14 @@ describe('PhotoGallery', () => {
 
   it('should handle photo click', () => {
     const mockOnPhotoClick = jest.fn();
-    render(<PhotoGallery photos={mockPhotos} loading={false} onPhotoClick={mockOnPhotoClick} />);
-    
+    render(
+      <PhotoGallery
+        photos={mockPhotos}
+        loading={false}
+        onPhotoClick={mockOnPhotoClick}
+      />
+    );
+
     fireEvent.click(screen.getAllByRole('img')[0]);
     expect(mockOnPhotoClick).toHaveBeenCalledWith(mockPhotos[0]);
   });
@@ -51,8 +57,14 @@ describe('PhotoGallery', () => {
 
   it('should handle favorite toggle', () => {
     const mockOnFavorite = jest.fn();
-    render(<PhotoGallery photos={mockPhotos} loading={false} onFavorite={mockOnFavorite} />);
-    
+    render(
+      <PhotoGallery
+        photos={mockPhotos}
+        loading={false}
+        onFavorite={mockOnFavorite}
+      />
+    );
+
     const favoriteButtons = screen.getAllByLabelText(/favorite/i);
     fireEvent.click(favoriteButtons[0]);
     expect(mockOnFavorite).toHaveBeenCalled();
@@ -73,7 +85,7 @@ describe('PhotoGallery', () => {
   it('should handle keyboard navigation', () => {
     render(<PhotoGallery photos={mockPhotos} loading={false} />);
     const firstPhoto = screen.getAllByRole('img')[0];
-    
+
     fireEvent.keyDown(firstPhoto, { key: 'Enter' });
     // Test that keyboard interaction works
     expect(firstPhoto).toHaveFocus();

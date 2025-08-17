@@ -24,11 +24,11 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    
+
     setIsAnimating(true);
     const newState = toggleFavorite(item);
     setIsFav(newState);
-    
+
     setTimeout(() => setIsAnimating(false), 300);
   };
 

@@ -19,7 +19,13 @@ jest.mock('../services/nasa.service', () => ({
 
 // Mock components
 jest.mock('../components/DatePicker', () => {
-  return function MockDatePicker({ value, onChange }: { value: string; onChange: (date: string) => void }) {
+  return function MockDatePicker({
+    value,
+    onChange,
+  }: {
+    value: string;
+    onChange: (date: string) => void;
+  }) {
     return (
       <input
         data-testid="date-picker"
@@ -49,7 +55,11 @@ jest.mock('../components/LoadingSpinner', () => {
 });
 
 jest.mock('../components/ErrorBoundary', () => {
-  return function MockErrorBoundary({ children }: { children: React.ReactNode }) {
+  return function MockErrorBoundary({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) {
     return <div>{children}</div>;
   };
 });
@@ -62,9 +72,7 @@ const renderWithProviders = (component: React.ReactElement) => {
   });
 
   return render(
-    <QueryClientProvider client={queryClient}>
-      {component}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{component}</QueryClientProvider>
   );
 };
 
@@ -85,19 +93,21 @@ describe('APOD', () => {
 
   it('renders APOD page title', () => {
     renderWithProviders(<APOD />);
-    
-    expect(screen.getByText('Astronomy Picture of the Day')).toBeInTheDocument();
+
+    expect(
+      screen.getByText('Astronomy Picture of the Day')
+    ).toBeInTheDocument();
   });
 
   it('renders date picker', () => {
     renderWithProviders(<APOD />);
-    
+
     expect(screen.getByTestId('date-picker')).toBeInTheDocument();
   });
 
   it('shows loading state initially', () => {
     renderWithProviders(<APOD />);
-    
+
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
@@ -111,7 +121,9 @@ describe('APOD', () => {
       expect(screen.getByText('Test APOD Title')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('This is a test APOD explanation.')).toBeInTheDocument();
+    expect(
+      screen.getByText('This is a test APOD explanation.')
+    ).toBeInTheDocument();
     expect(screen.getByTestId('image-viewer')).toBeInTheDocument();
     expect(screen.getByTestId('favorite-button')).toBeInTheDocument();
   });
@@ -157,7 +169,9 @@ describe('APOD', () => {
     });
 
     // Should still render content even for video type
-    expect(screen.getByText('This is a test APOD explanation.')).toBeInTheDocument();
+    expect(
+      screen.getByText('This is a test APOD explanation.')
+    ).toBeInTheDocument();
   });
 
   it('shows error state when API fails', async () => {

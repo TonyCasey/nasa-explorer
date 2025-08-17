@@ -1,4 +1,9 @@
-import { getVersionString, getFullVersionInfo, getBuildInfo, VERSION_INFO } from './version';
+import {
+  getVersionString,
+  getFullVersionInfo,
+  getBuildInfo,
+  VERSION_INFO,
+} from './version';
 
 describe('Version Utils', () => {
   describe('getVersionString', () => {

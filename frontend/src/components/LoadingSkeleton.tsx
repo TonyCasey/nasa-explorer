@@ -4,12 +4,14 @@ interface LoadingSkeletonProps {
   type?: 'card' | 'image' | 'text' | 'list';
   count?: number;
   className?: string;
+  'data-testid'?: string;
 }
 
 const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
   type = 'card',
   count = 1,
   className = '',
+  'data-testid': testId,
 }) => {
   const renderSkeletonItem = (index: number) => {
     switch (type) {
@@ -18,6 +20,7 @@ const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
           <div
             key={index}
             className={`glass-effect rounded-xl p-6 animate-pulse ${className}`}
+            data-testid={testId}
           >
             <div className="h-4 bg-white/20 rounded w-3/4 mb-4"></div>
             <div className="space-y-2">
