@@ -121,7 +121,7 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
 
       {/* Risk Assessment */}
       <div
-        className={`bg-${risk.color}/10 border border-${risk.color}/30 rounded-lg p-3 mb-4`}
+        className="bg-white/50 border border-white/30 rounded-lg p-3 mb-4"
       >
         <div className="flex items-center justify-between">
           <span className={`text-${risk.color} font-medium text-sm`}>
