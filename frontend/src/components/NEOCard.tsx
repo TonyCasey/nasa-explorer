@@ -128,7 +128,7 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
             Risk Level: {risk.label}
           </span>
           {neo.is_potentially_hazardous_asteroid && (
-            <span className="bg-mars-red/20 text-mars-red text-xs px-2 py-1 rounded-full">
+            <span className="bg-mars-red text-white text-xs px-2 py-1 rounded-full font-medium">
               ⚠️ PHA
             </span>
           )}
