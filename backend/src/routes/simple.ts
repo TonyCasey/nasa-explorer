@@ -8,7 +8,7 @@ router.get('/apod', (req: Request, res: Response) => {
     {
       date: "2025-08-16",
       title: "Earth from Space (Test Data)",
-      explanation: "This test image shows our beautiful planet Earth as seen from the International Space Station. The blue marble continues to inspire astronauts and space enthusiasts alike.",
+      explanation: "This test image shows our beautiful planet Earth as seen from the International Space Station. The blue marble continues to inspire astronauts and space enthusiasts alike. Now served via automated CI/CD pipeline!",
       url: "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=800&h=600&fit=crop",
       hdurl: "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=1200&h=900&fit=crop",
       media_type: "image",
