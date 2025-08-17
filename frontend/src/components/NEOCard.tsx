@@ -44,21 +44,21 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
     if (neo.is_potentially_hazardous_asteroid) {
       return {
         level: 'high',
-        color: 'mars-red',
+        color: '#851313',
         emoji: '🔴',
         label: 'High Risk',
       };
     } else if (missDistance < 10) {
       return {
         level: 'medium',
-        color: 'stellar-yellow',
+        color: '#a6841b',
         emoji: '🟡',
         label: 'Medium Risk',
       };
     } else {
       return {
         level: 'low',
-        color: 'aurora-green',
+        color: '#076041',
         emoji: '🟢',
         label: 'Low Risk',
       };
@@ -103,9 +103,9 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
       className={`
         glass-effect rounded-xl p-6 transition-all duration-300 
         ${onClick ? 'cursor-pointer hover:scale-105 card-hover' : ''}
-        border-l-4 border-${risk.color}
-        ${className}
+        border-l-4 ${className}
       `}
+      style={{ borderLeftColor: risk.color }}
       onClick={onClick}
     >
       {/* Header */}
@@ -116,7 +116,7 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
           </h3>
           <p className="text-gray-300 text-sm mt-1 font-medium">ID: {neo.id}</p>
         </div>
-        <div className={`text-${risk.color} text-2xl`}>{risk.emoji}</div>
+        <div className="text-2xl" style={{ color: risk.color }}>{risk.emoji}</div>
       </div>
 
       {/* Risk Assessment */}
@@ -124,11 +124,14 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
         className="bg-white/50 border border-white/30 rounded-lg p-3 mb-4"
       >
         <div className="flex items-center justify-between">
-          <span className={`text-${risk.color} font-medium text-sm`}>
+          <span className="font-medium text-sm" style={{ color: risk.color }}>
             Risk Level: {risk.label}
           </span>
           {neo.is_potentially_hazardous_asteroid && (
-            <span className="bg-mars-red text-white text-xs px-2 py-1 rounded-full font-medium">
+            <span 
+              className="text-white text-xs px-2 py-1 rounded-full font-medium"
+              style={{ backgroundColor: '#851313' }}
+            >
               ⚠️ PHA
             </span>
           )}
