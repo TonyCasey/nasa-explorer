@@ -16,9 +16,6 @@ const app = express();
 // Request logging middleware
 app.use(logRequest);
 
-// Error Handler
-app.use(errorHandler);
-
 // Security middleware
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
@@ -65,5 +62,8 @@ app.get('/health', (req, res) => {
 
 // Register API routes
 app.use('/api/v1', apiRoutes);
+
+// Error Handler (must be last)
+app.use(errorHandler);
 
 export default app;

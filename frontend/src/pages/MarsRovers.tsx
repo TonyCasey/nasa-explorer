@@ -83,10 +83,16 @@ const MarsRovers: React.FC = () => {
         page,
         total: reset ? newPhotos.length : photos.length + newPhotos.length,
       });
-    } catch (err) {
-      const errorMessage = 'Failed to load Mars rover photos';
+    } catch (err: any) {
       logger.error('Mars rover photos load error', err as Error, filters);
-      setError(errorMessage);
+      
+      // Check for 408 timeout error
+      if (err.status === 408) {
+        setError('NASA Server Timeout');
+      } else {
+        setError('Failed to load Mars rover photos');
+      }
+      
       if (reset) {
         setPhotos([]);
       }

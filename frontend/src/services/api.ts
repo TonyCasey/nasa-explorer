@@ -4,11 +4,12 @@ import logger, {
   logApiResponse,
   logApiError,
 } from '../utils/logger';
+import config from '../config';
 
 // Create axios instance with base configuration
 const api: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1',
-  timeout: 30000,
+  baseURL: config.apiUrl,
+  timeout: 20000, // 20 seconds - higher than backend timeout
   headers: {
     'Content-Type': 'application/json',
   },

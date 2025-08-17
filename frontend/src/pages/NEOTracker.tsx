@@ -15,9 +15,12 @@ const NEOTracker: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(
     new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
   );
-  const [endDate, setEndDate] = useState(
-    new Date().toISOString().split('T')[0]
-  );
+  const [endDate, setEndDate] = useState(() => {
+    // Ensure end date is never in the future
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    return today.toISOString().split('T')[0];
+  });
   const [selectedNEO, setSelectedNEO] = useState<NEOObject | null>(null);
 
   React.useEffect(() => {
@@ -59,13 +62,18 @@ const NEOTracker: React.FC = () => {
           (neo) => neo.is_potentially_hazardous_asteroid
         ).length,
       });
-    } catch (err) {
-      const errorMessage = 'Failed to load NEO tracking data';
+    } catch (err: any) {
       logger.error('NEO data load error', err as Error, {
         selectedDate,
         endDate,
       });
-      setError(errorMessage);
+      
+      // Check for 408 timeout error
+      if (err.status === 408) {
+        setError('NASA Server Timeout');
+      } else {
+        setError('Failed to load NEO tracking data');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -73,13 +81,20 @@ const NEOTracker: React.FC = () => {
 
   const handleDateChange = (date: string) => {
     setSelectedDate(date);
-    // Auto-adjust end date to be 7 days after start date
+    // Auto-adjust end date to be 7 days after start date, but never exceed today
     const startDate = new Date(date);
-    const newEndDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const potentialEndDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const today = new Date();
+    today.setHours(23, 59, 59, 999); // End of today
+    
+    // Use the earlier of: 7 days after start date OR today
+    const newEndDate = potentialEndDate > today ? today : potentialEndDate;
     setEndDate(newEndDate.toISOString().split('T')[0]);
+    
     logger.info('NEO date range changed', {
       startDate: date,
       endDate: newEndDate.toISOString().split('T')[0],
+      capped: potentialEndDate > today,
     });
   };
 
@@ -175,9 +190,7 @@ const NEOTracker: React.FC = () => {
                 selectedDate={selectedDate}
                 onDateChange={handleDateChange}
                 maxDate={
-                  new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-                    .toISOString()
-                    .split('T')[0]
+                  new Date().toISOString().split('T')[0]
                 }
               />
 

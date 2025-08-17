@@ -18,7 +18,16 @@
       "Bash(npm run dev:*)",
       "Bash(curl:*)",
       "Bash(node:*)",
-      "Bash(npm run build:backend:*)"
+      "Bash(npm run build:backend:*)",
+      "Bash(npm run build:*)",
+      "Bash(heroku ps:restart:*)",
+      "Bash(heroku logs:*)",
+      "Bash(rm:*)",
+      "Bash(taskkill:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(timeout 5 curl http://localhost:5000/api/v1/apod)",
+      "Bash(npx tsc:*)",
+      "Bash(timeout 10 curl http://localhost:5000/api/v1/apod)"
     ],
     "deny": [],
     "ask": []

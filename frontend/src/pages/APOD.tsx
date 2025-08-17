@@ -34,10 +34,15 @@ const APOD: React.FC = () => {
         date,
         title: response.title,
       });
-    } catch (err) {
-      const errorMessage = 'Failed to load astronomy picture';
+    } catch (err: any) {
       logger.error('APOD load error', err as Error, { date });
-      setError(errorMessage);
+      
+      // Check for 408 timeout error
+      if (err.status === 408) {
+        setError('NASA Server Timeout');
+      } else {
+        setError('Failed to load astronomy picture');
+      }
     } finally {
       setIsLoading(false);
     }

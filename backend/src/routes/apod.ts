@@ -26,8 +26,10 @@ router.get('/', asyncHandler(async (req: Request, res: Response) => {
     }
   }
   
+  console.log('🎯 APOD ROUTE CALLED - ABOUT TO CALL NASA SERVICE');
   logger.debug('Fetching APOD data', { date });
   const data = await nasaService.getAPOD(date as string);
+  console.log('🎯 APOD ROUTE COMPLETED - RECEIVED DATA');
   logger.info('APOD data fetched successfully', { date, hasData: !!data });
   
   res.json({

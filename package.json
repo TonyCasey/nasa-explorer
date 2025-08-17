@@ -63,12 +63,13 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
-    "puppeteer": "^24.16.2",
     "typescript": "^5.9.2",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.54.2"
+    "@playwright/test": "^1.54.2",
+    "@types/puppeteer": "^7.0.4",
+    "puppeteer": "^24.16.2"
   }
 }

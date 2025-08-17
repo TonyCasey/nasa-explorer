@@ -2,6 +2,8 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { createError } from '../middleware/errorHandler';
 import logger from '../utils/logger';
 
+console.log('🔥 NASA SERVICE MODULE LOADED - THIS SHOULD APPEAR ON STARTUP');
+
 export class NASAService {
   private client: AxiosInstance;
   private apiKey: string;
@@ -19,7 +21,7 @@ export class NASAService {
 
     this.client = axios.create({
       baseURL: process.env.NASA_API_BASE_URL || 'https://api.nasa.gov',
-      timeout: 10000, // Reduced timeout to 10 seconds
+      timeout: 5000, // 5 seconds - fail fast when NASA API is down
       params: {
         api_key: this.apiKey,
       },
@@ -123,7 +125,7 @@ export class NASAService {
       const cached = this.getFromCache(cacheKey);
       if (cached) return cached;
 
-      logger.info('APOD request received');
+      logger.info('APOD request received - calling NASA API');
       const response = await this.client.get('/planetary/apod', { params });
       
       // Cache the response
@@ -134,12 +136,8 @@ export class NASAService {
       logger.error('❌ NASA API Error:', error.code || error.message);
       
       // Return fallback data when NASA API is unavailable
-      if (error.code === 'ECONNABORTED' || error.code === 'ENOTFOUND' || error.code === 'ETIMEDOUT') {
-        logger.warn('⚠️  NASA API unavailable, returning fallback data');
-        return this.getFallbackAPOD(date);
-      }
-      
-      throw error;
+      logger.warn('🔄 NASA API unavailable, returning fallback data');
+      return this.getFallbackAPOD(date);
     }
   }
 

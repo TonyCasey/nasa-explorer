@@ -7,19 +7,19 @@ router.get('/apod', (req: Request, res: Response) => {
   const apodImages = [
     {
       date: "2025-08-16",
-      title: "Pillars of Creation (Test Data)",
-      explanation: "This is test data showing the famous Pillars of Creation from the Eagle Nebula, captured by the Hubble Space Telescope. These elephant trunks of interstellar gas and dust are incubators for new stars.",
-      url: "https://apod.nasa.gov/apod/image/2408/PillarsOfCreation_HubblePohl_1895.jpg",
-      hdurl: "https://apod.nasa.gov/apod/image/2408/PillarsOfCreation_HubblePohl_1895.jpg",
+      title: "Earth from Space (Test Data)",
+      explanation: "This test image shows our beautiful planet Earth as seen from the International Space Station. The blue marble continues to inspire astronauts and space enthusiasts alike.",
+      url: "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=800&h=600&fit=crop",
+      hdurl: "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=1200&h=900&fit=crop",
       media_type: "image",
       service_version: "v1"
     },
     {
       date: "2025-08-15", 
-      title: "Saturn's Hexagon (Test Data)",
-      explanation: "Test data showing Saturn's remarkable hexagonal cloud pattern at its north pole, one of the most mysterious features in our solar system.",
-      url: "https://apod.nasa.gov/apod/image/2408/SaturnHexagon_Cassini_960.jpg",
-      hdurl: "https://apod.nasa.gov/apod/image/2408/SaturnHexagon_Cassini_960.jpg",
+      title: "Galaxy Spiral (Test Data)",
+      explanation: "Test data showing a beautiful spiral galaxy with its characteristic arms stretching across the cosmos. This type of galaxy hosts billions of stars.",
+      url: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=800&h=600&fit=crop",
+      hdurl: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=1200&h=900&fit=crop",
       media_type: "image", 
       service_version: "v1"
     }
