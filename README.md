@@ -1,6 +1,6 @@
 # NASA Space Explorer 🚀
 
-**Version 2.1.0** - Advanced Features Release
+**Version 2.1.4** - UI Improvements & Enhanced Readability Release
 
 A full-stack web application that showcases NASA's space data through modern web technologies. This interactive platform provides access to stunning space imagery, Mars rover photos, Near Earth Object tracking, and more.
 
@@ -23,6 +23,17 @@ A full-stack web application that showcases NASA's space data through modern web
 - **Smart Navigation** - Favorites counter badge and dedicated favorites page
 - **Comprehensive Logging** - Daily rotating log files with configurable levels
 - **Version Tracking** - Automatic version management across frontend and backend
+
+### UI/UX Improvements (v2.1.4)
+- **Horizontal Filter Layouts** - Moved all filter components from sidebars to horizontal layouts for better space utilization
+- **Enhanced Readability** - Improved font colors and contrast ratios across all components
+- **Custom Color System** - Professional color palette for risk assessment:
+  - Low Risk: `#076041` (Dark Forest Green)
+  - Medium Risk: `#a6841b` (Dark Gold)
+  - High Risk: `#851313` (Dark Burgundy Red)
+- **White Background Overlays** - Semi-transparent white backgrounds for better content readability
+- **Responsive Design** - Optimized layouts for mobile and desktop viewing
+- **Accessibility Improvements** - Better contrast ratios and ARIA attributes
 
 ### Technical Highlights
 - Modern React 18+ with TypeScript
@@ -281,4 +292,21 @@ This project is built for educational purposes as part of the Bounce Insights co
 
 **Built with passion for space exploration and modern web technologies** 🌌
 
-**Latest Build**: v2.1.0 - August 15, 2025
+**Latest Build**: v2.1.4 - August 17, 2025
+
+## 📈 Recent Updates (v2.1.4)
+
+### UI Improvements Session - August 17, 2025
+- ✅ **Layout Optimization** - Converted all filter sidebars to horizontal layouts
+- ✅ **Readability Enhancement** - Improved font colors and contrast across NEO cards
+- ✅ **Custom Color System** - Implemented professional risk assessment colors
+- ✅ **Spacing Improvements** - Added proper padding to image cards
+- ✅ **Version Display Fix** - Corrected footer build number display
+- ✅ **Accessibility** - Enhanced contrast ratios and ARIA attributes
+- ✅ **Production Deployment** - All changes live on Vercel and Heroku
+
+**Live URLs:**
+- Frontend: https://frontend-3ulvugqi6-tonys-projects-e30b27a9.vercel.app
+- Backend: https://nasa-explorer-2347800d91dd.herokuapp.com/
+
+For detailed change log, see: [UI_IMPROVEMENTS_LOG.md](docs/UI_IMPROVEMENTS_LOG.md)
