@@ -113,3 +113,7 @@ dump.rdb
 
 playwright-report/
 test-results/
+.tmp/
+.claude/
+/@.tmp/eslint-basic.json
+/frontend/src/components/RoverFilters.test.tsx.backup

@@ -305,7 +305,5 @@ This project is built for educational purposes as part of the Bounce Insights co
 - ✅ **Production Deployment** - All changes live on Vercel and Heroku
 
 **Live URLs:**
-- Frontend: https://frontend-3ulvugqi6-tonys-projects-e30b27a9.vercel.app
-- Backend: https://nasa-explorer-2347800d91dd.herokuapp.com/
-
-For detailed change log, see: [UI_IMPROVEMENTS_LOG.md](docs/UI_IMPROVEMENTS_LOG.md)
+- Frontend: https://nasa.tonycasey.dev/
+- Backend: https://nasa-server.tonycasey.dev/
