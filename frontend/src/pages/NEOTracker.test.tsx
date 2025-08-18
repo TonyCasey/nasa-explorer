@@ -133,7 +133,9 @@ describe('NEOTracker', () => {
   it('renders NEO Tracker page title', () => {
     renderWithProviders(<NEOTracker />);
 
-    expect(screen.getByText('☄️ Near Earth Objects Tracker')).toBeInTheDocument();
+    expect(
+      screen.getByText('☄️ Near Earth Objects Tracker')
+    ).toBeInTheDocument();
   });
 
   it('renders date picker for date range selection', () => {

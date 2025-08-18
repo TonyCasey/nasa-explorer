@@ -60,7 +60,6 @@ describe('ErrorBoundary', () => {
   });
 
   it('toggles error details when button is clicked', async () => {
-
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
@@ -77,7 +76,9 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText(/test error/i)).toBeInTheDocument();
 
     // Click to hide details
-    await userEvent.click(screen.getByRole('button', { name: /hide details/i }));
+    await userEvent.click(
+      screen.getByRole('button', { name: /hide details/i })
+    );
     expect(screen.queryByText(/test error/i)).not.toBeInTheDocument();
   });
 
