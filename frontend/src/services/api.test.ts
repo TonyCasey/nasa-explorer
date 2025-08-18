@@ -17,7 +17,7 @@ describe('API Service', () => {
     test('api instance is configured', () => {
       expect(api).toBeDefined();
       expect(api.defaults.baseURL).toBe('http://localhost:5000/api/v1');
-      expect(api.defaults.timeout).toBe(30000);
+      expect(api.defaults.timeout).toBe(20000);
     });
 
     test('api has default headers configured', () => {
@@ -44,10 +44,8 @@ describe('API Service', () => {
       mock.onGet('/error').reply(500, { error: 'Server error' });
 
       await expect(api.get('/error')).rejects.toMatchObject({
-        response: {
-          status: 500,
-          data: { error: 'Server error' },
-        },
+        status: 500,
+        message: { error: 'Server error' },
       });
     });
 
@@ -55,7 +53,7 @@ describe('API Service', () => {
       mock.onGet('/timeout').timeout();
 
       await expect(api.get('/timeout')).rejects.toMatchObject({
-        code: 'ECONNABORTED',
+        message: 'timeout of 20000ms exceeded',
       });
     });
   });

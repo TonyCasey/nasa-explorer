@@ -10,6 +10,7 @@ import { getVersionString } from './utils/version';
 import logger, { logRequest } from './utils/logger';
 import apiRoutes from './routes';
 import { errorHandler } from './middleware/errorHandler';
+import { rateLimiter } from './middleware/rateLimiter';
 
 const app = express();
 
@@ -60,8 +61,17 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Register API routes
-app.use('/api/v1', apiRoutes);
+// Register API routes with rate limiting
+app.use('/api/v1', rateLimiter, apiRoutes);
+
+// 404 handler for unknown routes
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'Not Found',
+    message: `Route ${req.originalUrl} not found`,
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // Error Handler (must be last)
 app.use(errorHandler);

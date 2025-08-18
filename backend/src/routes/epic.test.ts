@@ -37,7 +37,7 @@ describe('EPIC Routes', () => {
       mockedNasaService.getEPICImages.mockResolvedValue(mockEPICImages);
 
       const response = await request(app)
-        .get('/api/v1/epic/images')
+        .get('/api/v1/epic/')
         .expect(200);
 
       expect(response.body).toMatchObject({
@@ -53,7 +53,7 @@ describe('EPIC Routes', () => {
       mockedNasaService.getEPICImages.mockResolvedValue(mockEPICImages);
 
       await request(app)
-        .get('/api/v1/epic/images?date=2025-08-15')
+        .get('/api/v1/epic/?date=2025-08-15')
         .expect(200);
 
       expect(mockedNasaService.getEPICImages).toHaveBeenCalledWith('2025-08-15');
@@ -63,7 +63,7 @@ describe('EPIC Routes', () => {
       mockedNasaService.getEPICImages.mockRejectedValue(new Error('NASA API Error'));
 
       const response = await request(app)
-        .get('/api/v1/epic/images')
+        .get('/api/v1/epic/')
         .expect(500);
 
       expect(response.body).toHaveProperty('error');
@@ -86,7 +86,16 @@ describe('EPIC Routes', () => {
 
       expect(response.body).toMatchObject({
         success: true,
-        data: mockArchive,
+        data: {
+          available_dates: ['2025-08-15'],
+          total_dates: 1,
+          date_range: {
+            first: '2025-08-15',
+            last: '2025-08-15'
+          },
+          years_available: ['2025'],
+          months_available: ['2025-08']
+        },
         timestamp: expect.any(String)
       });
       expect(mockedNasaService.getEPICImageArchive).toHaveBeenCalled();

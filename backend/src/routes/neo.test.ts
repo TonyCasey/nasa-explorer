@@ -101,13 +101,12 @@ describe('NEO Routes', () => {
     });
 
     it('should handle invalid NEO ID', async () => {
-      mockedNasaService.getNEOById.mockRejectedValue(new Error('NEO not found'));
-
       const response = await request(app)
         .get('/api/v1/neo/invalid-id')
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('error');
+      expect(response.body.message).toContain('Invalid NEO ID format');
     });
   });
 });

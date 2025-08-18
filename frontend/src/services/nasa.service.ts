@@ -59,7 +59,7 @@ export class NASAService {
       },
     });
     logger.info('Mars rover photos fetched successfully', {
-      ...params,
+      rover: params.rover,
       photoCount: response.data.data?.photos?.length || 0,
     });
     return response.data.data;
@@ -87,6 +87,10 @@ export class NASAService {
     near_earth_objects: Record<string, NEOObject[]>;
     element_count: number;
   }> {
+    logger.debug('Fetching NEO feed data', {
+      startDate: params.startDate,
+      endDate: params.endDate,
+    });
     const response = await api.get<{
       success: boolean;
       data: {
@@ -98,6 +102,11 @@ export class NASAService {
         start_date: params.startDate,
         end_date: params.endDate,
       },
+    });
+    logger.info('NEO feed data fetched successfully', {
+      startDate: params.startDate,
+      endDate: params.endDate,
+      objectCount: response.data.data?.element_count || 0,
     });
     return response.data.data;
   }

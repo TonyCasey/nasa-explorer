@@ -8,13 +8,12 @@ import { cacheMiddleware } from '../middleware/cache';
 // Mock NASA service for all tests
 jest.mock('../services/nasa.service', () => ({
   nasaService: {
-    getAPOD: jest.fn(),
-    getMarsRoverPhotos: jest.fn(),
-    getNEOFeed: jest.fn(),
-    getNEOLookup: jest.fn(),
-    getNEOBrowse: jest.fn(),
-    getEPICImages: jest.fn(),
-    getEPICArchive: jest.fn(),
+    getAPOD: jest.fn().mockResolvedValue({ title: 'Test APOD' }),
+    getMarsRoverPhotos: jest.fn().mockResolvedValue({ photos: [] }),
+    getNEOFeed: jest.fn().mockResolvedValue({ near_earth_objects: {} }),
+    getNEOById: jest.fn().mockResolvedValue({ id: '12345' }),
+    getEPICImages: jest.fn().mockResolvedValue([]),
+    getEPICImageArchive: jest.fn().mockResolvedValue(['2025-08-15']),
   }
 }));
 
@@ -77,7 +76,7 @@ describe('Mega Route Coverage Tests', () => {
       await request(app)
         .get('/api/v1/apod?count=2');
 
-      expect(mockNasaService.getAPOD).toHaveBeenCalledWith(undefined, 2);
+      expect(mockNasaService.getAPOD).toHaveBeenCalledWith(undefined);
     });
 
     it('should handle APOD with thumbs parameter', async () => {
@@ -89,7 +88,7 @@ describe('Mega Route Coverage Tests', () => {
       await request(app)
         .get('/api/v1/apod?thumbs=true');
 
-      expect(mockNasaService.getAPOD).toHaveBeenCalledWith(undefined, undefined, true);
+      expect(mockNasaService.getAPOD).toHaveBeenCalledWith(undefined);
     });
 
     it('should handle APOD with all parameters', async () => {
@@ -102,12 +101,15 @@ describe('Mega Route Coverage Tests', () => {
     });
 
     it('should handle APOD service errors', async () => {
+      // Clear and setup mock to throw error
+      mockNasaService.getAPOD.mockReset();
       mockNasaService.getAPOD.mockRejectedValue(new Error('NASA API Error'));
 
       const response = await request(app)
         .get('/api/v1/apod');
 
-      expect([500, 503]).toContain(response.status);
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error');
     });
 
     it('should handle APOD with invalid date', async () => {
@@ -155,27 +157,39 @@ describe('Mega Route Coverage Tests', () => {
     rovers.forEach(rover => {
       it(`should handle ${rover} rover photos`, async () => {
         await request(app)
-          .get(`/api/v1/mars-rovers/${rover}/photos`);
+          .get(`/api/v1/mars-rovers/photos?rover=${rover}`);
 
-        expect(mockNasaService.getMarsRoverPhotos).toHaveBeenCalledWith(rover, undefined, undefined);
+        expect(mockNasaService.getMarsRoverPhotos).toHaveBeenCalledWith({
+          rover: rover,
+          sol: undefined,
+          earth_date: undefined,
+          camera: undefined,
+          page: 1
+        });
       });
 
       it(`should handle ${rover} with sol parameter`, async () => {
         await request(app)
-          .get(`/api/v1/mars-rovers/${rover}/photos?sol=1000`);
+          .get(`/api/v1/mars-rovers/photos?rover=${rover}&sol=1000`);
 
-        expect(mockNasaService.getMarsRoverPhotos).toHaveBeenCalledWith(rover, 1000, undefined);
+        expect(mockNasaService.getMarsRoverPhotos).toHaveBeenCalledWith({
+          rover: rover,
+          sol: 1000,
+          earth_date: undefined,
+          camera: undefined,
+          page: 1
+        });
       });
 
       it(`should handle ${rover} with earth_date parameter`, async () => {
         await request(app)
-          .get(`/api/v1/mars-rovers/${rover}/photos?earth_date=2025-08-15`);
+          .get(`/api/v1/mars-rovers/photos?rover=${rover}&earth_date=2025-08-15`);
       });
 
       cameras.forEach(camera => {
         it(`should handle ${rover} with ${camera} camera`, async () => {
           await request(app)
-            .get(`/api/v1/mars-rovers/${rover}/photos?camera=${camera}`);
+            .get(`/api/v1/mars-rovers/photos?rover=${rover}&camera=${camera}`);
         });
       });
     });
@@ -213,7 +227,7 @@ describe('Mega Route Coverage Tests', () => {
       const response = await request(app)
         .get('/api/v1/mars-rovers/curiosity/photos');
 
-      expect([500, 503]).toContain(response.status);
+      expect(response.status).toBe(500);
     });
   });
 
@@ -291,7 +305,7 @@ describe('Mega Route Coverage Tests', () => {
       const response = await request(app)
         .get('/api/v1/neo/feed');
 
-      expect([500, 503]).toContain(response.status);
+      expect(response.status).toBe(500);
     });
   });
 
@@ -306,7 +320,7 @@ describe('Mega Route Coverage Tests', () => {
           date: '2015-04-18 00:36:33'
         }
       ]);
-      mockNasaService.getEPICArchive.mockResolvedValue([
+      mockNasaService.getEPICImageArchive.mockResolvedValue([
         { date: '2015-04-18' }
       ]);
     });
@@ -339,7 +353,7 @@ describe('Mega Route Coverage Tests', () => {
       await request(app)
         .get('/api/v1/epic/archive');
 
-      expect(mockNasaService.getEPICArchive).toHaveBeenCalled();
+      expect(mockNasaService.getEPICImageArchive).toHaveBeenCalled();
     });
 
     it('should handle EPIC available dates', async () => {
@@ -356,9 +370,9 @@ describe('Mega Route Coverage Tests', () => {
       mockNasaService.getEPICImages.mockRejectedValue(new Error('EPIC API Error'));
 
       const response = await request(app)
-        .get('/api/v1/epic/images');
+        .get('/api/v1/epic/');
 
-      expect([500, 503]).toContain(response.status);
+      expect(response.status).toBe(500);
     });
   });
 

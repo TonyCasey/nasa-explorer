@@ -96,21 +96,6 @@ export class NASAService {
     logger.debug(`💾 Cached: ${key}`);
   }
 
-  // Fallback data when NASA API is unavailable
-  private getFallbackAPOD(date?: string): any {
-    const fallbackImages = [
-      {
-        date: date || new Date().toISOString().split('T')[0],
-        title: "Eagle Nebula (Fallback Data)",
-        explanation: "The Eagle Nebula, a stellar nursery located 7,000 light-years away in the constellation Serpens. This fallback data is displayed when the NASA API is unavailable.",
-        url: "https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_eagle_nebula.jpg",
-        hdurl: "https://www.nasa.gov/sites/default/files/thumbnails/image/hubble_eagle_nebula.jpg",
-        media_type: "image",
-        service_version: "v1"
-      }
-    ];
-    return fallbackImages[0];
-  }
 
   // Astronomy Picture of the Day
   async getAPOD(date?: string): Promise<any> {
@@ -134,10 +119,7 @@ export class NASAService {
       return response.data;
     } catch (error: any) {
       logger.error('❌ NASA API Error:', error.code || error.message);
-      
-      // Return fallback data when NASA API is unavailable
-      logger.warn('🔄 NASA API unavailable, returning fallback data');
-      return this.getFallbackAPOD(date);
+      throw error;
     }
   }
 

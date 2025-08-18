@@ -1,6 +1,22 @@
 import request from 'supertest';
 import app from './app';
 
+// Mock the NASA service to prevent real API calls
+jest.mock('./services/nasa.service', () => {
+  const mockService = {
+    getAPOD: jest.fn().mockResolvedValue({ title: 'Test APOD' }),
+    getMarsRoverPhotos: jest.fn().mockResolvedValue({ photos: [] }),
+    getNEOFeed: jest.fn().mockResolvedValue({ near_earth_objects: {} }),
+    getEPICImages: jest.fn().mockResolvedValue([]),
+    validateApiKey: jest.fn().mockResolvedValue(true),
+  };
+  
+  return {
+    nasaService: mockService,
+    NASAService: jest.fn().mockImplementation(() => mockService),
+  };
+});
+
 describe('App', () => {
   // app is already imported and configured
 
@@ -26,9 +42,10 @@ describe('App', () => {
   it('should have CORS enabled', async () => {
     const response = await request(app)
       .options('/health')
+      .set('Origin', 'http://localhost:3000')
       .expect(204);
 
-    expect(response.headers['access-control-allow-origin']).toBeDefined();
+    expect(response.headers['access-control-allow-origin']).toBe('http://localhost:3000');
   });
 
   it('should parse JSON bodies', async () => {
@@ -40,9 +57,9 @@ describe('App', () => {
   });
 
   it('should have rate limiting middleware', async () => {
-    // Make multiple requests to test rate limiting headers
+    // Make multiple requests to test rate limiting headers on API routes
     const response = await request(app)
-      .get('/health');
+      .get('/api/v1/apod');
 
     expect(response.headers['x-ratelimit-limit']).toBeDefined();
     expect(response.headers['x-ratelimit-remaining']).toBeDefined();
@@ -50,11 +67,13 @@ describe('App', () => {
   });
 
   it('should handle API routes', async () => {
-    // Since the NASA API key is not configured correctly in tests,
-    // we expect a 403, but this proves the route exists and middleware works
-    await request(app)
+    // NASA service is mocked, so this should return 200 with mock data
+    const response = await request(app)
       .get('/api/v1/apod')
-      .expect(403);
+      .expect(200);
+    
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('data');
   });
 
   it('should serve static files in production', async () => {

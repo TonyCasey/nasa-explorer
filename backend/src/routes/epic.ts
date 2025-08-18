@@ -198,7 +198,18 @@ function enhanceEPICImage(image: any, date?: string): any {
 function processArchiveDates(dates: any[]): any {
   if (!Array.isArray(dates)) return { available_dates: [], stats: {} };
   
-  const sortedDates = dates.sort();
+  // Filter and convert dates to strings, handle different data types
+  const dateStrings = dates
+    .map(date => {
+      if (typeof date === 'string') return date;
+      if (typeof date === 'object' && date?.date) return date.date;
+      if (typeof date === 'object' && date?.identifier) return date.identifier;
+      return null;
+    })
+    .filter(date => date !== null && typeof date === 'string')
+    .filter(date => /^\d{4}-\d{2}-\d{2}$/.test(date)); // Validate date format
+  
+  const sortedDates = dateStrings.sort();
   const years = new Set<string>();
   const months = new Set<string>();
   

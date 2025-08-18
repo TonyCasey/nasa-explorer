@@ -411,7 +411,10 @@ describe('NASAService', () => {
         data: { success: true, data: mockNEOs },
       });
 
-      await NASAService.getNEOFeed('2025-08-15', '2025-08-15');
+      await NASAService.getNEOFeed({
+        startDate: '2025-08-15',
+        endDate: '2025-08-15',
+      });
 
       expect(logger.debug).toHaveBeenCalledWith('Fetching NEO feed data', {
         startDate: '2025-08-15',

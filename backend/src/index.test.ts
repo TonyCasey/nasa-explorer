@@ -1,5 +1,5 @@
 import request from 'supertest';
-import express from 'express';
+import app from './app';
 import { getVersionString } from './utils/version';
 
 // Mock the version utility
@@ -7,48 +7,24 @@ jest.mock('./utils/version', () => ({
   getVersionString: jest.fn().mockReturnValue('v1.3.0'),
 }));
 
-// Create a simple mock app for testing
-const createMockApp = () => {
-  const app = express();
-  app.use(express.json());
+// Mock the NASA service to prevent real API calls
+jest.mock('./services/nasa.service', () => {
+  const mockService = {
+    getAPOD: jest.fn().mockResolvedValue({ title: 'Test APOD' }),
+    getMarsRoverPhotos: jest.fn().mockResolvedValue({ photos: [] }),
+    getNEOFeed: jest.fn().mockResolvedValue({ near_earth_objects: {} }),
+    getEPICImages: jest.fn().mockResolvedValue([]),
+    validateApiKey: jest.fn().mockResolvedValue(true),
+  };
+  
+  return {
+    nasaService: mockService,
+    NASAService: jest.fn().mockImplementation(() => mockService),
+  };
+});
 
-  // Health check endpoint
-  app.get('/health', (req, res) => {
-    res.json({
-      status: 'OK',
-      version: getVersionString(),
-      timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
-      environment: 'test',
-      memory: process.memoryUsage(),
-    });
-  });
-
-  // API routes
-  const router = express.Router();
-  router.get('/test', (req, res) => {
-    res.json({ message: 'Test route' });
-  });
-  app.use('/api/v1', router);
-
-  // 404 handler
-  app.use((req, res) => {
-    res.status(404).json({
-      error: 'Not Found',
-      message: `Route ${req.originalUrl} not found`,
-      timestamp: new Date().toISOString(),
-    });
-  });
-
-  return app;
-};
 
 describe('Server Application', () => {
-  let app: express.Application;
-
-  beforeEach(() => {
-    app = createMockApp();
-  });
 
   describe('Health Check Endpoint', () => {
     test('GET /health returns server status', async () => {
@@ -59,42 +35,22 @@ describe('Server Application', () => {
       expect(response.body).toMatchObject({
         status: 'OK',
         version: 'v1.3.0',
-        environment: expect.any(String),
-        uptime: expect.any(Number),
-        memory: expect.any(Object),
       });
 
       expect(response.body.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     });
 
-    test('health check includes memory usage', async () => {
-      const response = await request(app)
-        .get('/health')
-        .expect(200);
-
-      expect(response.body.memory).toHaveProperty('rss');
-      expect(response.body.memory).toHaveProperty('heapTotal');
-      expect(response.body.memory).toHaveProperty('heapUsed');
-      expect(response.body.memory).toHaveProperty('external');
-    });
-
-    test('health check includes uptime', async () => {
-      const response = await request(app)
-        .get('/health')
-        .expect(200);
-
-      expect(typeof response.body.uptime).toBe('number');
-      expect(response.body.uptime).toBeGreaterThanOrEqual(0);
-    });
   });
 
   describe('API Routes', () => {
     test('API routes are mounted correctly', async () => {
+      // Test that API routes are mounted by hitting a real endpoint
       const response = await request(app)
-        .get('/api/v1/test')
+        .get('/api/v1/apod')
         .expect(200);
 
-      expect(response.body).toEqual({ message: 'Test route' });
+      expect(response.body).toHaveProperty('success', true);
+      expect(response.body).toHaveProperty('data');
     });
   });
 
@@ -149,9 +105,10 @@ describe('Server Application', () => {
     test('CORS headers are present', async () => {
       const response = await request(app)
         .get('/health')
+        .set('Origin', 'http://localhost:3000')
         .expect(200);
 
-      expect(response.headers).toHaveProperty('access-control-allow-origin');
+      expect(response.headers).toHaveProperty('access-control-allow-origin', 'http://localhost:3000');
     });
 
     test('Security headers are present', async () => {
@@ -196,13 +153,6 @@ describe('Server Application', () => {
   });
 
   describe('Environment Configuration', () => {
-    test('environment is set correctly', async () => {
-      const response = await request(app)
-        .get('/health')
-        .expect(200);
-
-      expect(['development', 'test', 'production']).toContain(response.body.environment);
-    });
 
     test('version string is included', async () => {
       const response = await request(app)

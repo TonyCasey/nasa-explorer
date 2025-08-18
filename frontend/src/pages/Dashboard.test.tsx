@@ -45,7 +45,7 @@ jest.mock('../components/MetricCard', () => {
         <div data-testid="metric-title">{title}</div>
         <div data-testid="metric-value">{value}</div>
         <div data-testid="metric-unit">{unit}</div>
-        <div data-testid="metric-trend">{trend}</div>
+        <div data-testid="metric-trend">{trend ? `${trend.value}%${trend.isPositive ? '↗' : '↘'}` : ''}</div>
         <div data-testid="metric-color">{color}</div>
       </div>
     );
