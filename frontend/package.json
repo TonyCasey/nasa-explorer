@@ -44,10 +44,11 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "node_modules/(?!(axios|react-router|react-router-dom|@tanstack)/)"
+      "node_modules/(?!(axios|react-router|react-router-dom|@tanstack|@remix-run)/)"
     ],
     "moduleNameMapper": {
-      "^axios$": "axios/dist/node/axios.cjs"
+      "^axios$": "axios/dist/node/axios.cjs",
+      "^react-router-dom$": "<rootDir>/src/__mocks__/react-router-dom.js"
     }
   },
   "browserslist": {

@@ -4,18 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import APOD from './APOD';
 
-// Mock react-router-dom
-jest.mock('react-router-dom', () => ({
-  useNavigate: () => jest.fn(),
-}));
-
 // Mock NASA service
-jest.mock('../services/nasa.service', () => ({
-  nasaService: {
-    getAPOD: jest.fn(),
-    getAPODRange: jest.fn(),
-  },
-}));
+jest.mock('../services/nasa.service');
 
 // Mock components
 jest.mock('../components/DatePicker', () => {
@@ -95,7 +85,7 @@ describe('APOD', () => {
     renderWithProviders(<APOD />);
 
     expect(
-      screen.getByText('Astronomy Picture of the Day')
+      screen.getByText('🌌 Astronomy Picture of the Day')
     ).toBeInTheDocument();
   });
 
@@ -112,8 +102,8 @@ describe('APOD', () => {
   });
 
   it('renders APOD content when data is loaded', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getAPOD.mockResolvedValue(mockAPOD);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPOD);
 
     renderWithProviders(<APOD />);
 
@@ -129,8 +119,8 @@ describe('APOD', () => {
   });
 
   it('displays copyright information when available', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getAPOD.mockResolvedValue(mockAPOD);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPOD);
 
     renderWithProviders(<APOD />);
 
@@ -140,27 +130,26 @@ describe('APOD', () => {
   });
 
   it('handles date picker changes', async () => {
-    const user = userEvent.setup();
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getAPOD.mockResolvedValue(mockAPOD);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPOD);
 
     renderWithProviders(<APOD />);
 
     const datePicker = screen.getByTestId('date-picker');
-    await user.clear(datePicker);
-    await user.type(datePicker, '2025-08-14');
+    await userEvent.clear(datePicker);
+    await userEvent.type(datePicker, '2025-08-14');
 
-    expect(nasaService.getAPOD).toHaveBeenCalledWith('2025-08-14');
+    expect(NASAService.getAPOD).toHaveBeenCalledWith('2025-08-14');
   });
 
   it('handles video media type', async () => {
-    const { nasaService } = require('../services/nasa.service');
+    const NASAService = require('../services/nasa.service').default;
     const mockVideoAPOD = {
       ...mockAPOD,
       media_type: 'video',
       url: 'https://example.com/video.mp4',
     };
-    nasaService.getAPOD.mockResolvedValue(mockVideoAPOD);
+    NASAService.getAPOD.mockResolvedValue(mockVideoAPOD);
 
     renderWithProviders(<APOD />);
 
@@ -175,8 +164,8 @@ describe('APOD', () => {
   });
 
   it('shows error state when API fails', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getAPOD.mockRejectedValue(new Error('API Error'));
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockRejectedValue(new Error('API Error'));
 
     renderWithProviders(<APOD />);
 
@@ -186,12 +175,12 @@ describe('APOD', () => {
   });
 
   it('handles today date as default', () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getAPOD.mockResolvedValue(mockAPOD);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPOD);
 
     renderWithProviders(<APOD />);
 
-    expect(nasaService.getAPOD).toHaveBeenCalledWith(
+    expect(NASAService.getAPOD).toHaveBeenCalledWith(
       expect.stringMatching(/\d{4}-\d{2}-\d{2}/)
     );
   });

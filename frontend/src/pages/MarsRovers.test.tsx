@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import MarsRovers from './MarsRovers';
-import NASAService from '../services/nasa.service';
 
 // Mock logger
 jest.mock('../utils/logger', () => ({
@@ -15,12 +14,7 @@ jest.mock('../utils/logger', () => ({
 }));
 
 // Mock NASA service
-jest.mock('../services/nasa.service', () => ({
-  default: {
-    getMarsRoverPhotos: jest.fn(),
-    getRoverInfo: jest.fn(),
-  },
-}));
+jest.mock('../services/nasa.service');
 
 // Mock components
 jest.mock('../components/RoverFilters', () => {
@@ -120,7 +114,7 @@ describe('MarsRovers', () => {
   it('renders Mars Rovers page title', () => {
     renderWithProviders(<MarsRovers />);
 
-    expect(screen.getByText('Mars Rover Photos')).toBeInTheDocument();
+    expect(screen.getByText('🔴 Mars Rover Gallery')).toBeInTheDocument();
   });
 
   it('renders rover filters', () => {
@@ -136,9 +130,9 @@ describe('MarsRovers', () => {
   });
 
   it('renders photo gallery when data is loaded', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
-    nasaService.getRoverInfo.mockResolvedValue(mockRoverInfo);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
+    NASAService.getRoverInfo.mockResolvedValue(mockRoverInfo);
 
     renderWithProviders(<MarsRovers />);
 
@@ -151,25 +145,24 @@ describe('MarsRovers', () => {
   });
 
   it('handles filter changes', async () => {
-    const user = userEvent.setup();
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
-    nasaService.getRoverInfo.mockResolvedValue(mockRoverInfo);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
+    NASAService.getRoverInfo.mockResolvedValue(mockRoverInfo);
 
     renderWithProviders(<MarsRovers />);
 
     const applyFiltersButton = screen.getByText('Apply Filters');
-    await user.click(applyFiltersButton);
+    await userEvent.click(applyFiltersButton);
 
-    expect(nasaService.getMarsRoverPhotos).toHaveBeenCalledWith(
+    expect(NASAService.getMarsRoverPhotos).toHaveBeenCalledWith(
       expect.objectContaining({ rover: 'curiosity' })
     );
   });
 
   it('displays rover information', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
-    nasaService.getRoverInfo.mockResolvedValue(mockRoverInfo);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
+    NASAService.getRoverInfo.mockResolvedValue(mockRoverInfo);
 
     renderWithProviders(<MarsRovers />);
 
@@ -181,8 +174,8 @@ describe('MarsRovers', () => {
   });
 
   it('shows error state when API fails', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getMarsRoverPhotos.mockRejectedValue(new Error('API Error'));
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getMarsRoverPhotos.mockRejectedValue(new Error('API Error'));
 
     renderWithProviders(<MarsRovers />);
 
@@ -192,9 +185,9 @@ describe('MarsRovers', () => {
   });
 
   it('handles empty photo results', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getMarsRoverPhotos.mockResolvedValue({ photos: [] });
-    nasaService.getRoverInfo.mockResolvedValue(mockRoverInfo);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getMarsRoverPhotos.mockResolvedValue({ photos: [] });
+    NASAService.getRoverInfo.mockResolvedValue(mockRoverInfo);
 
     renderWithProviders(<MarsRovers />);
 
@@ -206,9 +199,9 @@ describe('MarsRovers', () => {
   });
 
   it('displays photo count when photos are loaded', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
-    nasaService.getRoverInfo.mockResolvedValue(mockRoverInfo);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getMarsRoverPhotos.mockResolvedValue(mockPhotos);
+    NASAService.getRoverInfo.mockResolvedValue(mockRoverInfo);
 
     renderWithProviders(<MarsRovers />);
 

@@ -4,17 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import NEOTracker from './NEOTracker';
 
-// Mock react-router-dom
-jest.mock('react-router-dom', () => ({
-  useNavigate: () => jest.fn(),
-}));
-
 // Mock NASA service
-jest.mock('../services/nasa.service', () => ({
-  nasaService: {
-    getNEOFeed: jest.fn(),
-  },
-}));
+jest.mock('../services/nasa.service');
 
 // Mock components
 jest.mock('../components/DatePicker', () => {
@@ -142,7 +133,7 @@ describe('NEOTracker', () => {
   it('renders NEO Tracker page title', () => {
     renderWithProviders(<NEOTracker />);
 
-    expect(screen.getByText('Near Earth Objects Tracker')).toBeInTheDocument();
+    expect(screen.getByText('☄️ Near Earth Objects Tracker')).toBeInTheDocument();
   });
 
   it('renders date picker for date range selection', () => {
@@ -159,8 +150,8 @@ describe('NEOTracker', () => {
   });
 
   it('renders NEO cards when data is loaded', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getNEOFeed.mockResolvedValue(mockNEOData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getNEOFeed.mockResolvedValue(mockNEOData);
 
     renderWithProviders(<NEOTracker />);
 
@@ -174,8 +165,8 @@ describe('NEOTracker', () => {
   });
 
   it('renders NEO chart when data is loaded', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getNEOFeed.mockResolvedValue(mockNEOData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getNEOFeed.mockResolvedValue(mockNEOData);
 
     renderWithProviders(<NEOTracker />);
 
@@ -187,8 +178,8 @@ describe('NEOTracker', () => {
   });
 
   it('displays summary statistics', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getNEOFeed.mockResolvedValue(mockNEOData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getNEOFeed.mockResolvedValue(mockNEOData);
 
     renderWithProviders(<NEOTracker />);
 
@@ -200,27 +191,26 @@ describe('NEOTracker', () => {
   });
 
   it('handles date range changes', async () => {
-    const user = userEvent.setup();
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getNEOFeed.mockResolvedValue(mockNEOData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getNEOFeed.mockResolvedValue(mockNEOData);
 
     renderWithProviders(<NEOTracker />);
 
     const datePickers = screen.getAllByTestId('date-picker');
     const startDatePicker = datePickers[0];
 
-    await user.clear(startDatePicker);
-    await user.type(startDatePicker, '2025-08-14');
+    await userEvent.clear(startDatePicker);
+    await userEvent.type(startDatePicker, '2025-08-14');
 
-    expect(nasaService.getNEOFeed).toHaveBeenCalledWith(
+    expect(NASAService.getNEOFeed).toHaveBeenCalledWith(
       '2025-08-14',
       expect.any(String)
     );
   });
 
   it('shows error state when API fails', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getNEOFeed.mockRejectedValue(new Error('API Error'));
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getNEOFeed.mockRejectedValue(new Error('API Error'));
 
     renderWithProviders(<NEOTracker />);
 
@@ -230,8 +220,8 @@ describe('NEOTracker', () => {
   });
 
   it('handles empty NEO results', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getNEOFeed.mockResolvedValue({
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getNEOFeed.mockResolvedValue({
       element_count: 0,
       near_earth_objects: {},
     });
@@ -246,8 +236,8 @@ describe('NEOTracker', () => {
   });
 
   it('filters hazardous objects correctly', async () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getNEOFeed.mockResolvedValue(mockNEOData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getNEOFeed.mockResolvedValue(mockNEOData);
 
     renderWithProviders(<NEOTracker />);
 
@@ -261,12 +251,12 @@ describe('NEOTracker', () => {
   });
 
   it('displays today as default date range', () => {
-    const { nasaService } = require('../services/nasa.service');
-    nasaService.getNEOFeed.mockResolvedValue(mockNEOData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getNEOFeed.mockResolvedValue(mockNEOData);
 
     renderWithProviders(<NEOTracker />);
 
-    expect(nasaService.getNEOFeed).toHaveBeenCalledWith(
+    expect(NASAService.getNEOFeed).toHaveBeenCalledWith(
       expect.stringMatching(/\d{4}-\d{2}-\d{2}/),
       expect.stringMatching(/\d{4}-\d{2}-\d{2}/)
     );

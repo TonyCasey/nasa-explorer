@@ -4,15 +4,7 @@ import React from 'react';
 import { useFavorites } from './useFavorites';
 
 // Mock favorites service
-jest.mock('../services/favorites.service', () => ({
-  favoritesService: {
-    getFavorites: jest.fn(),
-    addFavorite: jest.fn(),
-    removeFavorite: jest.fn(),
-    clearFavorites: jest.fn(),
-    isFavorite: jest.fn(),
-  },
-}));
+jest.mock('../services/favorites.service');
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -51,7 +43,7 @@ describe('useFavorites', () => {
   });
 
   it('returns favorites data', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
 
     const { result } = renderHook(() => useFavorites(), {
@@ -71,7 +63,7 @@ describe('useFavorites', () => {
   });
 
   it('handles loading state', () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockImplementation(
       () => new Promise(() => {})
     ); // Never resolves
@@ -85,7 +77,7 @@ describe('useFavorites', () => {
   });
 
   it('handles error state', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockRejectedValue(new Error('API Error'));
 
     const { result } = renderHook(() => useFavorites(), {
@@ -101,7 +93,7 @@ describe('useFavorites', () => {
   });
 
   it('adds favorite successfully', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
     favoritesService.addFavorite.mockResolvedValue(undefined);
 
@@ -123,7 +115,7 @@ describe('useFavorites', () => {
   });
 
   it('removes favorite successfully', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
     favoritesService.removeFavorite.mockResolvedValue(undefined);
 
@@ -139,7 +131,7 @@ describe('useFavorites', () => {
   });
 
   it('clears all favorites successfully', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
     favoritesService.clearFavorites.mockResolvedValue(undefined);
 
@@ -155,7 +147,7 @@ describe('useFavorites', () => {
   });
 
   it('checks if item is favorite', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
     favoritesService.isFavorite.mockReturnValue(true);
 
@@ -169,7 +161,7 @@ describe('useFavorites', () => {
   });
 
   it('returns correct favorites count', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
 
     const { result } = renderHook(() => useFavorites(), {
@@ -184,7 +176,7 @@ describe('useFavorites', () => {
   });
 
   it('returns zero count when no favorites', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue([]);
 
     const { result } = renderHook(() => useFavorites(), {
@@ -199,7 +191,7 @@ describe('useFavorites', () => {
   });
 
   it('handles add favorite error', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
     favoritesService.addFavorite.mockRejectedValue(new Error('Add failed'));
 
@@ -217,7 +209,7 @@ describe('useFavorites', () => {
   });
 
   it('handles remove favorite error', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
     favoritesService.removeFavorite.mockRejectedValue(
       new Error('Remove failed')
@@ -235,7 +227,7 @@ describe('useFavorites', () => {
   });
 
   it('refetches data after mutations', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
     favoritesService.addFavorite.mockResolvedValue(undefined);
 

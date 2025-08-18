@@ -4,21 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Favorites from './Favorites';
 
-// Mock react-router-dom
-jest.mock('react-router-dom', () => ({
-  useNavigate: () => jest.fn(),
-}));
-
 // Mock favorites service
-jest.mock('../services/favorites.service', () => ({
-  favoritesService: {
-    getFavorites: jest.fn(),
-    addFavorite: jest.fn(),
-    removeFavorite: jest.fn(),
-    clearFavorites: jest.fn(),
-    exportFavorites: jest.fn(),
-  },
-}));
+jest.mock('../services/favorites.service');
 
 // Mock components
 jest.mock('../components/FavoriteButton', () => {
@@ -128,7 +115,7 @@ describe('Favorites', () => {
   });
 
   it('renders favorites when data is loaded', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
 
     renderWithProviders(<Favorites />);
@@ -143,7 +130,7 @@ describe('Favorites', () => {
   });
 
   it('displays favorites count', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
 
     renderWithProviders(<Favorites />);
@@ -154,7 +141,7 @@ describe('Favorites', () => {
   });
 
   it('handles empty favorites list', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue([]);
 
     renderWithProviders(<Favorites />);
@@ -167,8 +154,7 @@ describe('Favorites', () => {
   });
 
   it('filters favorites by type', async () => {
-    const user = userEvent.setup();
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
 
     renderWithProviders(<Favorites />);
@@ -179,7 +165,7 @@ describe('Favorites', () => {
 
     // Find and click APOD filter
     const apodFilter = screen.getByRole('button', { name: /apod/i });
-    await user.click(apodFilter);
+    await userEvent.click(apodFilter);
 
     // Should only show APOD items
     expect(screen.getByText('Amazing Galaxy')).toBeInTheDocument();
@@ -187,8 +173,7 @@ describe('Favorites', () => {
   });
 
   it('handles removing favorites', async () => {
-    const user = userEvent.setup();
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
     favoritesService.removeFavorite.mockResolvedValue(undefined);
 
@@ -199,14 +184,13 @@ describe('Favorites', () => {
     });
 
     const removeButton = screen.getByTestId('favorite-button-1');
-    await user.click(removeButton);
+    await userEvent.click(removeButton);
 
     expect(favoritesService.removeFavorite).toHaveBeenCalledWith('1');
   });
 
   it('handles clearing all favorites', async () => {
-    const user = userEvent.setup();
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
     favoritesService.clearFavorites.mockResolvedValue(undefined);
 
@@ -217,14 +201,13 @@ describe('Favorites', () => {
     });
 
     const clearButton = screen.getByRole('button', { name: /clear all/i });
-    await user.click(clearButton);
+    await userEvent.click(clearButton);
 
     expect(favoritesService.clearFavorites).toHaveBeenCalled();
   });
 
   it('handles exporting favorites', async () => {
-    const user = userEvent.setup();
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
     favoritesService.exportFavorites.mockResolvedValue('exported-data');
 
@@ -235,13 +218,13 @@ describe('Favorites', () => {
     });
 
     const exportButton = screen.getByRole('button', { name: /export/i });
-    await user.click(exportButton);
+    await userEvent.click(exportButton);
 
     expect(favoritesService.exportFavorites).toHaveBeenCalled();
   });
 
   it('shows error state when API fails', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockRejectedValue(new Error('API Error'));
 
     renderWithProviders(<Favorites />);
@@ -252,7 +235,7 @@ describe('Favorites', () => {
   });
 
   it('displays different favorite types correctly', async () => {
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
 
     renderWithProviders(<Favorites />);
@@ -272,8 +255,7 @@ describe('Favorites', () => {
   });
 
   it('handles search functionality', async () => {
-    const user = userEvent.setup();
-    const { favoritesService } = require('../services/favorites.service');
+    const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
 
     renderWithProviders(<Favorites />);
@@ -283,7 +265,7 @@ describe('Favorites', () => {
     });
 
     const searchInput = screen.getByPlaceholderText(/search favorites/i);
-    await user.type(searchInput, 'galaxy');
+    await userEvent.type(searchInput, 'galaxy');
 
     // Should filter to show only matching items
     expect(screen.getByText('Amazing Galaxy')).toBeInTheDocument();

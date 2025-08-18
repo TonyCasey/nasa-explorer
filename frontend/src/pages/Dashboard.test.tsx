@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Dashboard from './Dashboard';
-import NASAService from '../services/nasa.service';
 
 // Mock dependencies
 jest.mock('../utils/logger', () => ({
@@ -87,7 +86,8 @@ describe('Dashboard', () => {
   });
 
   test('renders dashboard header', () => {
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     renderWithRouter();
 
@@ -100,7 +100,8 @@ describe('Dashboard', () => {
   });
 
   test('loads APOD data on mount', async () => {
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     renderWithRouter();
 
@@ -110,7 +111,8 @@ describe('Dashboard', () => {
   });
 
   test('displays APOD data when loaded successfully', async () => {
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     renderWithRouter();
 
@@ -122,8 +124,9 @@ describe('Dashboard', () => {
   });
 
   test('handles APOD loading error', async () => {
+    const NASAService = require('../services/nasa.service').default;
     const mockError = new Error('Failed to fetch APOD');
-    (NASAService.getAPOD as jest.Mock).mockRejectedValue(mockError);
+    NASAService.getAPOD.mockRejectedValue(mockError);
 
     renderWithRouter();
 
@@ -133,7 +136,8 @@ describe('Dashboard', () => {
   });
 
   test('shows loading state initially', () => {
-    (NASAService.getAPOD as jest.Mock).mockImplementation(
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockImplementation(
       () =>
         new Promise((resolve) => setTimeout(() => resolve(mockAPODData), 100))
     );
@@ -147,7 +151,8 @@ describe('Dashboard', () => {
 
   test('logs dashboard initialization', () => {
     const logger = require('../utils/logger');
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     renderWithRouter();
 
@@ -157,7 +162,8 @@ describe('Dashboard', () => {
 
   test('logs successful APOD loading', async () => {
     const logger = require('../utils/logger');
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     renderWithRouter();
 
@@ -170,8 +176,9 @@ describe('Dashboard', () => {
 
   test('logs APOD loading errors', async () => {
     const logger = require('../utils/logger');
+    const NASAService = require('../services/nasa.service').default;
     const mockError = new Error('API Error');
-    (NASAService.getAPOD as jest.Mock).mockRejectedValue(mockError);
+    NASAService.getAPOD.mockRejectedValue(mockError);
 
     renderWithRouter();
 
@@ -184,7 +191,8 @@ describe('Dashboard', () => {
   });
 
   test('renders metric cards', () => {
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     renderWithRouter();
 
@@ -194,7 +202,8 @@ describe('Dashboard', () => {
   });
 
   test('renders status indicators', () => {
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     renderWithRouter();
 
@@ -204,7 +213,8 @@ describe('Dashboard', () => {
   });
 
   test('renders data widgets', () => {
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     renderWithRouter();
 
@@ -214,7 +224,8 @@ describe('Dashboard', () => {
   });
 
   test('has responsive layout classes', () => {
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     const { container } = renderWithRouter();
 
@@ -223,7 +234,8 @@ describe('Dashboard', () => {
   });
 
   test('displays system status correctly', () => {
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     renderWithRouter();
 
@@ -232,7 +244,8 @@ describe('Dashboard', () => {
   });
 
   test('handles navigation correctly', () => {
-    (NASAService.getAPOD as jest.Mock).mockResolvedValue(mockAPODData);
+    const NASAService = require('../services/nasa.service').default;
+    NASAService.getAPOD.mockResolvedValue(mockAPODData);
 
     renderWithRouter();
 

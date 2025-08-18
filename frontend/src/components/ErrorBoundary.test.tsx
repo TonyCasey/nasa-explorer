@@ -60,7 +60,6 @@ describe('ErrorBoundary', () => {
   });
 
   it('toggles error details when button is clicked', async () => {
-    const user = userEvent.setup();
 
     render(
       <ErrorBoundary>
@@ -74,16 +73,15 @@ describe('ErrorBoundary', () => {
     expect(screen.queryByText(/test error/i)).not.toBeInTheDocument();
 
     // Click to show details
-    await user.click(detailsButton);
+    await userEvent.click(detailsButton);
     expect(screen.getByText(/test error/i)).toBeInTheDocument();
 
     // Click to hide details
-    await user.click(screen.getByRole('button', { name: /hide details/i }));
+    await userEvent.click(screen.getByRole('button', { name: /hide details/i }));
     expect(screen.queryByText(/test error/i)).not.toBeInTheDocument();
   });
 
   it('resets error state when try again is clicked', async () => {
-    const user = userEvent.setup();
     let shouldThrow = true;
 
     const TestComponent = () => <ThrowError shouldThrow={shouldThrow} />;
@@ -101,7 +99,7 @@ describe('ErrorBoundary', () => {
     shouldThrow = false;
 
     const tryAgainButton = screen.getByRole('button', { name: /try again/i });
-    await user.click(tryAgainButton);
+    await userEvent.click(tryAgainButton);
 
     // Rerender with new props
     rerender(
