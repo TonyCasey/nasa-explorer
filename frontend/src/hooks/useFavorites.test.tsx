@@ -48,6 +48,7 @@ describe('useFavorites', () => {
   });
 
   it('returns favorites data', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockReturnValue(mockFavorites);
 
@@ -60,6 +61,7 @@ describe('useFavorites', () => {
   });
 
   it('handles empty favorites list', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockReturnValue([]);
 
@@ -72,6 +74,7 @@ describe('useFavorites', () => {
   });
 
   it('toggles favorite', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockReturnValue([]);
     favoritesService.toggleFavorite.mockReturnValue(true);
@@ -96,6 +99,7 @@ describe('useFavorites', () => {
   });
 
   it('removes favorite', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockReturnValue(mockFavorites);
 
@@ -111,6 +115,7 @@ describe('useFavorites', () => {
   });
 
   it('checks if item is favorite', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockReturnValue(mockFavorites);
     favoritesService.isFavorite.mockReturnValue(true);
@@ -125,6 +130,7 @@ describe('useFavorites', () => {
   });
 
   it('updates favorites when favoritesUpdated event is dispatched', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockReturnValue(mockFavorites);
 
@@ -146,6 +152,7 @@ describe('useFavorites', () => {
   });
 
   it('cleans up event listener on unmount', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockReturnValue([]);
 
