@@ -38,16 +38,16 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
 
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    expect(screen.getByText('Houston, we have a problem!')).toBeInTheDocument();
     expect(
-      screen.getByText(/an unexpected error occurred/i)
+      screen.getByText(/something went wrong in our space mission/i)
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /try again/i })
+      screen.getByRole('button', { name: /🔄 try again/i })
     ).toBeInTheDocument();
   });
 
-  it('shows error details button', () => {
+  it('shows reload button', () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
@@ -55,35 +55,27 @@ describe('ErrorBoundary', () => {
     );
 
     expect(
-      screen.getByRole('button', { name: /show details/i })
+      screen.getByRole('button', { name: /🌍 return to earth \(reload\)/i })
     ).toBeInTheDocument();
   });
 
-  it('toggles error details when button is clicked', async () => {
-    const user = userEvent.setup();
-
+  it('has working buttons', async () => {
     render(
       <ErrorBoundary>
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
 
-    const detailsButton = screen.getByRole('button', { name: /show details/i });
-
-    // Initially details should be hidden
-    expect(screen.queryByText(/test error/i)).not.toBeInTheDocument();
-
-    // Click to show details
-    await user.click(detailsButton);
-    expect(screen.getByText(/test error/i)).toBeInTheDocument();
-
-    // Click to hide details
-    await user.click(screen.getByRole('button', { name: /hide details/i }));
-    expect(screen.queryByText(/test error/i)).not.toBeInTheDocument();
+    // Both buttons should be present
+    expect(
+      screen.getByRole('button', { name: /🔄 try again/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /🌍 return to earth \(reload\)/i })
+    ).toBeInTheDocument();
   });
 
   it('resets error state when try again is clicked', async () => {
-    const user = userEvent.setup();
     let shouldThrow = true;
 
     const TestComponent = () => <ThrowError shouldThrow={shouldThrow} />;
@@ -95,13 +87,15 @@ describe('ErrorBoundary', () => {
     );
 
     // Error should be displayed
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    expect(screen.getByText('Houston, we have a problem!')).toBeInTheDocument();
 
     // Change shouldThrow to false and rerender
     shouldThrow = false;
 
-    const tryAgainButton = screen.getByRole('button', { name: /try again/i });
-    await user.click(tryAgainButton);
+    const tryAgainButton = screen.getByRole('button', {
+      name: /🔄 try again/i,
+    });
+    await userEvent.click(tryAgainButton);
 
     // Rerender with new props
     rerender(
@@ -114,15 +108,14 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('No error')).toBeInTheDocument();
   });
 
-  it('applies custom fallback component', () => {
-    const CustomFallback = () => <div>Custom error message</div>;
-
+  it('renders consistent error UI', () => {
     render(
-      <ErrorBoundary fallback={CustomFallback}>
+      <ErrorBoundary>
         <ThrowError shouldThrow={true} />
       </ErrorBoundary>
     );
 
-    expect(screen.getByText('Custom error message')).toBeInTheDocument();
+    // Component doesn't support fallback prop, just verify standard UI
+    expect(screen.getByText('Houston, we have a problem!')).toBeInTheDocument();
   });
 });

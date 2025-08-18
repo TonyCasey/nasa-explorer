@@ -5,7 +5,7 @@
 **Product Name:** NASA Space Explorer  
 **Type:** Full-stack web application  
 **Timeline:** 2 weeks  
-**Target:** Bounce Insights coding challenge submission  
+**Target:** Coding challenge submission  
 
 ### Purpose
 Create an engaging, interactive web application that showcases NASA's space data through modern web technologies, demonstrating full-stack development skills, creative UI/UX design, and effective data visualization.

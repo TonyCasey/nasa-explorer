@@ -18,7 +18,7 @@ const Favorites: React.FC = () => {
   const filteredFavorites =
     filter === 'all' ? favorites : favorites.filter((f) => f.type === filter);
 
-  const handleItemClick = (favorite: any) => {
+  const handleItemClick = (favorite: { type: string }) => {
     switch (favorite.type) {
       case 'apod':
         navigate('/apod');
@@ -82,7 +82,10 @@ const Favorites: React.FC = () => {
             ].map((tab) => (
               <button
                 key={tab.value}
-                onClick={() => setFilter(tab.value as any)}
+                // eslint-disable-next-line prettier/prettier
+                onClick={() =>
+                  setFilter(tab.value as 'all' | 'apod' | 'mars-photo' | 'neo')
+                }
                 className={`px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2 ${
                   filter === tab.value
                     ? 'bg-cosmic-purple text-white'

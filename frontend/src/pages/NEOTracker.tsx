@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import logger from '../utils/logger';
 import NEOCard from '../components/NEOCard';
 import NEOChart from '../components/NEOChart';
@@ -27,11 +27,7 @@ const NEOTracker: React.FC = () => {
     logger.info('NEO Tracker page loaded');
   }, []);
 
-  useEffect(() => {
-    loadNEOData();
-  }, [selectedDate, endDate]);
-
-  const loadNEOData = async () => {
+  const loadNEOData = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -44,9 +40,12 @@ const NEOTracker: React.FC = () => {
 
       // Flatten the NEO data from all dates
       const allNEOs: NEOObject[] = [];
-      Object.values(response.near_earth_objects).forEach((dateNEOs: any) => {
-        allNEOs.push(...dateNEOs);
-      });
+      // eslint-disable-next-line prettier/prettier
+      Object.values(response.near_earth_objects).forEach(
+        (dateNEOs: NEOObject[]) => {
+          allNEOs.push(...dateNEOs);
+        }
+      );
 
       // Sort by closest approach date
       allNEOs.sort((a, b) => {
@@ -62,14 +61,15 @@ const NEOTracker: React.FC = () => {
           (neo) => neo.is_potentially_hazardous_asteroid
         ).length,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('NEO data load error', err as Error, {
         selectedDate,
         endDate,
       });
 
       // Check for 408 timeout error
-      if (err.status === 408) {
+      // eslint-disable-next-line prettier/prettier
+      if (err && typeof err === 'object' && 'status' in err && (err as { status: number }).status === 408) {
         setError('NASA Server Timeout');
       } else {
         setError('Failed to load NEO tracking data');
@@ -77,12 +77,23 @@ const NEOTracker: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [selectedDate, endDate]);
+
+  useEffect(() => {
+    loadNEOData();
+  }, [loadNEOData]);
 
   const handleDateChange = (date: string) => {
     setSelectedDate(date);
-    // Auto-adjust end date to be 7 days after start date, but never exceed today
+
+    // Validate date before processing
     const startDate = new Date(date);
+    if (isNaN(startDate.getTime())) {
+      // Invalid date, don't update end date or make API call
+      return;
+    }
+
+    // Auto-adjust end date to be 7 days after start date, but never exceed today
     const potentialEndDate = new Date(
       startDate.getTime() + 7 * 24 * 60 * 60 * 1000
     );

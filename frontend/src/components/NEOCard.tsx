@@ -116,19 +116,19 @@ const NEOCard: React.FC<NEOCardProps> = ({ neo, className = '', onClick }) => {
           </h3>
           <p className="text-gray-300 text-sm mt-1 font-medium">ID: {neo.id}</p>
         </div>
-        <div className="text-2xl" style={{ color: risk.color }}>{risk.emoji}</div>
+        <div className="text-2xl" style={{ color: risk.color }}>
+          {risk.emoji}
+        </div>
       </div>
 
       {/* Risk Assessment */}
-      <div
-        className="bg-white/50 border border-white/30 rounded-lg p-3 mb-4"
-      >
+      <div className="bg-white/50 border border-white/30 rounded-lg p-3 mb-4">
         <div className="flex items-center justify-between">
           <span className="font-medium text-sm" style={{ color: risk.color }}>
             Risk Level: {risk.label}
           </span>
           {neo.is_potentially_hazardous_asteroid && (
-            <span 
+            <span
               className="text-white text-xs px-2 py-1 rounded-full font-medium"
               style={{ backgroundColor: '#851313' }}
             >

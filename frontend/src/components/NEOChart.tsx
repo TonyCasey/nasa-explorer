@@ -149,12 +149,20 @@ const NEOChart: React.FC<NEOChartProps> = ({ neos, className = '' }) => {
     else velocityRanges[3].count++;
   });
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: {
+    active?: boolean;
+    payload?: Array<{ name: string; value: number; color: string }>;
+    label?: string;
+  }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-space-dark/90 backdrop-blur-sm border border-white/20 rounded-lg p-3">
           <p className="text-white font-medium">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry, index: number) => (
             <p key={index} className="text-gray-300 text-sm">
               {entry.name}: {entry.value}
             </p>
@@ -165,7 +173,21 @@ const NEOChart: React.FC<NEOChartProps> = ({ neos, className = '' }) => {
     return null;
   };
 
-  const ScatterTooltip = ({ active, payload }: any) => {
+  const ScatterTooltip = ({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: Array<{
+      payload: {
+        name: string;
+        distance: number;
+        size: number;
+        velocity: number;
+        hazardous: boolean;
+      };
+    }>;
+  }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (

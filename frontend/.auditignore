@@ -1,0 +1,12 @@
+# Known vulnerabilities in react-scripts that cannot be fixed without breaking changes
+# These are all in development dependencies and don't affect production builds
+
+# nth-check vulnerability in svgo (part of react-scripts build chain)
+GHSA-rp65-9cf3-cjxr
+
+# PostCSS vulnerability in resolve-url-loader (part of react-scripts)
+GHSA-7fh5-64p2-3v2j
+
+# webpack-dev-server vulnerabilities (development server only)
+GHSA-9jgg-88mc-972h
+GHSA-4v9v-hfq4-rm2v

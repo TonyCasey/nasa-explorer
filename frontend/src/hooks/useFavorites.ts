@@ -13,9 +13,13 @@ export const useFavorites = () => {
       setFavorites(event.detail);
     };
 
-    window.addEventListener('favoritesUpdated' as any, handleUpdate);
+    window.addEventListener('favoritesUpdated', handleUpdate as EventListener);
     return () => {
-      window.removeEventListener('favoritesUpdated' as any, handleUpdate);
+      // eslint-disable-next-line prettier/prettier
+      window.removeEventListener(
+        'favoritesUpdated',
+        handleUpdate as EventListener
+      );
     };
   }, []);
 

@@ -5,7 +5,7 @@ export interface Favorite {
   type: 'apod' | 'mars-photo' | 'neo';
   title: string;
   thumbnail?: string;
-  data: any;
+  data: Record<string, unknown>;
   savedAt: Date;
 }
 
@@ -106,4 +106,5 @@ class FavoritesService {
   }
 }
 
-export default new FavoritesService();
+const favoritesService = new FavoritesService();
+export default favoritesService;

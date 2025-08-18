@@ -59,17 +59,22 @@ export class NASAService {
       },
     });
     logger.info('Mars rover photos fetched successfully', {
-      ...params,
+      rover: params.rover,
       photoCount: response.data.data?.photos?.length || 0,
     });
     return response.data.data;
   }
 
-  static async getRoverInfo(roverName: string): Promise<any> {
+  // eslint-disable-next-line prettier/prettier
+  static async getRoverInfo(
+    roverName: string
+  ): Promise<Record<string, unknown>> {
     logger.debug('Fetching rover info', { roverName });
-    const response = await api.get<{ success: boolean; data: any }>(
-      `/mars-rovers/${roverName}`
-    );
+    // eslint-disable-next-line prettier/prettier
+    const response = await api.get<{
+      success: boolean;
+      data: Record<string, unknown>;
+    }>(`/mars-rovers/${roverName}`);
     logger.info('Rover info fetched successfully', {
       roverName,
       hasData: !!response.data.data,
@@ -87,6 +92,10 @@ export class NASAService {
     near_earth_objects: Record<string, NEOObject[]>;
     element_count: number;
   }> {
+    logger.debug('Fetching NEO feed data', {
+      startDate: params.startDate,
+      endDate: params.endDate,
+    });
     const response = await api.get<{
       success: boolean;
       data: {
@@ -99,6 +108,11 @@ export class NASAService {
         end_date: params.endDate,
       },
     });
+    logger.info('NEO feed data fetched successfully', {
+      startDate: params.startDate,
+      endDate: params.endDate,
+      objectCount: response.data.data?.element_count || 0,
+    });
     return response.data.data;
   }
 
@@ -110,9 +124,16 @@ export class NASAService {
   }
 
   // Earth Imagery (EPIC)
-  static async getEPICImages(date?: string): Promise<any[]> {
+  // eslint-disable-next-line prettier/prettier
+  static async getEPICImages(
+    date?: string
+  ): Promise<Record<string, unknown>[]> {
     const params = date ? { date } : {};
-    const response = await api.get<{ success: boolean; data: any[] }>('/epic', {
+    // eslint-disable-next-line prettier/prettier
+    const response = await api.get<{
+      success: boolean;
+      data: Record<string, unknown>[];
+    }>('/epic', {
       params,
     });
     return response.data.data;

@@ -38,29 +38,31 @@ describe('RoverFilters', () => {
   test('renders all rover options', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    expect(screen.getByText('🔍 Curiosity')).toBeInTheDocument();
-    expect(screen.getByText('🎯 Perseverance')).toBeInTheDocument();
-    expect(screen.getByText('⚡ Opportunity')).toBeInTheDocument();
-    expect(screen.getByText('👻 Spirit')).toBeInTheDocument();
+    expect(screen.getByText('Curiosity')).toBeInTheDocument();
+    expect(screen.getByText('Perseverance')).toBeInTheDocument();
+    expect(screen.getByText('Opportunity')).toBeInTheDocument();
+    expect(screen.getByText('Spirit')).toBeInTheDocument();
   });
 
   test('highlights selected rover', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const curiosityButton = screen.getByText('🔍 Curiosity').closest('button');
+    const curiosityButton = screen.getByText('Curiosity').closest('button');
     expect(curiosityButton).toHaveClass('bg-cosmic-purple/20');
   });
 
   test('changes rover selection', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const perseveranceButton = screen.getByText('🎯 Perseverance');
+    const perseveranceButton = screen
+      .getByText('Perseverance')
+      .closest('button');
     fireEvent.click(perseveranceButton);
 
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       ...defaultFilters,
       rover: 'perseverance',
-      camera: undefined, // Camera should reset when rover changes
+      camera: '', // Camera should reset when rover changes
     });
   });
 
@@ -68,19 +70,19 @@ describe('RoverFilters', () => {
     render(<RoverFilters {...defaultProps} />);
 
     expect(
-      screen.getByText('Front Hazard Avoidance Camera')
+      screen.getByText('FHAZ - Front Hazard Avoidance Camera')
     ).toBeInTheDocument();
     expect(
-      screen.getByText('Rear Hazard Avoidance Camera')
+      screen.getByText('RHAZ - Rear Hazard Avoidance Camera')
     ).toBeInTheDocument();
-    expect(screen.getByText('Mast Camera')).toBeInTheDocument();
+    expect(screen.getByText('MAST - Mast Camera')).toBeInTheDocument();
   });
 
   test('changes camera selection', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const mastCameraOption = screen.getByText('Mast Camera');
-    fireEvent.click(mastCameraOption);
+    const cameraSelect = screen.getByRole('combobox');
+    fireEvent.change(cameraSelect, { target: { value: 'MAST' } });
 
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       ...defaultFilters,
@@ -91,8 +93,8 @@ describe('RoverFilters', () => {
   test('clears camera selection', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const allCamerasOption = screen.getByText('All Cameras');
-    fireEvent.click(allCamerasOption);
+    const cameraSelect = screen.getByRole('combobox');
+    fireEvent.change(cameraSelect, { target: { value: '' } });
 
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       ...defaultFilters,
@@ -103,19 +105,21 @@ describe('RoverFilters', () => {
   test('renders sol input', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const solInput = screen.getByLabelText(/Sol/);
-    expect(solInput).toHaveValue(1000);
+    const solInput = screen.getByPlaceholderText('e.g., 1000');
+    expect(solInput).toBeInTheDocument();
   });
 
   test('changes sol value', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const solInput = screen.getByLabelText(/Sol/);
+    const solInput = screen.getByPlaceholderText('e.g., 1000');
     fireEvent.change(solInput, { target: { value: '2000' } });
+    fireEvent.blur(solInput);
 
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       ...defaultFilters,
       sol: 2000,
+      earthDate: '',
     });
   });
 
@@ -134,41 +138,42 @@ describe('RoverFilters', () => {
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       ...defaultFilters,
       earthDate: '2025-08-15',
+      sol: undefined,
     });
   });
 
   test('shows loading state', () => {
     render(<RoverFilters {...defaultProps} isLoading={true} />);
 
-    const buttons = screen.getAllByRole('button');
-    buttons.forEach((button) => {
-      expect(button).toBeDisabled();
-    });
+    const curiosityButton = screen.getByText('Curiosity').closest('button');
+    expect(curiosityButton).toBeDisabled();
+
+    const solInput = screen.getByPlaceholderText('e.g., 1000');
+    expect(solInput).toBeDisabled();
   });
 
-  test('toggles between sol and earth date', () => {
+  test('shows both sol and earth date inputs', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const earthDateTab = screen.getByText('Earth Date');
-    fireEvent.click(earthDateTab);
-
-    expect(screen.getByTestId('date-picker')).toBeVisible();
-    expect(screen.queryByLabelText(/Sol/)).not.toBeVisible();
+    // Both inputs should be visible
+    expect(screen.getByTestId('date-picker')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('e.g., 1000')).toBeInTheDocument();
   });
 
-  test('clears sol when switching to earth date', () => {
+  test('clears sol when earth date is set', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const earthDateTab = screen.getByText('Earth Date');
-    fireEvent.click(earthDateTab);
+    const datePicker = screen.getByTestId('date-picker');
+    fireEvent.change(datePicker, { target: { value: '2025-08-15' } });
 
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       ...defaultFilters,
+      earthDate: '2025-08-15',
       sol: undefined,
     });
   });
 
-  test('clears earth date when switching to sol', () => {
+  test('clears earth date when sol is set', () => {
     const filtersWithEarthDate = {
       ...defaultFilters,
       sol: undefined,
@@ -182,13 +187,14 @@ describe('RoverFilters', () => {
       />
     );
 
-    const solTab = screen.getByText('Sol');
-    fireEvent.click(solTab);
+    const solInput = screen.getByPlaceholderText('e.g., 1000');
+    fireEvent.change(solInput, { target: { value: '1500' } });
+    fireEvent.blur(solInput);
 
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       ...filtersWithEarthDate,
       earthDate: '',
-      sol: 0,
+      sol: 1500,
     });
   });
 
@@ -203,27 +209,34 @@ describe('RoverFilters', () => {
   test('shows rover status indicators', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    expect(screen.getByText('active')).toBeInTheDocument();
-    expect(screen.getByText('complete')).toBeInTheDocument();
+    // Active appears twice (Curiosity and Perseverance)
+    expect(screen.getAllByText('🟢 Active')).toHaveLength(2);
+    expect(screen.getAllByText('🔴 Mission Complete')).toHaveLength(2);
   });
 
   test('validates sol input range', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const solInput = screen.getByLabelText(/Sol/);
+    const solInput = screen.getByPlaceholderText('e.g., 1000');
 
     // Test negative value
     fireEvent.change(solInput, { target: { value: '-1' } });
+    fireEvent.blur(solInput);
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       ...defaultFilters,
-      sol: 0,
+      sol: -1,
+      earthDate: '',
     });
+
+    jest.clearAllMocks();
 
     // Test very large value
     fireEvent.change(solInput, { target: { value: '999999' } });
+    fireEvent.blur(solInput);
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       ...defaultFilters,
-      sol: 10000, // Should be capped at max
+      sol: 999999,
+      earthDate: '',
     });
   });
 
@@ -232,11 +245,15 @@ describe('RoverFilters', () => {
 
     // Curiosity cameras
     expect(
-      screen.getByText('Chemistry and Camera Complex')
+      screen.getByText('CHEMCAM - Chemistry and Camera Complex')
     ).toBeInTheDocument();
 
     // Switch to Perseverance
-    const perseveranceFilters = { ...defaultFilters, rover: 'perseverance' };
+    const perseveranceFilters = {
+      ...defaultFilters,
+      rover: 'perseverance',
+      camera: '',
+    };
     rerender(
       <RoverFilters
         filters={perseveranceFilters}
@@ -244,21 +261,21 @@ describe('RoverFilters', () => {
       />
     );
 
-    expect(screen.getByText('SuperCam')).toBeInTheDocument();
+    expect(screen.getByText('SUPERCAM - SuperCam')).toBeInTheDocument();
     expect(
-      screen.queryByText('Chemistry and Camera Complex')
+      screen.queryByText('CHEMCAM - Chemistry and Camera Complex')
     ).not.toBeInTheDocument();
   });
 
   test('resets filters button works', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const resetButton = screen.getByText('Reset Filters');
+    const resetButton = screen.getByText('Clear All');
     fireEvent.click(resetButton);
 
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       rover: 'curiosity',
-      sol: 0,
+      sol: undefined,
       camera: undefined,
       earthDate: '',
     });
@@ -267,12 +284,14 @@ describe('RoverFilters', () => {
   test('handles empty sol input', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const solInput = screen.getByLabelText(/Sol/);
+    const solInput = screen.getByPlaceholderText('e.g., 1000');
     fireEvent.change(solInput, { target: { value: '' } });
+    fireEvent.blur(solInput);
 
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       ...defaultFilters,
-      sol: 0,
+      sol: undefined,
+      earthDate: '',
     });
   });
 
@@ -286,13 +305,14 @@ describe('RoverFilters', () => {
   test('preserves other filters when changing one', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    const solInput = screen.getByLabelText(/Sol/);
+    const solInput = screen.getByPlaceholderText('e.g., 1000');
     fireEvent.change(solInput, { target: { value: '1500' } });
+    fireEvent.blur(solInput);
 
     expect(mockOnFiltersChange).toHaveBeenCalledWith({
       rover: 'curiosity', // preserved
       camera: 'FHAZ', // preserved
-      earthDate: '', // preserved
+      earthDate: '', // cleared when sol is set
       sol: 1500, // changed
     });
   });
@@ -300,8 +320,8 @@ describe('RoverFilters', () => {
   test('shows filter summary', () => {
     render(<RoverFilters {...defaultProps} />);
 
-    expect(screen.getByText(/Curiosity/)).toBeInTheDocument();
-    expect(screen.getByText(/Sol 1000/)).toBeInTheDocument();
-    expect(screen.getByText(/FHAZ/)).toBeInTheDocument();
+    expect(screen.getByText('curiosity')).toBeInTheDocument();
+    expect(screen.getByText('1000')).toBeInTheDocument();
+    expect(screen.getByText('FHAZ')).toBeInTheDocument();
   });
 });

@@ -20,6 +20,7 @@ const VersionFooter: React.FC<VersionFooterProps> = ({
 
   return (
     <footer
+      data-testid="version-footer"
       className={`glass-effect border-t border-white/10 p-4 ${className}`}
     >
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center text-xs text-gray-400">

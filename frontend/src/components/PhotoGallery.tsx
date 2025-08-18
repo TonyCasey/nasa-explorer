@@ -112,7 +112,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
               ) : (
                 <img
                   src={photo.img_src}
-                  alt={`Mars photo by ${photo.rover.name} rover`}
+                  alt={`Mars surface captured by ${photo.rover.name} rover`}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   loading="lazy"
                   onError={() => handleImageError(photo.id)}
@@ -128,7 +128,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                       type: 'mars-photo',
                       title: `${photo.rover.name} - Sol ${photo.sol}`,
                       thumbnail: photo.img_src,
-                      data: photo,
+                      data: photo as unknown as Record<string, unknown>,
                     }}
                     className="text-white hover:text-solar-orange"
                     size="md"
@@ -220,12 +220,12 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
               <div className="flex items-start space-x-2 text-sm text-gray-400">
                 <span>•</span>
                 <span>
-                  The rover didn't take photos on that specific date/sol
+                  The rover didn&apos;t take photos on that specific date/sol
                 </span>
               </div>
               <div className="flex items-start space-x-2 text-sm text-gray-400">
                 <span>•</span>
-                <span>The selected camera wasn't used that day</span>
+                <span>The selected camera wasn&apos;t used that day</span>
               </div>
               <div className="flex items-start space-x-2 text-sm text-gray-400">
                 <span>•</span>
@@ -309,7 +309,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
             {/* Main Image */}
             <img
               src={selectedImage.img_src}
-              alt={`Mars photo by ${selectedImage.rover.name} rover`}
+              alt={`Mars surface captured by ${selectedImage.rover.name} rover`}
               className="max-w-full max-h-full object-contain rounded-lg"
             />
 

@@ -75,8 +75,8 @@ A full-stack web application that showcases NASA's space data through modern web
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/TonyCasey/BounceInsights
-cd nasa-space-explorer
+git clone https://github.com/TonyCasey/nasa-explorer.git
+cd nasa-explorer
 ```
 
 2. Install all dependencies:
@@ -284,7 +284,6 @@ This project is built for educational purposes as part of the Bounce Insights co
 ## 🙏 Acknowledgments
 
 - NASA Open APIs for providing amazing space data
-- Bounce Insights for the opportunity
 - The open-source community for the amazing tools and libraries
 - All contributors and testers
 

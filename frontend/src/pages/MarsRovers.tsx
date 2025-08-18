@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import logger from '../utils/logger';
 import PhotoGallery from '../components/PhotoGallery';
 import RoverFilters, { IRoverFilters } from '../components/RoverFilters';
@@ -29,77 +29,83 @@ const MarsRovers: React.FC = () => {
     logger.info('Mars Rovers page loaded');
   }, []);
 
+  const loadPhotos = useCallback(
+    async (reset = false) => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const page = reset ? 1 : currentPage;
+        logger.debug('Loading Mars rover photos', { ...filters, page });
+
+        // Build params for the API call
+        // eslint-disable-next-line prettier/prettier
+        const params: { rover: string; sol?: number; earth_date?: string; camera?: string; page?: number } = {
+          rover: filters.rover,
+          page,
+        };
+
+        if (filters.sol) {
+          params.sol = filters.sol;
+        } else if (filters.earthDate) {
+          params.earth_date = filters.earthDate;
+        }
+
+        if (filters.camera) {
+          params.camera = filters.camera;
+        }
+
+        const response = await NASAService.getMarsRoverPhotos(params);
+        const newPhotos = response.photos || [];
+
+        if (reset) {
+          setPhotos(newPhotos);
+          setCurrentPage(2);
+        } else {
+          setPhotos((prev) => [...prev, ...newPhotos]);
+          setCurrentPage((prev) => prev + 1);
+        }
+
+        // Update stats
+        setRoverStats({
+          totalPhotos: newPhotos.length,
+          lastUpdate: new Date(),
+        });
+
+        // Check if there are more photos (if we got less than expected per page)
+        setHasMore(newPhotos.length >= 25);
+
+        logger.info('Mars rover photos loaded', {
+          rover: filters.rover,
+          count: newPhotos.length,
+          page,
+          total: reset ? newPhotos.length : photos.length + newPhotos.length,
+        });
+      } catch (err: unknown) {
+        // eslint-disable-next-line prettier/prettier
+        logger.error('Mars rover photos load error', err as Error, filters as unknown as Record<string, unknown>);
+
+        // Check for 408 timeout error
+        // eslint-disable-next-line prettier/prettier
+        if (err && typeof err === 'object' && 'status' in err && (err as { status: number }).status === 408) {
+          setError('NASA Server Timeout');
+        } else {
+          setError('Failed to load Mars rover photos');
+        }
+
+        if (reset) {
+          setPhotos([]);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [filters, currentPage, photos.length]
+  );
+
   useEffect(() => {
     loadPhotos(true); // Reset when filters change
-  }, [filters]);
-
-  const loadPhotos = async (reset = false) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const page = reset ? 1 : currentPage;
-      logger.debug('Loading Mars rover photos', { ...filters, page });
-
-      // Build params for the API call
-      const params: any = {
-        rover: filters.rover,
-        page,
-      };
-
-      if (filters.sol) {
-        params.sol = filters.sol;
-      } else if (filters.earthDate) {
-        params.earth_date = filters.earthDate;
-      }
-
-      if (filters.camera) {
-        params.camera = filters.camera;
-      }
-
-      const response = await NASAService.getMarsRoverPhotos(params);
-      const newPhotos = response.photos || [];
-
-      if (reset) {
-        setPhotos(newPhotos);
-        setCurrentPage(2);
-      } else {
-        setPhotos((prev) => [...prev, ...newPhotos]);
-        setCurrentPage((prev) => prev + 1);
-      }
-
-      // Update stats
-      setRoverStats({
-        totalPhotos: newPhotos.length,
-        lastUpdate: new Date(),
-      });
-
-      // Check if there are more photos (if we got less than expected per page)
-      setHasMore(newPhotos.length >= 25);
-
-      logger.info('Mars rover photos loaded', {
-        rover: filters.rover,
-        count: newPhotos.length,
-        page,
-        total: reset ? newPhotos.length : photos.length + newPhotos.length,
-      });
-    } catch (err: any) {
-      logger.error('Mars rover photos load error', err as Error, filters);
-
-      // Check for 408 timeout error
-      if (err.status === 408) {
-        setError('NASA Server Timeout');
-      } else {
-        setError('Failed to load Mars rover photos');
-      }
-
-      if (reset) {
-        setPhotos([]);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [loadPhotos]);
 
   const handleLoadMore = () => {
     if (!isLoading && hasMore) {
@@ -111,7 +117,8 @@ const MarsRovers: React.FC = () => {
     setFilters(newFilters);
     setCurrentPage(1);
     setHasMore(true);
-    logger.info('Mars rover filters changed', newFilters);
+    // eslint-disable-next-line prettier/prettier
+    logger.info('Mars rover filters changed', newFilters as unknown as Record<string, unknown>);
   };
 
   const getRoverStatusColor = (rover: string) => {

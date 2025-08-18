@@ -5,17 +5,26 @@ import { nasaService } from '../services/nasa.service';
 import { errorHandler } from '../middleware/errorHandler';
 
 // Mock the NASA service
-jest.mock('../services/nasa.service');
-const mockedNasaService = nasaService as jest.Mocked<typeof nasaService>;
+jest.mock('../services/nasa.service', () => ({
+  nasaService: {
+    getAPOD: jest.fn(),
+    getAPODRandom: jest.fn(),
+    healthCheck: jest.fn(),
+    validateApiKey: jest.fn()
+  }
+}));
 
 describe('APOD Routes', () => {
   let app: express.Application;
+  let mockNasaService: jest.Mocked<typeof nasaService>;
 
   beforeAll(() => {
     app = express();
     app.use(express.json());
     app.use('/api/v1/apod', apodRouter);
     app.use(errorHandler);
+    
+    mockNasaService = nasaService as jest.Mocked<typeof nasaService>;
   });
 
   beforeEach(() => {
@@ -32,7 +41,7 @@ describe('APOD Routes', () => {
         media_type: 'image',
       };
 
-      mockedNasaService.getAPOD.mockResolvedValue(mockAPOD);
+      mockNasaService.getAPOD.mockResolvedValue(mockAPOD);
 
       const response = await request(app)
         .get('/api/v1/apod')
@@ -43,7 +52,7 @@ describe('APOD Routes', () => {
         data: mockAPOD,
         timestamp: expect.any(String)
       });
-      expect(mockedNasaService.getAPOD).toHaveBeenCalledWith(undefined);
+      expect(mockNasaService.getAPOD).toHaveBeenCalledWith(undefined);
     });
 
     it('should return APOD data for specific date', async () => {
@@ -55,7 +64,7 @@ describe('APOD Routes', () => {
         media_type: 'image',
       };
 
-      mockedNasaService.getAPOD.mockResolvedValue(mockAPOD);
+      mockNasaService.getAPOD.mockResolvedValue(mockAPOD);
 
       const response = await request(app)
         .get('/api/v1/apod?date=2025-08-14')
@@ -66,11 +75,11 @@ describe('APOD Routes', () => {
         data: mockAPOD,
         timestamp: expect.any(String)
       });
-      expect(mockedNasaService.getAPOD).toHaveBeenCalledWith('2025-08-14');
+      expect(mockNasaService.getAPOD).toHaveBeenCalledWith('2025-08-14');
     });
 
     it('should handle NASA service errors', async () => {
-      mockedNasaService.getAPOD.mockRejectedValue(new Error('NASA API Error'));
+      mockNasaService.getAPOD.mockRejectedValue(new Error('NASA API Error'));
 
       const response = await request(app)
         .get('/api/v1/apod')

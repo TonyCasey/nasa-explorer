@@ -17,7 +17,7 @@ describe('API Service', () => {
     test('api instance is configured', () => {
       expect(api).toBeDefined();
       expect(api.defaults.baseURL).toBe('http://localhost:5000/api/v1');
-      expect(api.defaults.timeout).toBe(30000);
+      expect(api.defaults.timeout).toBe(20000);
     });
 
     test('api has default headers configured', () => {
@@ -43,22 +43,18 @@ describe('API Service', () => {
     test('handles failed request', async () => {
       mock.onGet('/error').reply(500, { error: 'Server error' });
 
-      try {
-        await api.get('/error');
-      } catch (error: any) {
-        expect(error.response.status).toBe(500);
-        expect(error.response.data).toEqual({ error: 'Server error' });
-      }
+      await expect(api.get('/error')).rejects.toMatchObject({
+        status: 500,
+        message: { error: 'Server error' },
+      });
     });
 
     test('handles network timeout', async () => {
       mock.onGet('/timeout').timeout();
 
-      try {
-        await api.get('/timeout');
-      } catch (error: any) {
-        expect(error.code).toBe('ECONNABORTED');
-      }
+      await expect(api.get('/timeout')).rejects.toMatchObject({
+        message: 'timeout of 20000ms exceeded',
+      });
     });
   });
 });
