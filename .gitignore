@@ -110,3 +110,6 @@ dist
 
 # Redis dump file
 dump.rdb
+
+playwright-report/
+test-results/

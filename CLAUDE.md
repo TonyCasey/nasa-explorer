@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-NASA Space Explorer - A full-stack web application showcasing NASA's space data through modern web technologies. This is a coding challenge submission for Bounce Insights with a 2-week development timeline.
+NASA Space Explorer - A full-stack web application showcasing NASA's space data through modern web technologies. This is a coding challenge submission with a 2-week development timeline.
 
 ## Project Structure
 
