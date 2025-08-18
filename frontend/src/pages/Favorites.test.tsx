@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Favorites from './Favorites';
@@ -13,7 +13,7 @@ jest.mock('../components/FavoriteButton', () => {
     item,
     onRemove,
   }: {
-    item: any;
+    item: { id: string };
     onRemove?: () => void;
   }) {
     return (
@@ -25,7 +25,11 @@ jest.mock('../components/FavoriteButton', () => {
 });
 
 jest.mock('../components/PhotoGallery', () => {
-  return function MockPhotoGallery({ photos }: { photos: any[] }) {
+  return function MockPhotoGallery({
+    photos,
+  }: {
+    photos: Array<{ title?: string; img_src?: string }>;
+  }) {
     return (
       <div data-testid="photo-gallery">
         {photos.map((photo, index) => (
@@ -123,7 +127,7 @@ describe('Favorites', () => {
   it('renders Favorites page title', () => {
     const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockReturnValue([]);
-    
+
     renderWithProviders(<Favorites />);
 
     expect(screen.getByText(/My Favorites/)).toBeInTheDocument();
@@ -132,7 +136,7 @@ describe('Favorites', () => {
   it('shows empty state when no favorites', () => {
     const favoritesService = require('../services/favorites.service').default;
     favoritesService.getFavorites.mockReturnValue([]);
-    
+
     renderWithProviders(<Favorites />);
 
     expect(screen.getByText(/No Favorites Yet/)).toBeInTheDocument();
