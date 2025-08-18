@@ -5,17 +5,28 @@ import { nasaService } from '../services/nasa.service';
 import { errorHandler } from '../middleware/errorHandler';
 
 // Mock the NASA service
-jest.mock('../services/nasa.service');
-const mockedNasaService = nasaService as jest.Mocked<typeof nasaService>;
+jest.mock('../services/nasa.service', () => ({
+  nasaService: {
+    getNEOFeed: jest.fn(),
+    getNEOById: jest.fn(),
+    getNEOBrowse: jest.fn(),
+    getNEOStats: jest.fn(),
+    healthCheck: jest.fn(),
+    validateApiKey: jest.fn()
+  }
+}));
 
 describe('NEO Routes', () => {
   let app: express.Application;
+  let mockNasaService: jest.Mocked<typeof nasaService>;
 
   beforeAll(() => {
     app = express();
     app.use(express.json());
     app.use('/api/v1/neo', neoRouter);
     app.use(errorHandler);
+    
+    mockNasaService = nasaService as jest.Mocked<typeof nasaService>;
   });
 
   beforeEach(() => {
@@ -39,7 +50,7 @@ describe('NEO Routes', () => {
         },
       };
 
-      mockedNasaService.getNEOFeed.mockResolvedValue(mockNEOFeed);
+      mockNasaService.getNEOFeed.mockResolvedValue(mockNEOFeed);
 
       const response = await request(app)
         .get('/api/v1/neo/feed')
@@ -50,22 +61,22 @@ describe('NEO Routes', () => {
         data: mockNEOFeed,
         timestamp: expect.any(String)
       });
-      expect(mockedNasaService.getNEOFeed).toHaveBeenCalled();
+      expect(mockNasaService.getNEOFeed).toHaveBeenCalled();
     });
 
     it('should handle custom date range', async () => {
       const mockNEOFeed = { near_earth_objects: {} };
-      mockedNasaService.getNEOFeed.mockResolvedValue(mockNEOFeed);
+      mockNasaService.getNEOFeed.mockResolvedValue(mockNEOFeed);
 
       await request(app)
         .get('/api/v1/neo/feed?start_date=2025-08-15&end_date=2025-08-16')
         .expect(200);
 
-      expect(mockedNasaService.getNEOFeed).toHaveBeenCalledWith('2025-08-15', '2025-08-16');
+      expect(mockNasaService.getNEOFeed).toHaveBeenCalledWith('2025-08-15', '2025-08-16');
     });
 
     it('should handle NASA service errors', async () => {
-      mockedNasaService.getNEOFeed.mockRejectedValue(new Error('NASA API Error'));
+      mockNasaService.getNEOFeed.mockRejectedValue(new Error('NASA API Error'));
 
       const response = await request(app)
         .get('/api/v1/neo/feed')
@@ -86,7 +97,7 @@ describe('NEO Routes', () => {
         is_potentially_hazardous_asteroid: false,
       };
 
-      mockedNasaService.getNEOById.mockResolvedValue(mockNEO);
+      mockNasaService.getNEOById.mockResolvedValue(mockNEO);
 
       const response = await request(app)
         .get('/api/v1/neo/54016849')
@@ -97,7 +108,7 @@ describe('NEO Routes', () => {
         data: mockNEO,
         timestamp: expect.any(String)
       });
-      expect(mockedNasaService.getNEOById).toHaveBeenCalledWith('54016849');
+      expect(mockNasaService.getNEOById).toHaveBeenCalledWith('54016849');
     });
 
     it('should handle invalid NEO ID', async () => {

@@ -81,8 +81,15 @@ const NEOTracker: React.FC = () => {
 
   const handleDateChange = (date: string) => {
     setSelectedDate(date);
-    // Auto-adjust end date to be 7 days after start date, but never exceed today
+
+    // Validate date before processing
     const startDate = new Date(date);
+    if (isNaN(startDate.getTime())) {
+      // Invalid date, don't update end date or make API call
+      return;
+    }
+
+    // Auto-adjust end date to be 7 days after start date, but never exceed today
     const potentialEndDate = new Date(
       startDate.getTime() + 7 * 24 * 60 * 60 * 1000
     );

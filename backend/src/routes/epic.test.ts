@@ -5,17 +5,28 @@ import { nasaService } from '../services/nasa.service';
 import { errorHandler } from '../middleware/errorHandler';
 
 // Mock the NASA service
-jest.mock('../services/nasa.service');
-const mockedNasaService = nasaService as jest.Mocked<typeof nasaService>;
+jest.mock('../services/nasa.service', () => ({
+  nasaService: {
+    getEPICImages: jest.fn(),
+    getEPICImageMetadata: jest.fn(),
+    getEPICAvailableDates: jest.fn(),
+    getEPICImageArchive: jest.fn(),
+    healthCheck: jest.fn(),
+    validateApiKey: jest.fn()
+  }
+}));
 
 describe('EPIC Routes', () => {
   let app: express.Application;
+  let mockNasaService: jest.Mocked<typeof nasaService>;
 
   beforeAll(() => {
     app = express();
     app.use(express.json());
     app.use('/api/v1/epic', epicRouter);
     app.use(errorHandler);
+    
+    mockNasaService = nasaService as jest.Mocked<typeof nasaService>;
   });
 
   beforeEach(() => {
@@ -34,7 +45,7 @@ describe('EPIC Routes', () => {
         }
       ];
 
-      mockedNasaService.getEPICImages.mockResolvedValue(mockEPICImages);
+      mockNasaService.getEPICImages.mockResolvedValue(mockEPICImages);
 
       const response = await request(app)
         .get('/api/v1/epic/')
@@ -45,22 +56,22 @@ describe('EPIC Routes', () => {
         data: mockEPICImages,
         timestamp: expect.any(String)
       });
-      expect(mockedNasaService.getEPICImages).toHaveBeenCalled();
+      expect(mockNasaService.getEPICImages).toHaveBeenCalled();
     });
 
     it('should handle custom date parameter', async () => {
       const mockEPICImages: any[] = [];
-      mockedNasaService.getEPICImages.mockResolvedValue(mockEPICImages);
+      mockNasaService.getEPICImages.mockResolvedValue(mockEPICImages);
 
       await request(app)
         .get('/api/v1/epic/?date=2025-08-15')
         .expect(200);
 
-      expect(mockedNasaService.getEPICImages).toHaveBeenCalledWith('2025-08-15');
+      expect(mockNasaService.getEPICImages).toHaveBeenCalledWith('2025-08-15');
     });
 
     it('should handle NASA service errors', async () => {
-      mockedNasaService.getEPICImages.mockRejectedValue(new Error('NASA API Error'));
+      mockNasaService.getEPICImages.mockRejectedValue(new Error('NASA API Error'));
 
       const response = await request(app)
         .get('/api/v1/epic/')
@@ -78,7 +89,7 @@ describe('EPIC Routes', () => {
         }
       ];
 
-      mockedNasaService.getEPICImageArchive.mockResolvedValue(mockArchive);
+      mockNasaService.getEPICImageArchive.mockResolvedValue(mockArchive);
 
       const response = await request(app)
         .get('/api/v1/epic/archive')
@@ -98,11 +109,11 @@ describe('EPIC Routes', () => {
         },
         timestamp: expect.any(String)
       });
-      expect(mockedNasaService.getEPICImageArchive).toHaveBeenCalled();
+      expect(mockNasaService.getEPICImageArchive).toHaveBeenCalled();
     });
 
     it('should handle NASA service errors', async () => {
-      mockedNasaService.getEPICImageArchive.mockRejectedValue(new Error('NASA API Error'));
+      mockNasaService.getEPICImageArchive.mockRejectedValue(new Error('NASA API Error'));
 
       const response = await request(app)
         .get('/api/v1/epic/archive')

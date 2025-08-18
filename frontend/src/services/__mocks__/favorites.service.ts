@@ -19,6 +19,4 @@ const mockFavoritesService = {
   getFavoritesByType: jest.fn(() => []),
 };
 
-export { Favorite };
-
 export default mockFavoritesService;
