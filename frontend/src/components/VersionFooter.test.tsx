@@ -44,7 +44,9 @@ describe('VersionFooter', () => {
   it('displays passion message', () => {
     render(<VersionFooter />);
 
-    expect(screen.getByText(/Built with passion for space exploration/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Built with passion for space exploration/)
+    ).toBeInTheDocument();
   });
 
   it('has proper styling classes', () => {
