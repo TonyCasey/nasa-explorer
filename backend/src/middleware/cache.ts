@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 interface CacheEntry {
-  data: any;
+  data: unknown;
   timestamp: number;
   ttl: number;
 }
@@ -15,7 +15,7 @@ export const cacheMiddleware = (req: Request, res: Response, next: NextFunction)
   }
   
   const cacheKey = `${req.originalUrl}${JSON.stringify(req.query)}`;
-  const ttl = parseInt(process.env.CACHE_TTL || '900') * 1000; // 15 minutes default
+  const ttl = parseInt(process.env.CACHE_TTL || '900') * 1000; // 15-minute default
   const now = Date.now();
   
   // Clean expired entries periodically
@@ -39,11 +39,11 @@ export const cacheMiddleware = (req: Request, res: Response, next: NextFunction)
     return;
   }
   
-  // Store original json method
+  // Store original JSON method
   const originalJson = res.json;
   
-  // Override json method to cache the response
-  res.json = function(data: any) {
+  // Override JSON method to cache the response
+  res.json = function(data: unknown) {
     // Only cache successful responses
     if (res.statusCode === 200) {
       cache.set(cacheKey, {

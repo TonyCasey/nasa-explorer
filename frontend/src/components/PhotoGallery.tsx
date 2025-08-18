@@ -220,12 +220,12 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
               <div className="flex items-start space-x-2 text-sm text-gray-400">
                 <span>•</span>
                 <span>
-                  The rover didn't take photos on that specific date/sol
+                  The rover didn&apos;t take photos on that specific date/sol
                 </span>
               </div>
               <div className="flex items-start space-x-2 text-sm text-gray-400">
                 <span>•</span>
-                <span>The selected camera wasn't used that day</span>
+                <span>The selected camera wasn&apos;t used that day</span>
               </div>
               <div className="flex items-start space-x-2 text-sm text-gray-400">
                 <span>•</span>
