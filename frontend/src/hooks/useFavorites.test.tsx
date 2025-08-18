@@ -25,16 +25,21 @@ describe('useFavorites', () => {
   const mockFavorites = [
     {
       id: '1',
-      type: 'apod',
+      type: 'apod' as const,
       title: 'Amazing Galaxy',
       url: 'https://example.com/galaxy.jpg',
       date: '2025-08-15',
+      data: {},
+      savedAt: new Date(),
     },
     {
       id: '2',
-      type: 'mars-photo',
+      type: 'mars-photo' as const,
+      title: 'Mars Photo',
       img_src: 'https://example.com/mars.jpg',
       earth_date: '2025-08-15',
+      data: {},
+      savedAt: new Date(),
     },
   ];
 
@@ -42,60 +47,34 @@ describe('useFavorites', () => {
     jest.clearAllMocks();
   });
 
-  it('returns favorites data', async () => {
+  it('returns favorites data', () => {
     const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockResolvedValue(mockFavorites);
+    favoritesService.getFavorites.mockReturnValue(mockFavorites);
 
     const { result } = renderHook(() => useFavorites(), {
       wrapper: createWrapper(),
-    });
-
-    expect(result.current.favorites).toEqual([]);
-    expect(result.current.isLoading).toBe(true);
-
-    // Wait for the query to resolve
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     expect(result.current.favorites).toEqual(mockFavorites);
-    expect(result.current.isLoading).toBe(false);
+    expect(result.current.totalCount).toBe(2);
   });
 
-  it('handles loading state', () => {
+  it('handles empty favorites list', () => {
     const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockImplementation(
-      () => new Promise(() => {})
-    ); // Never resolves
+    favoritesService.getFavorites.mockReturnValue([]);
 
     const { result } = renderHook(() => useFavorites(), {
       wrapper: createWrapper(),
     });
 
-    expect(result.current.isLoading).toBe(true);
     expect(result.current.favorites).toEqual([]);
+    expect(result.current.totalCount).toBe(0);
   });
 
-  it('handles error state', async () => {
+  it('toggles favorite', async () => {
     const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockRejectedValue(new Error('API Error'));
-
-    const { result } = renderHook(() => useFavorites(), {
-      wrapper: createWrapper(),
-    });
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    expect(result.current.error).toBeTruthy();
-    expect(result.current.isLoading).toBe(false);
-  });
-
-  it('adds favorite successfully', async () => {
-    const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockResolvedValue(mockFavorites);
-    favoritesService.addFavorite.mockResolvedValue(undefined);
+    favoritesService.getFavorites.mockReturnValue([]);
+    favoritesService.toggleFavorite.mockReturnValue(true);
 
     const { result } = renderHook(() => useFavorites(), {
       wrapper: createWrapper(),
@@ -103,52 +82,37 @@ describe('useFavorites', () => {
 
     const newFavorite = {
       id: '3',
-      type: 'neo',
-      name: '(2020 BZ12)',
+      type: 'neo' as const,
+      title: 'Asteroid',
+      data: {},
     };
 
     await act(async () => {
-      await result.current.addFavorite(newFavorite);
+      const toggled = result.current.toggleFavorite(newFavorite);
+      expect(toggled).toBe(true);
     });
 
-    expect(favoritesService.addFavorite).toHaveBeenCalledWith(newFavorite);
+    expect(favoritesService.toggleFavorite).toHaveBeenCalledWith(newFavorite);
   });
 
-  it('removes favorite successfully', async () => {
+  it('removes favorite', async () => {
     const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockResolvedValue(mockFavorites);
-    favoritesService.removeFavorite.mockResolvedValue(undefined);
+    favoritesService.getFavorites.mockReturnValue(mockFavorites);
 
     const { result } = renderHook(() => useFavorites(), {
       wrapper: createWrapper(),
     });
 
     await act(async () => {
-      await result.current.removeFavorite('1');
+      result.current.removeFavorite('1');
     });
 
     expect(favoritesService.removeFavorite).toHaveBeenCalledWith('1');
   });
 
-  it('clears all favorites successfully', async () => {
+  it('checks if item is favorite', () => {
     const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockResolvedValue(mockFavorites);
-    favoritesService.clearFavorites.mockResolvedValue(undefined);
-
-    const { result } = renderHook(() => useFavorites(), {
-      wrapper: createWrapper(),
-    });
-
-    await act(async () => {
-      await result.current.clearFavorites();
-    });
-
-    expect(favoritesService.clearFavorites).toHaveBeenCalled();
-  });
-
-  it('checks if item is favorite', async () => {
-    const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockResolvedValue(mockFavorites);
+    favoritesService.getFavorites.mockReturnValue(mockFavorites);
     favoritesService.isFavorite.mockReturnValue(true);
 
     const { result } = renderHook(() => useFavorites(), {
@@ -160,94 +124,44 @@ describe('useFavorites', () => {
     expect(favoritesService.isFavorite).toHaveBeenCalledWith('1');
   });
 
-  it('returns correct favorites count', async () => {
+  it('updates favorites when favoritesUpdated event is dispatched', () => {
     const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockResolvedValue(mockFavorites);
+    favoritesService.getFavorites.mockReturnValue(mockFavorites);
 
     const { result } = renderHook(() => useFavorites(), {
       wrapper: createWrapper(),
     });
 
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
+    const updatedFavorites = [mockFavorites[0]];
 
-    expect(result.current.favoritesCount).toBe(2);
-  });
-
-  it('returns zero count when no favorites', async () => {
-    const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockResolvedValue([]);
-
-    const { result } = renderHook(() => useFavorites(), {
-      wrapper: createWrapper(),
-    });
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    expect(result.current.favoritesCount).toBe(0);
-  });
-
-  it('handles add favorite error', async () => {
-    const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockResolvedValue(mockFavorites);
-    favoritesService.addFavorite.mockRejectedValue(new Error('Add failed'));
-
-    const { result } = renderHook(() => useFavorites(), {
-      wrapper: createWrapper(),
-    });
-
-    const newFavorite = { id: '3', type: 'neo', name: '(2020 BZ12)' };
-
-    await expect(async () => {
-      await act(async () => {
-        await result.current.addFavorite(newFavorite);
+    act(() => {
+      const event = new CustomEvent('favoritesUpdated', {
+        detail: updatedFavorites,
       });
-    }).rejects.toThrow('Add failed');
+      window.dispatchEvent(event);
+    });
+
+    expect(result.current.favorites).toEqual(updatedFavorites);
+    expect(result.current.totalCount).toBe(1);
   });
 
-  it('handles remove favorite error', async () => {
+  it('cleans up event listener on unmount', () => {
     const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockResolvedValue(mockFavorites);
-    favoritesService.removeFavorite.mockRejectedValue(
-      new Error('Remove failed')
+    favoritesService.getFavorites.mockReturnValue([]);
+
+    const removeEventListenerSpy = jest.spyOn(window, 'removeEventListener');
+
+    const { unmount } = renderHook(() => useFavorites(), {
+      wrapper: createWrapper(),
+    });
+
+    unmount();
+
+    expect(removeEventListenerSpy).toHaveBeenCalledWith(
+      'favoritesUpdated',
+      expect.any(Function)
     );
 
-    const { result } = renderHook(() => useFavorites(), {
-      wrapper: createWrapper(),
-    });
-
-    await expect(async () => {
-      await act(async () => {
-        await result.current.removeFavorite('1');
-      });
-    }).rejects.toThrow('Remove failed');
-  });
-
-  it('refetches data after mutations', async () => {
-    const favoritesService = require('../services/favorites.service').default;
-    favoritesService.getFavorites.mockResolvedValue(mockFavorites);
-    favoritesService.addFavorite.mockResolvedValue(undefined);
-
-    const { result } = renderHook(() => useFavorites(), {
-      wrapper: createWrapper(),
-    });
-
-    // Wait for initial load
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    expect(favoritesService.getFavorites).toHaveBeenCalledTimes(1);
-
-    // Add a favorite
-    await act(async () => {
-      await result.current.addFavorite({ id: '3', type: 'neo' });
-    });
-
-    // Should refetch after mutation
-    expect(favoritesService.getFavorites).toHaveBeenCalledTimes(2);
+    removeEventListenerSpy.mockRestore();
   });
 });
