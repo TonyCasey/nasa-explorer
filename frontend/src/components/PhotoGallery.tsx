@@ -112,7 +112,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
               ) : (
                 <img
                   src={photo.img_src}
-                  alt={`Mars photo by ${photo.rover.name} rover`}
+                  alt={`Mars surface captured by ${photo.rover.name} rover`}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   loading="lazy"
                   onError={() => handleImageError(photo.id)}
@@ -309,7 +309,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
             {/* Main Image */}
             <img
               src={selectedImage.img_src}
-              alt={`Mars photo by ${selectedImage.rover.name} rover`}
+              alt={`Mars surface captured by ${selectedImage.rover.name} rover`}
               className="max-w-full max-h-full object-contain rounded-lg"
             />
 

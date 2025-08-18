@@ -72,6 +72,7 @@ class FrontendLogger {
               ? 'debug'
               : 'log';
 
+      // eslint-disable-next-line no-console
       console[consoleMethod](
         `[${entry.timestamp}] ${entry.level.toUpperCase()}: ${entry.message}`,
         entry.data || '',
@@ -96,6 +97,7 @@ class FrontendLogger {
       );
       localStorage.setItem(storageKey, JSON.stringify(todayLogs));
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to save logs to localStorage:', error);
     }
   }
@@ -134,6 +136,7 @@ class FrontendLogger {
       const stored = localStorage.getItem(storageKey);
       return stored ? JSON.parse(stored) : [];
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to retrieve logs from localStorage:', error);
       return [];
     }
@@ -146,6 +149,7 @@ class FrontendLogger {
       const storageKey = `nasa_explorer_logs_${today}`;
       localStorage.removeItem(storageKey);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to clear logs from localStorage:', error);
     }
   }

@@ -12,7 +12,8 @@ export const config = {
 };
 
 // Debug logging in development
-if (config.environment === 'development') {
+if (config.environment === 'development' && typeof window !== 'undefined') {
+  // eslint-disable-next-line no-console
   console.log('🔧 Config loaded:', {
     apiUrl: config.apiUrl,
     nasaApiKey: config.nasaApiKey

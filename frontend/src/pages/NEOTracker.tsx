@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import logger from '../utils/logger';
 import NEOCard from '../components/NEOCard';
 import NEOChart from '../components/NEOChart';
@@ -27,11 +27,7 @@ const NEOTracker: React.FC = () => {
     logger.info('NEO Tracker page loaded');
   }, []);
 
-  useEffect(() => {
-    loadNEOData();
-  }, [selectedDate, endDate]);
-
-  const loadNEOData = async () => {
+  const loadNEOData = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -77,7 +73,11 @@ const NEOTracker: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [selectedDate, endDate]);
+
+  useEffect(() => {
+    loadNEOData();
+  }, [loadNEOData]);
 
   const handleDateChange = (date: string) => {
     setSelectedDate(date);

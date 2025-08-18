@@ -106,4 +106,5 @@ class FavoritesService {
   }
 }
 
-export default new FavoritesService();
+const favoritesService = new FavoritesService();
+export default favoritesService;

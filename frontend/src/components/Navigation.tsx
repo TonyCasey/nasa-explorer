@@ -61,10 +61,6 @@ const Navigation: React.FC = () => {
       {isMobile && (
         <button
           onClick={() => {
-            console.log(
-              '🍔 Hamburger clicked! Current state:',
-              isMobileMenuOpen
-            );
             setIsMobileMenuOpen(!isMobileMenuOpen);
           }}
           className="mobile-menu-button lg:hidden fixed top-4 left-4 p-3 glass-effect rounded-lg border border-white/20 text-white hover:bg-white/10 transition-all duration-200 cursor-pointer"
