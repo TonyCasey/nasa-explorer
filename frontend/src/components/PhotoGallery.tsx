@@ -128,7 +128,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                       type: 'mars-photo',
                       title: `${photo.rover.name} - Sol ${photo.sol}`,
                       thumbnail: photo.img_src,
-                      data: photo,
+                      data: photo as unknown as Record<string, unknown>,
                     }}
                     className="text-white hover:text-solar-orange"
                     size="md"

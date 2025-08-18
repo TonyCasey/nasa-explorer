@@ -39,7 +39,8 @@ const MarsRovers: React.FC = () => {
         logger.debug('Loading Mars rover photos', { ...filters, page });
 
         // Build params for the API call
-        const params: any = {
+        // eslint-disable-next-line prettier/prettier
+        const params: { rover: string; sol?: number; earth_date?: string; camera?: string; page?: number } = {
           rover: filters.rover,
           page,
         };
@@ -80,11 +81,13 @@ const MarsRovers: React.FC = () => {
           page,
           total: reset ? newPhotos.length : photos.length + newPhotos.length,
         });
-      } catch (err: any) {
-        logger.error('Mars rover photos load error', err as Error, filters);
+      } catch (err: unknown) {
+        // eslint-disable-next-line prettier/prettier
+        logger.error('Mars rover photos load error', err as Error, filters as unknown as Record<string, unknown>);
 
         // Check for 408 timeout error
-        if (err.status === 408) {
+        // eslint-disable-next-line prettier/prettier
+        if (err && typeof err === 'object' && 'status' in err && (err as { status: number }).status === 408) {
           setError('NASA Server Timeout');
         } else {
           setError('Failed to load Mars rover photos');
@@ -114,7 +117,8 @@ const MarsRovers: React.FC = () => {
     setFilters(newFilters);
     setCurrentPage(1);
     setHasMore(true);
-    logger.info('Mars rover filters changed', newFilters);
+    // eslint-disable-next-line prettier/prettier
+    logger.info('Mars rover filters changed', newFilters as unknown as Record<string, unknown>);
   };
 
   const getRoverStatusColor = (rover: string) => {

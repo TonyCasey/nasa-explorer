@@ -5,7 +5,7 @@ export interface Favorite {
   type: 'apod' | 'mars-photo' | 'neo';
   title: string;
   thumbnail?: string;
-  data: any;
+  data: Record<string, unknown>;
   savedAt: Date;
 }
 

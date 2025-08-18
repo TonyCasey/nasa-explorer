@@ -4,7 +4,7 @@ interface LogEntry {
   timestamp: string;
   level: LogLevel;
   message: string;
-  data?: any;
+  data?: Record<string, unknown>;
   error?: {
     message: string;
     stack?: string;
@@ -34,7 +34,7 @@ class FrontendLogger {
   private createLogEntry(
     level: LogLevel,
     message: string,
-    data?: any,
+    data?: Record<string, unknown>,
     error?: Error
   ): LogEntry {
     const entry: LogEntry = {
@@ -102,25 +102,25 @@ class FrontendLogger {
     }
   }
 
-  debug(message: string, data?: any): void {
+  debug(message: string, data?: Record<string, unknown>): void {
     if (this.shouldLog('debug')) {
       this.addLog(this.createLogEntry('debug', message, data));
     }
   }
 
-  info(message: string, data?: any): void {
+  info(message: string, data?: Record<string, unknown>): void {
     if (this.shouldLog('info')) {
       this.addLog(this.createLogEntry('info', message, data));
     }
   }
 
-  warn(message: string, data?: any): void {
+  warn(message: string, data?: Record<string, unknown>): void {
     if (this.shouldLog('warn')) {
       this.addLog(this.createLogEntry('warn', message, data));
     }
   }
 
-  error(message: string, error?: Error, data?: any): void {
+  error(message: string, error?: Error, data?: Record<string, unknown>): void {
     if (this.shouldLog('error')) {
       this.addLog(this.createLogEntry('error', message, data, error));
     }
@@ -163,7 +163,11 @@ const logger = new FrontendLogger();
 export default logger;
 export { FrontendLogger };
 
-export const logApiRequest = (method: string, url: string, data?: any) => {
+export const logApiRequest = (
+  method: string,
+  url: string,
+  data?: Record<string, unknown>
+) => {
   logger.debug(`API Request: ${method} ${url}`, { method, url, data });
 };
 
@@ -171,7 +175,7 @@ export const logApiResponse = (
   method: string,
   url: string,
   status: number,
-  data?: any
+  data?: Record<string, unknown>
 ) => {
   const message = `API Response: ${method} ${url} - ${status}`;
   if (status >= 400) {

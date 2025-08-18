@@ -34,11 +34,17 @@ const APOD: React.FC = () => {
         date,
         title: response.title,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('APOD load error', err as Error, { date });
 
       // Check for 408 timeout error
-      if (err.status === 408) {
+      // eslint-disable-next-line prettier/prettier
+      if (
+        err &&
+        typeof err === 'object' &&
+        'status' in err &&
+        (err as { status: number }).status === 408
+      ) {
         setError('NASA Server Timeout');
       } else {
         setError('Failed to load astronomy picture');
@@ -121,7 +127,8 @@ const APOD: React.FC = () => {
                               apodData.media_type === 'image'
                                 ? apodData.url
                                 : apodData.url,
-                            data: apodData,
+                            // eslint-disable-next-line prettier/prettier
+                            data: apodData as unknown as Record<string, unknown>,
                           }}
                           size="lg"
                           className="text-gray-300 hover:text-solar-orange"

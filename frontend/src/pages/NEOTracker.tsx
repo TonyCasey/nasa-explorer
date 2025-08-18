@@ -40,9 +40,12 @@ const NEOTracker: React.FC = () => {
 
       // Flatten the NEO data from all dates
       const allNEOs: NEOObject[] = [];
-      Object.values(response.near_earth_objects).forEach((dateNEOs: any) => {
-        allNEOs.push(...dateNEOs);
-      });
+      // eslint-disable-next-line prettier/prettier
+      Object.values(response.near_earth_objects).forEach(
+        (dateNEOs: NEOObject[]) => {
+          allNEOs.push(...dateNEOs);
+        }
+      );
 
       // Sort by closest approach date
       allNEOs.sort((a, b) => {
@@ -58,14 +61,15 @@ const NEOTracker: React.FC = () => {
           (neo) => neo.is_potentially_hazardous_asteroid
         ).length,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('NEO data load error', err as Error, {
         selectedDate,
         endDate,
       });
 
       // Check for 408 timeout error
-      if (err.status === 408) {
+      // eslint-disable-next-line prettier/prettier
+      if (err && typeof err === 'object' && 'status' in err && (err as { status: number }).status === 408) {
         setError('NASA Server Timeout');
       } else {
         setError('Failed to load NEO tracking data');

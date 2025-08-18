@@ -30,11 +30,17 @@ const Dashboard: React.FC = () => {
       const apod = await NASAService.getAPOD();
       setApodData(apod);
       logger.info('Dashboard APOD loaded successfully');
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('Failed to load dashboard data', error as Error);
 
       // Check for 408 timeout error
-      if (error.status === 408) {
+      // eslint-disable-next-line prettier/prettier
+      if (
+        error &&
+        typeof error === 'object' &&
+        'status' in error &&
+        (error as { status: number }).status === 408
+      ) {
         setApodError('NASA Server Timeout');
       } else {
         setApodError('Failed to load space image data');
