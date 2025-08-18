@@ -23,11 +23,9 @@ const createWrapper = () => {
   });
 
   const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
-  
+
   return TestWrapper;
 };
 
@@ -65,7 +63,7 @@ describe('useFavorites', () => {
 
     // Wait for the query to resolve
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     expect(result.current.favorites).toEqual(mockFavorites);
@@ -74,7 +72,9 @@ describe('useFavorites', () => {
 
   it('handles loading state', () => {
     const { favoritesService } = require('../services/favorites.service');
-    favoritesService.getFavorites.mockImplementation(() => new Promise(() => {})); // Never resolves
+    favoritesService.getFavorites.mockImplementation(
+      () => new Promise(() => {})
+    ); // Never resolves
 
     const { result } = renderHook(() => useFavorites(), {
       wrapper: createWrapper(),
@@ -93,7 +93,7 @@ describe('useFavorites', () => {
     });
 
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     expect(result.current.error).toBeTruthy();
@@ -177,7 +177,7 @@ describe('useFavorites', () => {
     });
 
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     expect(result.current.favoritesCount).toBe(2);
@@ -192,7 +192,7 @@ describe('useFavorites', () => {
     });
 
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     expect(result.current.favoritesCount).toBe(0);
@@ -209,31 +209,29 @@ describe('useFavorites', () => {
 
     const newFavorite = { id: '3', type: 'neo', name: '(2020 BZ12)' };
 
-    await act(async () => {
-      try {
+    await expect(async () => {
+      await act(async () => {
         await result.current.addFavorite(newFavorite);
-      } catch (error) {
-        expect(error.message).toBe('Add failed');
-      }
-    });
+      });
+    }).rejects.toThrow('Add failed');
   });
 
   it('handles remove favorite error', async () => {
     const { favoritesService } = require('../services/favorites.service');
     favoritesService.getFavorites.mockResolvedValue(mockFavorites);
-    favoritesService.removeFavorite.mockRejectedValue(new Error('Remove failed'));
+    favoritesService.removeFavorite.mockRejectedValue(
+      new Error('Remove failed')
+    );
 
     const { result } = renderHook(() => useFavorites(), {
       wrapper: createWrapper(),
     });
 
-    await act(async () => {
-      try {
+    await expect(async () => {
+      await act(async () => {
         await result.current.removeFavorite('1');
-      } catch (error) {
-        expect(error.message).toBe('Remove failed');
-      }
-    });
+      });
+    }).rejects.toThrow('Remove failed');
   });
 
   it('refetches data after mutations', async () => {
@@ -247,7 +245,7 @@ describe('useFavorites', () => {
 
     // Wait for initial load
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     expect(favoritesService.getFavorites).toHaveBeenCalledTimes(1);

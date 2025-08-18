@@ -43,22 +43,20 @@ describe('API Service', () => {
     test('handles failed request', async () => {
       mock.onGet('/error').reply(500, { error: 'Server error' });
 
-      try {
-        await api.get('/error');
-      } catch (error: any) {
-        expect(error.response.status).toBe(500);
-        expect(error.response.data).toEqual({ error: 'Server error' });
-      }
+      await expect(api.get('/error')).rejects.toMatchObject({
+        response: {
+          status: 500,
+          data: { error: 'Server error' },
+        },
+      });
     });
 
     test('handles network timeout', async () => {
       mock.onGet('/timeout').timeout();
 
-      try {
-        await api.get('/timeout');
-      } catch (error: any) {
-        expect(error.code).toBe('ECONNABORTED');
-      }
+      await expect(api.get('/timeout')).rejects.toMatchObject({
+        code: 'ECONNABORTED',
+      });
     });
   });
 });

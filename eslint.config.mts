@@ -31,6 +31,9 @@ export default tseslint.config(
       "react/react-in-jsx-scope": "off",
       "no-useless-escape": "warn",
       "react/prop-types": "off",
+      "testing-library/no-container": "off",
+      "testing-library/no-node-access": "off",
+      "prettier/prettier": ["error", { "endOfLine": "auto" }],
     },
   },
   {

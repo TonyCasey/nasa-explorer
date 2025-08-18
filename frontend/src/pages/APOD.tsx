@@ -82,8 +82,8 @@ const APOD: React.FC = () => {
             🌌 Astronomy Picture of the Day
           </h1>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            Discover the cosmos through NASA&apos;s daily featured space imagery and
-            astronomical phenomena
+            Discover the cosmos through NASA&apos;s daily featured space imagery
+            and astronomical phenomena
           </p>
         </div>
 

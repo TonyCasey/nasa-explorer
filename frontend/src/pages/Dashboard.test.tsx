@@ -128,7 +128,7 @@ describe('Dashboard', () => {
     renderWithRouter();
 
     await waitFor(() => {
-      expect(screen.queryByTestId('widget-error')).toBeInTheDocument();
+      expect(screen.getByTestId('widget-error')).toBeInTheDocument();
     });
   });
 
