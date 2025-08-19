@@ -1,5 +1,7 @@
 # NASA Space Explorer 🚀
 
+[![codecov](https://codecov.io/gh/TonyCasey/nasa-explorer/branch/main/graph/badge.svg)](https://codecov.io/gh/TonyCasey/nasa-explorer)
+
 **Version 2.1.4** - UI Improvements & Enhanced Readability Release
 
 A full-stack web application that showcases NASA's space data through modern web technologies. This interactive platform provides access to stunning space imagery, Mars rover photos, Near Earth Object tracking, and more.
@@ -307,3 +309,6 @@ This project is built for educational purposes as part of the Bounce Insights co
 **Live URLs:**
 - Frontend: https://nasa.tonycasey.dev/
 - Backend: https://nasa-server.tonycasey.dev/
+
+## Code Coverage
+

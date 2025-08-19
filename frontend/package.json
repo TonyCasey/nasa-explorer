@@ -30,6 +30,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
@@ -49,7 +50,17 @@
     "moduleNameMapper": {
       "^axios$": "axios/dist/node/axios.cjs",
       "^react-router-dom$": "<rootDir>/src/__mocks__/react-router-dom.js"
-    }
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/index.tsx",
+      "!src/reportWebVitals.ts",
+      "!src/setupTests.ts",
+      "!src/**/*.test.{ts,tsx}",
+      "!src/**/__tests__/**"
+    ],
+    "coverageReporters": ["text", "lcov", "html", "json"]
   },
   "browserslist": {
     "production": [
