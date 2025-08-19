@@ -1,0 +1,48 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 2%
+        base: auto
+    patch:
+      default:
+        target: 80%
+        threshold: 2%
+        base: auto
+
+codecov:
+  require_ci_to_pass: true
+  notify:
+    after_n_builds: 2  # Wait for both frontend and backend
+
+flags:
+  frontend:
+    paths:
+      - frontend/src/
+    carryforward: false
+  backend:
+    paths:
+      - backend/src/
+    carryforward: false
+
+coverage:
+  precision: 2
+  round: down
+  range: 70..100
+
+ignore:
+  - "frontend/src/index.tsx"
+  - "frontend/src/reportWebVitals.ts"
+  - "frontend/src/setupTests.ts"
+  - "frontend/src/**/*.test.{ts,tsx}"
+  - "frontend/src/**/__tests__/**"
+  - "backend/src/**/*.d.ts"
+  - "backend/src/types/**"
+  - "backend/src/server.ts"
+  - "backend/src/test/**"
+  - "**/*.config.js"
+  - "**/node_modules/**"
+  - "**/coverage/**"
+  - "**/dist/**"
+  - "**/build/**"

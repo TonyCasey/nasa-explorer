@@ -60,7 +60,7 @@ const Dashboard: React.FC = () => {
           </h1>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto">
             Real-time monitoring of NASA space data, missions, and celestial
-            events - now with automated CI/CD deployment! 🛰️
+            events!🛰️
           </p>
         </div>
 
